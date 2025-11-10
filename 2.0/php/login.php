@@ -28,20 +28,20 @@ if ($stmt) {
             $_SESSION['authenticated'] = true;
             
             if ($user["role"] == 'user') {
-                header("Location: /craftGrodno/mainUser.php");
+                header("Location: /craftGrodno/2.0/mainUser.php");
             } else if ($user["role"] == "seller") {
-                header("Location: /craftGrodno/mainSeller.php");
+                header("Location: /craftGrodno/2.0/mainSeller.php");
             }
             exit();
         } else {
             $_SESSION['login_error'] = 'password';
             $_SESSION['previous_login'] = $login;
-            header("Location: /craftGrodno/loginPage.php");
+            header("Location: /craftGrodno/2.0/loginPage.php");
             exit();
         }
     } else {
         $_SESSION['login_error'] = 'login';
-        header("Location: /craftGrodno/loginPage.php");
+        header("Location: /craftGrodno/2.0/loginPage.php");
         exit();
     }
 }

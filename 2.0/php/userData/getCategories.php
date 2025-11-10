@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__ . "/../init.php");
 
-// Получаем категории из базы данных
 $sql = "SELECT 
             c.categoryID, 
             c.categoryName, 
@@ -21,13 +20,12 @@ if ($result && $result->num_rows > 0) {
         $icon = getCategoryIcon($category['categoryName']);
         
         $categories_html .= '
-        <div class="category-card">
+        <a href="./allProducts.php?category=' . urlencode($category['categoryName']) . '" class="category-card">
             <div class="category-icon">' . $icon . '</div>
             <div class="category-name">' . htmlspecialchars($category['categoryName']) . '</div>
             <div class="category-count">' . $category['product_count'] . ' ' . getProductCountText($category['product_count']) . '</div>
-        </div>';
+        </a>';
     }
 }
 
-// Возвращаем HTML с категориями
 echo $categories_html;

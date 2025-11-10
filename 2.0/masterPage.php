@@ -2,15 +2,13 @@
 require_once('./php/checkAuth.php');
 checkAuth();
 
-// Проверяем, что страница доступна только пользователям
 if (getUserRole() !== 'user') {
-    header("Location: /craftGrodno/loginPage.php");
+    header("Location: /craftGrodno/2.0/loginPage.php");
     exit();
 }
 
 require_once('./php/init.php');
 
-// Получаем ID мастера из GET параметра
 $masterID = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($masterID === 0) {
@@ -18,17 +16,14 @@ if ($masterID === 0) {
     exit();
 }
 
-// Подключаем файл с функциями для работы с мастером
 require_once('./php/userData/getMasterData.php');
 
-// Получаем данные мастера
 $masterData = getMasterData($masterID);
 if (!$masterData) {
     header("Location: allMasters.php");
     exit();
 }
 
-// Получаем товары мастера
 $masterProducts = getMasterProducts($masterID);
 ?>
 <!DOCTYPE html>
@@ -137,44 +132,5 @@ $masterProducts = getMasterProducts($masterID);
             </div>
         </div>
     </footer>
-
-    <!-- Модальное окно связи с продавцом -->
-    <div id="sellerModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Связь с продавцом</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="seller-info">
-                    <div class="seller-name" id="modalSellerName"></div>
-                    <div class="seller-phone" id="modalSellerPhone"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="close-button">Закрыть</button>
-            </div>
-        </div>
-    </div>
-    
-    <script src="./js/modalWindow.js"></script>
-    <script>
-        // Обработчики для кнопок связи с мастером
-        document.addEventListener('DOMContentLoaded', function() {
-            const contactButtons = document.querySelectorAll('.contact-seller-btn');
-            
-            contactButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const masterName = this.getAttribute('data-master-name');
-                    const masterPhone = this.getAttribute('data-master-phone');
-                    
-                    // Открываем модальное окно
-                    document.getElementById('modalSellerName').textContent = 'Мастер: ' + masterName;
-                    document.getElementById('modalSellerPhone').textContent = 'Телефон: ' + masterPhone;
-                    document.getElementById('sellerModal').style.display = 'block';
-                });
-            });
-        });
-    </script>
 </body>
 </html>

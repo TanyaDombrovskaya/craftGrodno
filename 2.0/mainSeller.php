@@ -3,13 +3,12 @@ require_once('./php/checkAuth.php');
 checkAuth();
 
 if (getUserRole() !== 'seller') {
-    header("Location: /craftGrodno/loginPage.php");
+    header("Location: /craftGrodno/2.0/loginPage.php");
     exit();
 }
 
 require_once('./php/db.php');
 
-// Проверяем, что userID получен
 $userID = getUserId();
 
 // Первый запрос
@@ -83,7 +82,6 @@ $phone = $phoneData['phoneNumber'] ?? '';
         <!-- Секция личных данных -->
         <section id="profile" class="section">
             <h2>Личные данные мастера</h2>
-            <!-- ДОБАВЛЕН ID К ФОРМЕ -->
             <form method="POST" action="./php/masterData/saveMaster.php" class="master-form" id="master-form">
                 <div class="form-row">
                     <div class="form-group">
@@ -137,7 +135,6 @@ $phone = $phoneData['phoneNumber'] ?? '';
         <!-- Секция добавления товара -->
         <section id="add-product" class="section">
             <h2>Добавить новый товар</h2>
-            <!-- ДОБАВЛЕН ID К ФОРМЕ -->
             <form method="POST" action="./php/masterData/addProduct.php" class="product-form" id="product-form">
                 <div class="form-group">
                     <label for="product_name">Название товара *</label>
@@ -191,10 +188,10 @@ $phone = $phoneData['phoneNumber'] ?? '';
         </div>
     </div>              
 
-    <script src="./js/mainSelelr/sellerFormValidate.js"></script>
-    <script src="./js/mainSelelr/sellerFuncDostup.js"></script>
-    <script src="./js/mainSelelr/deleteProduct.js"></script>
+    <script src="./js/mainSeller/sellerFormValidate.js"></script>
+    <script src="./js/mainSeller/sellerFuncDostup.js"></script>
+    <script src="./js/mainSeller/deleteProduct.js"></script>
     <script src="./js/commonValidate.js"></script>
-    <script src="./js/mainSelelr/sellerValidate.js"></script>
+    <script src="./js/mainSeller/sellerValidate.js"></script>
 </body>
 </html>

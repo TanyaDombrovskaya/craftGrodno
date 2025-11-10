@@ -1,10 +1,8 @@
 <?php
 session_start();
 
-// Очищаем все данные сессии
 $_SESSION = array();
 
-// Если нужно уничтожить cookie сессии
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(session_name(), '', time() - 42000,
@@ -13,9 +11,7 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// Уничтожаем сессию
 session_destroy();
 
-// Перенаправляем на страницу входа
-header("Location: /craftGrodno/loginPage.php");
+header("Location: /craftGrodno/2.0/loginPage.php");
 exit();

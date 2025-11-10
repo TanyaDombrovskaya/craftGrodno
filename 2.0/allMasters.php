@@ -3,7 +3,7 @@ require_once('./php/checkAuth.php');
 checkAuth();
 
 if (getUserRole() !== 'user') {
-    header("Location: /craftGrodno/loginPage.php");
+    header("Location: /craftGrodno/2.0/oginPage.php");
     exit();
 }
 ?>
@@ -82,26 +82,5 @@ if (getUserRole() !== 'user') {
             </div>
         </div>
     </footer>
-
-    <!-- Модальное окно связи с продавцом -->
-    <div id="sellerModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Связь с продавцом</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="seller-info">
-                    <div class="seller-name" id="modalSellerName"></div>
-                    <div class="seller-phone" id="modalSellerPhone"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="close-button">Закрыть</button>
-            </div>
-        </div>
-    </div>
-    
-    <script src="./js/modalWindow.js"></script>
 </body>
 </html>

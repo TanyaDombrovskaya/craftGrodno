@@ -1,3 +1,6 @@
+<?php
+$selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -36,6 +39,60 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Фильтры -->
+        <section class="filters-section">
+            <div class="filters-header">
+                <h3 class="filters-title">Фильтры</h3>
+                <button class="reset-filters" id="resetFilters">Сбросить все</button>
+            </div>
+            
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Категория</label>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">Все категории</option>
+                        <option value="Дерево" <?php echo $selectedCategory === 'Дерево' ? 'selected' : ''; ?>>Дерево</option>
+                        <option value="Вязание" <?php echo $selectedCategory === 'Вязание' ? 'selected' : ''; ?>>Вязание</option>
+                        <option value="Керамика" <?php echo $selectedCategory === 'Керамика' ? 'selected' : ''; ?>>Керамика</option>
+                        <option value="Шитье" <?php echo $selectedCategory === 'Шитье' ? 'selected' : ''; ?>>Шитье</option>
+                        <option value="Бижутерия" <?php echo $selectedCategory === 'Бижутерия' ? 'selected' : ''; ?>>Бижутерия</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Цена, руб.</label>
+                    <div class="price-range">
+                        <input type="number" class="filter-input" id="priceMin" placeholder="От" min="0">
+                        <span class="price-separator">—</span>
+                        <input type="number" class="filter-input" id="priceMax" placeholder="До" min="0">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Сортировка</label>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="name_asc">По названию (А-Я)</option>
+                        <option value="name_desc">По названию (Я-А)</option>
+                        <option value="price_asc">По цене (сначала дешевые)</option>
+                        <option value="price_desc">По цене (сначала дорогие)</option>
+                        <option value="popular">По популярности</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">&nbsp;</label>
+                    <button class="filter-button" id="applyFilters">Применить</button>
+                </div>
+            </div>
+            
+            <div class="active-filters" id="activeFilters">
+                <!-- Активные фильтры будут добавляться здесь -->
+            </div>
+        </section>
+
+        <!-- Результаты -->
+        <div class="results-count" id="resultsCount"></div>
 
         <!-- Все товары -->
         <section class="products" id="products">
@@ -103,5 +160,6 @@
 
     <script src="./js/modalWindow.js"></script>
     <script src="./js/allProducts/searchProducts.js"></script>
+    <script src="./js/allProducts/filterProduct.js"></script>
 </body>
 </html>

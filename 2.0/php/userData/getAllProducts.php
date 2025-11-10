@@ -59,7 +59,11 @@ if ($result && $result->num_rows > 0) {
         $price = number_format($product['price'], 2, '.', ' ') . ' руб.';
         
         $products_html .= '
-        <div class="product-card" data-product-name="'.htmlspecialchars($product['productName']).'" data-product-description="'.htmlspecialchars($product['aboutProduct']).'">
+        <div class="product-card" 
+             data-product-name="'.htmlspecialchars($product['productName']).'" 
+             data-product-description="'.htmlspecialchars($product['aboutProduct']).'"
+             data-product-price="'.htmlspecialchars($product['price']).'"
+             data-product-category="'.htmlspecialchars($product['categoryName']).'">
             <div class="product-image">' . $icon . '</div>
             <div class="product-info">
                 <div class="product-title">' . htmlspecialchars($product['productName']) . '</div>
@@ -80,5 +84,4 @@ if ($result && $result->num_rows > 0) {
     $products_html = '<div class="no-products">Товары не найдены</div>';
 }
 
-// Возвращаем HTML с товарами
 echo $products_html;

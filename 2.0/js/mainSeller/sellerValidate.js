@@ -2,12 +2,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('sellerValidate.js loaded');
     
-    // Поля формы личных данных мастера
     const masterFormFields = [
         'master_name', 'direction', 'category', 'phone', 'about', 'experience'
     ];
     
-    // Поля формы добавления товара
     const productFormFields = [
         'product_name', 'product_about', 'price', 'count'
     ];
@@ -24,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 clearFieldError(this);
             });
             
-            // Убираем стандартную валидацию HTML5
             field.removeAttribute('required');
         }
     });
@@ -41,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 clearFieldError(this);
             });
             
-            // Убираем стандартную валидацию HTML5
             field.removeAttribute('required');
         }
     });
@@ -51,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (masterForm) {
         console.log('Master form found');
         
-        // Отключаем стандартную HTML5 валидацию
         masterForm.setAttribute('novalidate', 'novalidate');
         
         masterForm.addEventListener('submit', function(e) {
@@ -60,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             let hasError = false;
             
-            // Проверка обязательных полей
             const masterName = document.getElementById('master_name');
             if (!masterName.value.trim()) {
                 showFieldError(masterName, 'Заполните поле Имя мастера');
@@ -106,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 console.log('Form submission prevented due to errors');
                 
-                // Прокрутка к первой ошибке
                 const firstError = document.querySelector('.error-input');
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -122,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (productForm) {
         console.log('Product form found');
         
-        // Отключаем стандартную HTML5 валидацию
         productForm.setAttribute('novalidate', 'novalidate');
         
         productForm.addEventListener('submit', function(e) {
@@ -175,7 +167,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Функция валидации телефона
 function validatePhone(phone) {
-    // Простая валидация - можно настроить под нужный формат
     const phoneRegex = /^[\+]?[0-9\s\-\(\)]{7,15}$/;
     return phoneRegex.test(phone);
 }

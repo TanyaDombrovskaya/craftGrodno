@@ -1,12 +1,11 @@
 <?php
 session_start();
 
-// Если пользователь уже авторизован, перенаправляем на соответствующую страницу
 if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
     if ($_SESSION['user_role'] == 'user') {
-        header("Location: /craftGrodno/mainUser.php");
+        header("Location: /craftGrodno/2.0/mainUser.php");
     } else if ($_SESSION['user_role'] == 'seller') {
-        header("Location: /craftGrodno/mainSeller.php");
+        header("Location: /craftGrodno/2.0/mainSeller.php");
     }
     exit();
 }

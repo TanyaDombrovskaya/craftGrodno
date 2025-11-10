@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const productGrid = document.getElementById('productGrid');
     const productCards = productGrid.querySelectorAll('.product-card');
     
-    // Функция для поиска товаров
     function searchProducts() {
         const searchTerm = searchInput.value.toLowerCase().trim();
         
@@ -19,13 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Обработчик ввода в поисковую строку
     searchInput.addEventListener('input', searchProducts);
     
-    // Обработчик кнопки поиска
     document.querySelector('.search-button').addEventListener('click', searchProducts);
     
-    // Поиск при нажатии Enter
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             searchProducts();

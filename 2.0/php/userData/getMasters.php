@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__ . "/../init.php");
 
-// Получаем топ-3 мастеров с наибольшим количеством товаров (больше 0)
 $sql = "SELECT 
             m.masterID,
             m.masterName,
@@ -50,5 +49,4 @@ if ($result && $result->num_rows > 0) {
     }
 }
 
-// Возвращаем HTML с мастерами
 echo $masters_html;

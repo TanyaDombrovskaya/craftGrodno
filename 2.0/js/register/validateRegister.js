@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Инициализация переключателя типа пользователя
     initUserTypeToggle();
     
     const registerButton = document.getElementById('register-button');
@@ -112,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Если все проверки пройдены, отправляем форму
             console.log('Регистрация с типом пользователя:', userType);
             submitRegistrationForm();
         });
@@ -155,7 +153,6 @@ function initUserTypeToggle() {
         });
     });
     
-    // Инициализируем начальное состояние
     updateUserTypeActiveState();
 }
 
@@ -206,30 +203,24 @@ function validateLogin(login) {
 function validateName(name) {
     if (!name) return false;
     
-    // Проверяем, что имя содержит только буквы, дефисы и максимум один пробел
     const allowedChars = /^[a-zA-Zа-яА-Я- ]+$/;
     if (!allowedChars.test(name)) return false;
     
-    // Проверяем, что пробелов не больше одного
     const spaceCount = (name.match(/ /g) || []).length;
     if (spaceCount > 1) return false;
     
-    // Проверяем, что пробел не в начале и не в конце
     if (name.startsWith(' ') || name.endsWith(' ')) return false;
     
-    // Проверяем, что если есть пробел, то с обеих сторон есть другие символы
     if (name.includes(' ')) {
         const parts = name.split(' ');
         if (parts[0].length === 0 || parts[1].length === 0) {
-            return false; // Пробел не может быть без символов с обеих сторон
+            return false;
         }
     }
     
-    // Проверяем, что нет двух дефисов подряд или дефисов в начале/конце
     if (name.startsWith('-') || name.endsWith('-')) return false;
     if (name.includes('--')) return false;
     
-    // Проверяем, что имя содержит хотя бы один буквенный символ
     const hasLetters = /[a-zA-Zа-яА-Я]/.test(name);
     if (!hasLetters) return false;
     

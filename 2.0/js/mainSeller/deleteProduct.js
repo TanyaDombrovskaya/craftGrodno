@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmDeleteBtn = deleteModal.querySelector('.confirm-delete-button');
     
     let productToDeleteId = null;
-    
-    // Обработчики для кнопок удаления
+
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('delete-product-btn')) {
             productToDeleteId = e.target.getAttribute('data-product-id');
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Закрытие модального окна
     function closeDeleteModal() {
         deleteModal.style.display = 'none';
         productToDeleteId = null;
@@ -29,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     closeModalBtn.addEventListener('click', closeDeleteModal);
     cancelBtn.addEventListener('click', closeDeleteModal);
     
-    // Подтверждение удаления
     confirmDeleteBtn.addEventListener('click', function() {
         if (productToDeleteId) {
             deleteProduct(productToDeleteId);
@@ -49,12 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(result => {
             if (result === 'success') {
                 showMessage('Товар успешно удален', 'success');
-                // Удаляем карточку из DOM
                 const productCard = document.querySelector(`[data-product-id="${productId}"]`);
                 if (productCard) {
                     productCard.remove();
                 }
-                // Если товаров не осталось, показываем сообщение
                 const productGrid = document.querySelector('.product-grid');
                 if (productGrid && productGrid.children.length === 0) {
                     productGrid.innerHTML = '<div class="no-products">У вас пока нет товаров</div>';

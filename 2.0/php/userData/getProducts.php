@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__ . "/../init.php");
 
-// Функция для получения иконки продукта на основе названия
 function getProductIcon($productName) {
     $icons = [
         'салфетка' => '🧵',
@@ -31,10 +30,9 @@ function getProductIcon($productName) {
         }
     }
     
-    return '📦'; // Иконка по умолчанию
+    return '📦';
 }
 
-// Получаем топ-3 товара по количеству
 $sql = "SELECT 
             p.productID,
             p.productName,
@@ -61,7 +59,6 @@ if ($result && $result->num_rows > 0) {
         $icon = getProductIcon($product['productName']);
         $price = number_format($product['price'], 2, '.', ' ') . ' руб.';
         
-        // ОБНОВЛЕННАЯ СТРОКА С КНОПКОЙ - добавлены data-атрибуты
         $products_html .= '
         <div class="product-card">
             <div class="product-image">' . $icon . '</div>
@@ -82,5 +79,4 @@ if ($result && $result->num_rows > 0) {
     }
 }
 
-// Возвращаем HTML с товарами
 echo $products_html;

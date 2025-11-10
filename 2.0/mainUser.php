@@ -2,9 +2,8 @@
 require_once('./php/checkAuth.php');
 checkAuth();
 
-// Проверяем, что страница доступна только пользователям
 if (getUserRole() !== 'user') {
-    header("Location: /craftGrodno/loginPage.php");
+    header("Location: /craftGrodno/2.0/loginPage.php");
     exit();
 }
 ?>
@@ -102,7 +101,7 @@ if (getUserRole() !== 'user') {
                 </div>
             </div>
             <div class="about-image">
-                🎨
+                <img src="./styles/image/about-main-image.jpg" alt="">
             </div>
         </div>
     </section>
@@ -117,11 +116,11 @@ if (getUserRole() !== 'user') {
             <div class="footer-section">
                 <h3>Категории</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Дерево</a></li>
-                    <li><a href="#">Вязание</a></li>
-                    <li><a href="#">Керамика</a></li>
-                    <li><a href="#">Шытье</a></li>
-                    <li><a href="#">Бижутерия</a></li>
+                    <li><a href="./allProducts.php?category=Дерево">Дерево</a></li>
+                    <li><a href="./allProducts.php?category=Вязание">Вязание</a></li>
+                    <li><a href="./allProducts.php?category=Керамика">Керамика</a></li>
+                    <li><a href="./allProducts.php?category=Шитье">Шитье</a></li>
+                    <li><a href="./allProducts.php?category=Бижутерия">Бижутерия</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -144,7 +143,7 @@ if (getUserRole() !== 'user') {
         </div>
     </footer>
 
-    <!-- Модальное окно связи с продавцом -->
+    <!-- Модальное окно связи -->
     <div id="sellerModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">

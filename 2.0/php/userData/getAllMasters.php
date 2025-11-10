@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__ . "/../init.php");
 
-// Получаем всех мастеров с товарами
 $sql = "SELECT 
             m.masterID,
             m.masterName,
@@ -55,5 +54,4 @@ if ($result && $result->num_rows > 0) {
     </div>';
 }
 
-// Возвращаем HTML с мастерами
 echo $masters_html;

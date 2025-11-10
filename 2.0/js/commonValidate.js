@@ -46,4 +46,3 @@ document.querySelectorAll('#login-input, #name-input, #email-input, #password-in
         }
     });
 });
-

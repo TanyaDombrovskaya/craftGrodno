@@ -1,5 +1,5 @@
 <?php
-// Функция для получения данных мастера
+
 function getMasterData($masterID) {
     global $connection;
     

@@ -3,7 +3,7 @@ session_start();
 
 function checkAuth() {
     if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
-        header("Location: /craftGrodno/loginPage.php");
+        header("Location: /craftGrodno/2.0/loginPage.php");
         exit();
     }
 }
