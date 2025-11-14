@@ -116,7 +116,7 @@ body {
 
 .section h2 {
     color: #2e8b57;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     font-size: 1.5rem;
     border-bottom: 2px solid #e8f5e8;
     padding-bottom: 0.5rem;
@@ -168,6 +168,74 @@ body {
     background-color: #f7fafc;
     color: #718096;
     cursor: not-allowed;
+}
+
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.image-input {
+    display: none;
+}
+
+.image-upload-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #2e8b57, #3cb371);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    text-align: center;
+    justify-content: center;
+}
+
+.upload-text {
+    color: white;
+}
+
+.image-upload-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+}
+
+.upload-icon {
+    font-size: 1.2rem;
+}
+
+.image-preview {
+    width: 100%;
+    min-height: 150px;
+    border: 2px dashed #e2e8f0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+.image-preview.has-image {
+    border-color: #2e8b57;
+    border-style: solid;
+}
+
+.preview-text {
+    color: #718096;
+    text-align: center;
+    padding: 2rem;
+}
+
+.image-preview img.preview-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
 }
 
 .submit-button {
@@ -240,9 +308,27 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Стили для изображения */
+.product-image-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Стили для иконки (когда нет изображения) */
+.product-image-icon {
     font-size: 3rem;
     color: #2e8b57;
-    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .product-info {
@@ -293,27 +379,6 @@ body {
 .product-count {
     color: #718096;
     font-size: 0.9rem;
-}
-
-/* Кнопка удаления товара */
-.delete-product-btn {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-    width: 100%;
-}
-
-.delete-product-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
-    background: linear-gradient(135deg, #ff5252, #e53935);
 }
 
 /* Модальное окно */
@@ -455,4 +520,349 @@ body {
 .product-form textarea.error-input {
     border: 1px solid #ff4444 !important;
     background-color: #fff8f8 !important;
+}
+
+/* Стили для кнопок действий в карточке товара */
+.product-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.edit-product-btn, .delete-product-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    flex: 1;
+    text-align: center;
+}
+
+.edit-product-btn {
+    background: linear-gradient(135deg, #2e8b57, #3cb371);
+    color: white;
+}
+
+.edit-product-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+}
+
+.delete-product-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.delete-product-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Модальное окно редактирования товара */
+#editProductModal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#editProductModal .modal-content {
+    background: white;
+    margin: 5% auto;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+#editProductModal .modal-header {
+    background: linear-gradient(135deg, #2e8b57, #3cb371);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+#editProductModal .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+#editProductModal .close-modal {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#editProductModal .close-modal:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+#editProductModal .product-form {
+    padding: 2rem;
+}
+
+#editProductModal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#editProductModal .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+#editProductModal .form-group input,
+#editProductModal .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+}
+
+#editProductModal .form-group input:focus,
+#editProductModal .form-group textarea:focus {
+    outline: none;
+    border-color: #2e8b57;
+    box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+}
+
+#editProductModal .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+#editProductModal .image-upload-container {
+    border: 2px dashed #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+#editProductModal .image-upload-container:hover {
+    border-color: #2e8b57;
+}
+
+#editProductModal .image-upload-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #2e8b57, #3cb371);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+#editProductModal .image-upload-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+}
+
+#editProductModal #editImagePreview {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    overflow: hidden;
+    background: white;
+}
+
+#editProductModal #editImagePreview img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+}
+
+#editProductModal .preview-text {
+    color: #718096;
+    font-style: italic;
+}
+
+#editProductModal small {
+    color: #718096;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+#editProductModal .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+#editProductModal .cancel-button {
+    background: #718096;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+#editProductModal .cancel-button:hover {
+    background: #4a5568;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(113, 128, 150, 0.3);
+}
+
+#editProductModal .submit-button {
+    background: linear-gradient(135deg, #2e8b57, #3cb371);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 160px;
+}
+
+#editProductModal .submit-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #247d4e, #2e8b57);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+}
+
+#editProductModal .submit-button:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Стили для уведомлений */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    z-index: 10001;
+    font-weight: 500;
+    max-width: 300px;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notification-success {
+    background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+.notification-error {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.notification-info {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Анимация загрузки для кнопки */
+@keyframes buttonLoading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.submit-button.loading {
+    background: linear-gradient(90deg, #2e8b57, #3cb371, #2e8b57);
+    background-size: 200% 100%;
+    animation: buttonLoading 1.5s infinite;
+}
+
+.products-count {
+    font-size: 1.0rem;
+    font-weight: 500;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
 }

@@ -21,9 +21,6 @@ function getProductIcon($productName) {
         'колье' => '💎',
         'бижутери' => '💎',
         'камен' => '💎',
-        'сумка' => '🪡',
-        'льнян' => '🪡',
-        'шить' => '🪡'
     ];
     
     $productNameLower = mb_strtolower($productName, 'UTF-8');
@@ -46,6 +43,7 @@ $sql = "SELECT
             p.aboutProduct,
             p.price,
             p.masterID,
+            p.image,
             m.masterName,
             m.phoneNumber,
             c.categoryName,
@@ -68,9 +66,35 @@ if ($result && $result->num_rows > 0) {
         $icon = getProductIcon($product['productName']);
         $price = number_format($product['price'], 2, '.', ' ') . ' BYN';
         
+        // Обработка изображения
+        $image_html = '';
+        $image_size = isset($product['image']) ? strlen($product['image']) : 0;
+        
+        if ($image_size > 100) {
+            try {
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $mime_type = $finfo->buffer($product['image']);
+                
+                if (strpos($mime_type, 'image/') === 0) {
+                    $image_data = base64_encode($product['image']);
+                    $image_src = 'data:' . $mime_type . ';base64,' . $image_data;
+                    $image_html = '<img src="' . $image_src . '" alt="' . htmlspecialchars($product['productName']) . '" class="product-image-img" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">';
+                    $image_html .= '<div class="product-image-icon" style="display:none;">' . $icon . '</div>';
+                } else {
+                    throw new Exception("Not an image: " . $mime_type);
+                }
+            } catch (Exception $e) {
+                $image_html = '<div class="product-image-icon">' . $icon . '</div>';
+            }
+        } else {
+            $image_html = '<div class="product-image-icon">' . $icon . '</div>';
+        }
+        
         $products_html .= '
         <div class="product-card" data-product-id="' . $product['productID'] . '">
-            <div class="product-image">' . $icon . '</div>
+            <div class="product-image">
+                ' . $image_html . '
+            </div>
             <div class="product-info">
                 <h3 class="product-title">' . htmlspecialchars($product['productName']) . '</h3>
                 <p class="product-description">' . htmlspecialchars($product['aboutProduct']) . '</p>
@@ -78,9 +102,18 @@ if ($result && $result->num_rows > 0) {
                     <span class="product-price">' . $price . '</span>
                     <span class="product-count">Осталось: ' . $product['countOfProduct'] . ' шт.</span>
                 </div>
-                <button class="delete-product-btn" data-product-id="' . $product['productID'] . '" data-product-name="' . htmlspecialchars($product['productName']) . '">
-                    Удалить товар
-                </button>
+                <div class="product-actions">
+                    <button class="edit-product-btn" data-product-id="' . $product['productID'] . '" 
+                            data-product-name="' . htmlspecialchars($product['productName']) . '" 
+                            data-product-about="' . htmlspecialchars($product['aboutProduct']) . '" 
+                            data-product-price="' . $product['price'] . '" 
+                            data-product-count="' . $product['countOfProduct'] . '">
+                        Редактировать
+                    </button>
+                    <button class="delete-product-btn" data-product-id="' . $product['productID'] . '" data-product-name="' . htmlspecialchars($product['productName']) . '">
+                        Удалить
+                    </button>
+                </div>
             </div>
         </div>';
     }

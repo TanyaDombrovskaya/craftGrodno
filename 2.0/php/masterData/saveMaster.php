@@ -19,7 +19,7 @@ mysqli_stmt_bind_param($stmt, "ssissii", $name, $direction, $categoryID, $phone,
 if (mysqli_stmt_execute($stmt)) {
     // Обновляем имя пользователя в сессии
     $_SESSION['user_name'] = $name;
-    header("Location: /craftGrodno/mainSeller.php?success=master");
+    header("Location: /craftGrodno/2.0/mainSeller.php?success=master");
 } else {
     http_response_code(500);
     echo "Ошибка при сохранении данных: " . mysqli_error($connection);

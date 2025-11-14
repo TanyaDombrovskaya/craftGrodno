@@ -82,7 +82,7 @@ $phone = $phoneData['phoneNumber'] ?? '';
         <!-- Секция личных данных -->
         <section id="profile" class="section">
             <h2>Личные данные мастера</h2>
-            <form method="POST" action="./php/masterData/saveMaster.php" class="master-form" id="master-form">
+            <form method="POST" action="./php/masterData/saveMaster.php" class="master-form" id="master-form" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="login">Логин</label>
@@ -135,7 +135,7 @@ $phone = $phoneData['phoneNumber'] ?? '';
         <!-- Секция добавления товара -->
         <section id="add-product" class="section">
             <h2>Добавить новый товар</h2>
-            <form method="POST" action="./php/masterData/addProduct.php" class="product-form" id="product-form">
+            <form method="POST" action="./php/masterData/addProduct.php" class="product-form" id="product-form" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="product_name">Название товара *</label>
                     <input type="text" id="product_name" name="product_name" required>
@@ -146,6 +146,20 @@ $phone = $phoneData['phoneNumber'] ?? '';
                     <textarea id="product_about" name="product_about" rows="4" required></textarea>
                 </div>
                 
+                <div class="form-group">
+                    <label for="product_image">Изображение товара</label>
+                    <div class="image-upload-container">
+                        <input type="file" id="product_image" name="product_image" accept="image/*" class="image-input">
+                        <label for="product_image" class="image-upload-button">
+                            <span class="upload-icon">📷</span>
+                            <span class="upload-text">Выберите изображение</span>
+                        </label>
+                        <div class="image-preview" id="imagePreview">
+                            <span class="preview-text">Изображение не выбрано</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="price">Цена (BYN) *</label>
@@ -165,6 +179,33 @@ $phone = $phoneData['phoneNumber'] ?? '';
         <!-- Секция моих товаров -->
         <section id="products" class="section">
             <h2>Мои товары</h2>
+            
+            <?php
+            require_once(__DIR__ . "/php/init.php");
+            
+            // Получаем userID текущего пользователя
+            $userID = getUserId();
+            
+            // Запрос для подсчета общего количества товаров
+            $count_sql = "SELECT COUNT(*) as total_products 
+                        FROM products p 
+                        LEFT JOIN masters m ON p.masterID = m.masterID 
+                        WHERE m.userID = ? AND p.productName IS NOT NULL";
+            $count_stmt = mysqli_prepare($connection, $count_sql);
+            mysqli_stmt_bind_param($count_stmt, "i", $userID);
+            mysqli_stmt_execute($count_stmt);
+            $count_result = mysqli_stmt_get_result($count_stmt);
+            $count_data = mysqli_fetch_assoc($count_result);
+            $total_products = $count_data['total_products'];
+            mysqli_stmt_close($count_stmt);
+            ?>
+            
+            <div class="products-header">
+                <div class="products-count">
+                    Всего товаров: <span class="count-number"><?php echo $total_products; ?></span>
+                </div>
+            </div>
+            
             <div class="product-grid">
                 <?php include('./php/masterData/getAllMasterProducts.php'); ?>
             </div>
@@ -186,12 +227,68 @@ $phone = $phoneData['phoneNumber'] ?? '';
                 <button class="confirm-delete-button">Удалить</button>
             </div>
         </div>
-    </div>              
+    </div>      
+    
+    <!-- Модальное окно редактирования товара -->
+    <div id="editProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Редактировать товар</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <form id="edit-product-form" class="product-form" enctype="multipart/form-data">
+                <input type="hidden" id="edit_product_id" name="product_id">
+                
+                <div class="form-group">
+                    <label for="edit_product_name">Название товара *</label>
+                    <input type="text" id="edit_product_name" name="product_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_product_about">Описание товара *</label>
+                    <textarea id="edit_product_about" name="product_about" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit_product_image">Изображение товара</label>
+                    <div class="image-upload-container">
+                        <input type="file" id="edit_product_image" name="product_image" accept="image/*" class="image-input">
+                        <label for="edit_product_image" class="image-upload-button">
+                            <span class="upload-icon">📷</span>
+                            <span class="upload-text">Изменить изображение</span>
+                        </label>
+                        <div class="image-preview" id="editImagePreview">
+                            <span class="preview-text">Текущее изображение</span>
+                        </div>
+                    </div>
+                    <small>Оставьте пустым, чтобы сохранить текущее изображение</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit_price">Цена (BYN) *</label>
+                        <input type="number" id="edit_price" name="price" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit_count">Количество *</label>
+                        <input type="number" id="edit_count" name="count" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="cancel-button">Отмена</button>
+                    <button type="submit" class="submit-button">Сохранить изменения</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="./js/mainSeller/sellerFormValidate.js"></script>
     <script src="./js/mainSeller/sellerFuncDostup.js"></script>
     <script src="./js/mainSeller/deleteProduct.js"></script>
     <script src="./js/commonValidate.js"></script>
-    <script src="./js/mainSeller/sellerValidate.js"></script>
+    <script src="./js/mainSeller/uploadImage.js"></script>
+    <script src="./js/mainSeller/productManagment.js"></script>
 </body>
 </html>
