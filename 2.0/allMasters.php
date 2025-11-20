@@ -14,6 +14,7 @@ if (getUserRole() !== 'user') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrodnoCraft - Все мастера</title>
     <link rel="stylesheet" href="./styles/allMastersPageStyle.css">
+    <link rel="icon" href="./styles/image/icon.png">
 </head>
 <body>
     <!-- Навигация -->

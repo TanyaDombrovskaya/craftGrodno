@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrodnoCraft - Регистрация</title>
     <link rel="stylesheet" href="./styles/registerStyle.css">
+    <link rel="icon" href="./styles/image/icon.png">
 </head>
 <body>
     <div class="container">        

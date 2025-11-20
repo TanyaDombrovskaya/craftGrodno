@@ -394,7 +394,7 @@ function showMessage(text, type) {
     `;
     
     if (type === 'success') {
-        messageDiv.style.background = 'linear-gradient(135deg, #2e8b57, #3cb371)';
+        messageDiv.style.background = 'linear-gradient(135deg, #10b981, #34d399)';
     } else {
         messageDiv.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
     }

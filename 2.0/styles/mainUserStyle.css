@@ -45,7 +45,7 @@ body {
 
 /* Навигация - Полупрозрачная с новым цветом */
 .navbar {
-    background: rgba(31, 41, 55, 0.85); /* Темный полупрозрачный */
+    background: rgba(31, 41, 55, 0.85);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem 2rem;

@@ -33,6 +33,7 @@ $masterProducts = getMasterProducts($masterID);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrodnoCraft - <?php echo htmlspecialchars($masterData['masterName']); ?></title>
     <link rel="stylesheet" href="./styles/masterPageStyle.css">
+    <link rel="icon" href="./styles/image/icon.png">
 </head>
 <body>
     <!-- Навигация -->

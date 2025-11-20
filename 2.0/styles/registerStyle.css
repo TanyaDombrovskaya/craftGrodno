@@ -1,3 +1,30 @@
+:root {
+    --primary: #10b981;
+    --primary-dark: #059669;
+    --primary-light: #34d399;
+    --secondary: #f59e0b;
+    --accent: #8b5cf6;
+    --dark: #1f2937;
+    --dark-light: #374151;
+    --light: #f8fafc;
+    --gray: #6b7280;
+    --gray-light: #9ca3af;
+    --white: #ffffff;
+    --card-bg: #ffffff;
+    --border: #e5e7eb;
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    
+    --radius: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    
+    --transition: all 0.2s ease-in-out;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,10 +32,8 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: -webkit-linear-gradient(0deg, rgb(46, 103, 0), rgb(148, 241, 144) 100%);
-    background: -moz-linear-gradient(0deg, rgb(46, 103, 0), rgb(148, 241, 144) 100%);
-    background: linear-gradient(0deg, rgb(46, 103, 0), rgb(148, 241, 144) 100%);
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -18,9 +43,9 @@ body {
 
 .container {
     width: 500px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
     overflow: hidden;
 }
 
@@ -34,19 +59,20 @@ body {
     text-align: center;
     margin-bottom: 30px;
     font-size: 35px;
-    color: #2e8b57;
-    font-weight: bold;
+    color: var(--primary);
+    font-weight: 700;
     width: 100%;
 }
 
 .logo span {
-    color: #ffd700;
+    color: var(--secondary);
 }
 
+/* Переключатель типа пользователя */
 .user-type-toggle {
     display: flex;
-    background: #f0f0f0;
-    border-radius: 10px;
+    background: var(--light);
+    border-radius: var(--radius);
     padding: 5px;
     margin-bottom: 25px;
     position: relative;
@@ -62,16 +88,16 @@ body {
     text-align: center;
     padding: 12px;
     cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    border-radius: calc(var(--radius) - 2px);
+    transition: var(--transition);
     font-weight: 600;
-    color: #666;
+    color: var(--gray);
     z-index: 1;
 }
 
 .user-type-toggle input[type="radio"]:checked + .user-type-option {
-    background: #2e8b57;
-    color: white;
+    background: var(--primary);
+    color: var(--white);
 }
 
 .form-group {
@@ -83,44 +109,42 @@ body {
 label {
     display: block;
     margin-bottom: 8px;
-    color: #2e8b57;
-    font-weight: 600;
+    color: var(--dark);
+    font-weight: 500;
     font-size: 14px;
-}
-
-.user-type-option {
-    margin: 0;
 }
 
 input {
     width: 100%;
     padding: 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
     font-size: 16px;
-    transition: all 0.3s ease;
-    background: #f9f9f9;
+    transition: var(--transition);
+    background: var(--light);
+    font-family: inherit;
 }
 
 .error-input {
     width: 100%;
     padding: 15px;
-    border: 2px solid #de1111;
-    border-radius: 10px;
+    border: 2px solid #ef4444;
+    border-radius: var(--radius);
     font-size: 16px;
-    transition: all 0.3s ease;
-    background: #f9f9f9;
+    transition: var(--transition);
+    background: #fef2f2;
+    font-family: inherit;
 }
 
 input:focus {
     outline: none;
-    border-color: #2e8b57;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 input::placeholder {
-    color: #999;
+    color: var(--gray-light);
 }
 
 .password-toggle {
@@ -128,20 +152,25 @@ input::placeholder {
     right: 15px;
     top: 42px;
     cursor: pointer;
-    color: #666;
+    color: var(--gray);
     font-size: 14px;
     user-select: none;
+    transition: var(--transition);
+}
+
+.password-toggle:hover {
+    color: var(--primary);
 }
 
 .password-match {
-    color: #2e8b57;
+    color: var(--primary);
     font-size: 12px;
     margin-top: 5px;
     display: none;
 }
 
 .password-mismatch {
-    color: #e74c3c;
+    color: #ef4444;
     font-size: 12px;
     margin-top: 5px;
     display: none;
@@ -150,20 +179,25 @@ input::placeholder {
 #register-button {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #2e8b57, #3cb371);
-    color: white;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--white);
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius);
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     margin-top: 10px;
+    font-family: inherit;
 }
 
 #register-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(46, 139, 87, 0.4);
+    box-shadow: var(--shadow-md);
+}
+
+#register-button:active {
+    transform: translateY(0);
 }
 
 .links-group {
@@ -174,14 +208,66 @@ input::placeholder {
 }
 
 .link {
-    color: #2e8b57;
+    color: var(--primary);
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: var(--transition);
     font-size: 14px;
 }
 
 .link:hover {
-    color: #ffd700;
+    color: var(--primary-dark);
     text-decoration: underline;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin: 1rem;
+    }
+    
+    .form-section {
+        padding: 30px 40px;
+    }
+    
+    .logo {
+        font-size: 30px;
+        margin-bottom: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 20px 0;
+    }
+    
+    .container {
+        width: 95%;
+        border-radius: var(--radius-md);
+    }
+    
+    .form-section {
+        padding: 25px 30px;
+    }
+    
+    .logo {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+    
+    .user-type-option {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    input {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    #register-button {
+        padding: 14px;
+        font-size: 15px;
+    }
 }

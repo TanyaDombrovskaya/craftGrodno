@@ -8,6 +8,7 @@ $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrodnoCraft - Все товары</title>
     <link rel="stylesheet" href="./styles/allProductsPageStyle.css">
+    <link rel="icon" href="./styles/image/icon.png">
 </head>
 <body>
     <!-- Навигация -->

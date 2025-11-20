@@ -130,7 +130,6 @@ function updateProduct() {
         if (data.success) {
             showNotification('Товар успешно обновлен!', 'success');
             closeEditModal();
-            // Обновляем список товаров
             loadProducts();
         } else {
             showNotification('Ошибка при обновлении товара: ' + data.message, 'error');
@@ -198,11 +197,9 @@ function showNotification(message, type = 'info') {
     `;
     
     if (type === 'success') {
-        notification.style.backgroundColor = '#27ae60';
-    } else if (type === 'error') {
-        notification.style.backgroundColor = '#e74c3c';
+        notification.style.background = 'linear-gradient(135deg, #10b981, #34d399)';
     } else {
-        notification.style.backgroundColor = '#3498db';
+        notification.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
     }
     
     document.body.appendChild(notification);

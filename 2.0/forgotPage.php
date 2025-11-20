@@ -8,6 +8,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Восстановление пароля - GrodnoCraft</title>
     <link rel="stylesheet" href="./styles/forgotStyle.css">
+    <link rel="icon" href="./styles/image/icon.png">
 </head>
 <body>
     <div class="container">

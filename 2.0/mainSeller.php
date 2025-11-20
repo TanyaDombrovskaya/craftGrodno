@@ -61,6 +61,7 @@ $phone = $phoneData['phoneNumber'] ?? '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrodnoCraft - Панель продавца</title>
     <link rel="stylesheet" href="./styles/mainSellerStyle.css">
+    <link rel="icon" href="./styles/image/icon.png">
 </head>
 <body>
     <nav class="navbar">

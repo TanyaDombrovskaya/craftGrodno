@@ -14,6 +14,7 @@ if (getUserRole() !== 'user') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrodnoCraft - Магазин ремесленных изделий</title>
     <link rel="stylesheet" href="./styles/mainUserStyle.css">
+    <link rel="icon" href="./styles/image/icon.png">
 </head>
 <body>
     <!-- Навигация -->
