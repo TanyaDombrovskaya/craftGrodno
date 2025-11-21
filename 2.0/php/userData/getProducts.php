@@ -90,7 +90,7 @@ if ($result && $result->num_rows > 0) {
                 ' . $image_html . '
             </div>
             <div class="product-info">
-                <div class="product-title">' . htmlspecialchars($product['productName']) . '</div>
+                <div class="product-title"><a href="./productCard.php?id=' . $product['productID'] . '">' . htmlspecialchars($product['productName']) . '</a></div>
                 <div class="product-description">' . htmlspecialchars($product['aboutProduct']) . '</div>
                 <div class="product-footer">
                     <div class="product-price">' . $price . '</div>

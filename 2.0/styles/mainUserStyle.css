@@ -325,15 +325,19 @@ body {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Занимает все доступное пространство */
+    flex-grow: 1;
 }
 
 .product-title {
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: var(--dark);
     font-size: 1.1rem;
     flex-shrink: 0;
+}
+
+.product-title a {
+    text-decoration: none;
+    color: var(--dark);
 }
 
 .product-description {
@@ -431,6 +435,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%; /* Добавлено для одинаковой высоты */
+    width: 100%;
 }
 
 .master-card:hover {

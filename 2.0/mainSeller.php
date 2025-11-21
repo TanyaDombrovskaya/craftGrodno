@@ -200,7 +200,7 @@ $phone = $phoneData['phoneNumber'] ?? '';
             $total_products = $count_data['total_products'];
             mysqli_stmt_close($count_stmt);
             ?>
-            
+
             <div class="products-header">
                 <div class="products-count">
                     Всего товаров: <span class="count-number"><?php echo $total_products; ?></span>
@@ -291,5 +291,15 @@ $phone = $phoneData['phoneNumber'] ?? '';
     <script src="./js/commonValidate.js"></script>
     <script src="./js/mainSeller/uploadImage.js"></script>
     <script src="./js/mainSeller/productManagment.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const productGrid = document.querySelector('.product-grid');
+        
+        if (productGrid && <?php echo $total_products; ?> === 0) {
+            productGrid.classList.remove('product-grid');
+            productGrid.classList.add('product-grid-no');
+        }
+    });
+</script>
 </body>
 </html>

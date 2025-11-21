@@ -1,5 +1,27 @@
 @import url("./mainUserStyle.css");
 
+/* Основной контейнер для сетки товаров */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Карточка товара - ширина определяется сеткой */
+.product-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Убрано max-width - ширина теперь определяется сеткой */
+}
+
 .no-products {
     text-align: center;
     color: var(--gray);
@@ -23,7 +45,7 @@
     opacity: 0.8;
 }
 
-/* Стили для строки поиска */
+/* Остальные стили остаются без изменений */
 .products-header {
     display: flex;
     justify-content: space-between;
@@ -245,7 +267,7 @@
     margin-bottom: 1rem;
 }
 
-/* Адаптивность для фильтров */
+/* Адаптивность */
 @media (max-width: 768px) {
     .products-header {
         flex-direction: column;
@@ -268,6 +290,10 @@
     
     .filter-button {
         align-self: stretch;
+    }
+    
+    .product-grid {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -89,7 +89,7 @@ if ($result && $result->num_rows > 0):
         <div class="product-card">
             <div class="product-image"><?php echo $image_html; ?></div>
             <div class="product-info">
-                <h3 class="product-name"><?php echo htmlspecialchars($product['productName']); ?></h3>
+                <h3 class="product-title"><a href="./productCard.php?id=<?php echo $product['productID']; ?>"><?php echo htmlspecialchars($product['productName']); ?></a></h3>
                 <p class="product-description"><?php echo htmlspecialchars($product['aboutProduct']); ?></p>
                 <div class="product-footer">
                     <div class="product-price"><?php echo $price; ?></div>

@@ -333,6 +333,12 @@ body {
     align-items: stretch;
 }
 
+.product-grid-no {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .product-card {
     background: var(--card-bg);
     border-radius: var(--radius-lg);

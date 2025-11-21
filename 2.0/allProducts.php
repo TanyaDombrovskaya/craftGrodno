@@ -1,4 +1,12 @@
 <?php
+require_once('./php/checkAuth.php');
+checkAuth();
+
+if (getUserRole() !== 'user') {
+    header("Location: /craftGrodno/2.0/loginPage.php");
+    exit();
+}
+
 $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
 ?>
 <!DOCTYPE html>
@@ -16,11 +24,15 @@ $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
         <div class="nav-container">
             <div class="logo">Grodno<span>Craft</span></div>
             <div class="nav-links">
-                <a href="./mainUser.php" class="nav-link">Главная</a>
-                <a href="./mainUser.php#categories" class="nav-link">Категории</a>
-                <a href="./mainUser.php#masters" class="nav-link">Мастера</a>
-                <a href="./mainUser.php#about" class="nav-link">О нас</a>
-                <a href="./mainUser.php#footer" class="nav-link">Контакты</a>
+                <a href="./mainUserPage.php#banner" class="nav-link">Главная</a>
+                <a href="./mainUserPage.php#categories" class="nav-link">Категории</a>
+                <a href="./allMasters.php" class="nav-link">Мастера</a>
+                <a href="./mainUserPage.php#about" class="nav-link">О нас</a>
+                <a href="./mainUserPage.php#footer" class="nav-link">Контакты</a>
+            </div>
+            <div class="user-section">
+                <p class="user-name"><?php echo htmlspecialchars($_SESSION['user_login']); ?></p>
+                <a href="./php/logout.php" class="logout-button">Выйти</a>
             </div>
         </div>
     </nav>
@@ -113,11 +125,11 @@ $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
             <div class="footer-section">
                 <h3>Категории</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Дерево</a></li>
-                    <li><a href="#">Вязание</a></li>
-                    <li><a href="#">Керамика</a></li>
-                    <li><a href="#">Шытье</a></li>
-                    <li><a href="#">Бижутерия</a></li>
+                    <li><a href="./allProducts.php?category=Дерево">Дерево</a></li>
+                    <li><a href="./allProducts.php?category=Вязание">Вязание</a></li>
+                    <li><a href="./allProducts.php?category=Керамика">Керамика</a></li>
+                    <li><a href="./allProducts.php?category=Шитье">Шитье</a></li>
+                    <li><a href="./allProducts.php?category=Бижутерия">Бижутерия</a></li>
                 </ul>
             </div>
             <div class="footer-section">

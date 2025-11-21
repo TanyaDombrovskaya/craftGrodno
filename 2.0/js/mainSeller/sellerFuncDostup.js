@@ -20,6 +20,12 @@ document.querySelector('.master-form').addEventListener('submit', function(e) {
     }
 });
 
+const sections = [
+    { id: 'add-product', content: '.product-form' },
+    { id: 'products', content: '.product-grid' },
+    { id: 'products', content: '.products-header' }
+];
+
 function checkMasterDataCompletion() {
     const requiredFields = [
         document.getElementById('master_name'),
@@ -52,11 +58,6 @@ function checkMasterDataCompletion() {
 }
 
 function updateSectionMessages(isComplete) {
-    const sections = [
-        { id: 'add-product', content: '.product-form' },
-        { id: 'products', content: '.product-grid' }
-    ];
-    
     sections.forEach(section => {
         const sectionElement = document.getElementById(section.id);
         if (!sectionElement) return;

@@ -1,0 +1,336 @@
+@import url('mainUserStyle.css');
+
+/* Стили для страницы продукта */
+.product-details {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.product-main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.product-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.product-image-container {
+    width: 100%;
+    height: 400px;
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-image-icon {
+    font-size: 4rem;
+    color: var(--primary);
+}
+
+.product-info-section {
+    /* Убрали отдельные стили фона и тени, так как теперь они в общем контейнере */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.product-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.product-category {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--white);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    width: 20%;
+    text-align: center;
+}
+
+.product-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.product-stock {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.stock-available {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.stock-low {
+    color: var(--secondary);
+    font-weight: 500;
+}
+
+.stock-out {
+    color: var(--gray);
+    font-weight: 500;
+}
+
+.product-description {
+    margin-bottom: 2rem;
+    flex-grow: 1;
+}
+
+.description-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+}
+
+.description-text {
+    color: var(--gray);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.product-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.contact-seller {
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    flex: 1;
+    font-size: 1rem;
+}
+
+.contact-seller:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.contact-seller:disabled {
+    background: var(--gray-light);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.back-to-products {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    text-align: center;
+    flex: 1;
+    font-size: 1rem;
+}
+
+.back-to-products:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+/* Секция информации о мастере */
+.master-section {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-top: 2rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-light);
+}
+
+.master-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.master-avatar-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.master-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.master-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.master-name a {
+    text-decoration: none;
+    color: var(--dark);
+}
+
+.master-direction {
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.master-about {
+    color: var(--gray);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.master-stats-detailed {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.master-stat-detailed {
+    text-align: center;
+    padding: 1rem;
+    background: var(--light);
+    border-radius: var(--radius);
+}
+
+.stat-value-detailed {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: block;
+}
+
+.stat-name-detailed {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .product-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .product-image-container {
+        height: 300px;
+    }
+    
+    .product-title {
+        font-size: 1.75rem;
+    }
+    
+    .product-price {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-details {
+        padding: 1rem 0;
+    }
+    
+    .product-image-section,
+    .product-info-section,
+    .master-section {
+        padding: 1.5rem;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+    }
+    
+    .master-info {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .master-avatar-large {
+        margin: 0 auto;
+    }
+    
+    .master-stats-detailed {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-title {
+        font-size: 1.5rem;
+    }
+    
+    .product-price {
+        font-size: 1.5rem;
+    }
+    
+    .contact-seller,
+    .back-to-products {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+    }
+}

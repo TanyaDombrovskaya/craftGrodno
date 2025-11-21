@@ -162,6 +162,7 @@ if (getUserRole() !== 'user') {
             </div>
         </div>
     </div>
+    
     <script src="./js/modalWindow.js"></script>
 </body>
 </html>
