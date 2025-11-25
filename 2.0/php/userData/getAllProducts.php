@@ -59,6 +59,19 @@ if ($result && $result->num_rows > 0) {
         $icon = getProductIcon($product['productName']);
         $price = number_format($product['price'], 2, '.', ' ') . ' руб.';
         
+        // Получаем средний рейтинг товара
+        $rating_sql = "SELECT AVG(rating) as avg_rating, COUNT(*) as review_count 
+                       FROM reviews 
+                       WHERE productID = ?";
+        $rating_stmt = $connection->prepare($rating_sql);
+        $rating_stmt->bind_param("i", $product['productID']);
+        $rating_stmt->execute();
+        $rating_result = $rating_stmt->get_result();
+        $rating_data = $rating_result->fetch_assoc();
+        
+        $avg_rating = $rating_data['avg_rating'] ? round($rating_data['avg_rating'], 1) : 0;
+        $review_count = $rating_data['review_count'];
+        
         // Обработка изображения
         $image_html = '';
         $image_size = isset($product['image']) ? strlen($product['image']) : 0;
@@ -89,10 +102,22 @@ if ($result && $result->num_rows > 0) {
              data-product-description="'.htmlspecialchars($product['aboutProduct']).'"
              data-product-price="'.htmlspecialchars($product['price']).'"
              data-product-category="'.htmlspecialchars($product['categoryName']).'">
-            <div class="product-image">' . $image_html . '</div>
+            <div class="product-image">
+                ' . $image_html . '
+            </div>
             <div class="product-info">
                 <div class="product-title"><a href="./productCard.php?id=' . $product['productID'] . '">' . htmlspecialchars($product['productName']) . '</a></div>
-                <div class="product-description">' . htmlspecialchars($product['aboutProduct']) . '</div>
+                
+                <!-- Рейтинг товара -->
+                <div class="product-rating">
+                    <div class="rating-stars">' . displayRatingStars($avg_rating) . '</div>
+                    <div class="rating-info">
+                        <span class="rating-value">' . $avg_rating . '</span>
+                        <span class="rating-count">(' . $review_count . ')</span>
+                    </div>
+                </div>
+                
+                <div class="product-description">' . htmlspecialchars(mb_substr($product['aboutProduct'], 0, 100)) . (mb_strlen($product['aboutProduct']) > 100 ? '...' : '') . '</div>
                 <div class="product-footer">
                     <div class="product-price">' . $price . '</div>
                     <button class="add-to-cart" 
@@ -104,6 +129,9 @@ if ($result && $result->num_rows > 0) {
                 </div>
             </div>
         </div>';
+        
+        // Закрываем statement для рейтинга
+        $rating_stmt->close();
     }
 } else {
     $products_html = '<div class="no-products">Товары не найдены</div>';

@@ -842,6 +842,138 @@ body {
     margin-bottom: 0.5rem;
 }
 
+/* Стили для рейтинга в навбаре */
+.user-rating {
+    display: flex;
+    align-items: center;
+}
+
+.rating-square {
+    padding: 0.7rem 0.7rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: var(--transition);
+}
+
+.rating-number {
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 1px;
+}
+
+.rating-star-all {
+    color: var(--secondary);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Стили для рейтинга товара */
+.product-rating {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-star {
+    color: #ddd;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.rating-star.filled {
+    color: #ffc107;
+}
+
+.rating-star.half {
+    background: linear-gradient(90deg, #ffc107 50%, #ddd 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.rating-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.rating-value {
+    font-weight: 600;
+    color: #333;
+}
+
+.rating-count {
+    color: #666;
+}
+
+/* Стиль для товаров без отзывов */
+.no-reviews .rating-stars {
+    opacity: 0.5;
+}
+
+.no-reviews .rating-info {
+    color: #999;
+}
+
+/* Адаптивность для рейтинга */
+@media (max-width: 768px) {
+    .user-section {
+        flex-direction: row;
+        gap: 0.75rem;
+    }
+    
+    .rating-square {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .rating-number {
+        font-size: 13px;
+    }
+    
+    .rating-star {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-section {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+    
+    .rating-square {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .rating-number {
+        font-size: 12px;
+    }
+    
+    .rating-star {
+        font-size: 10px;
+    }
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .nav-container {

@@ -45,6 +45,49 @@ if ($product_id <= 0) {
     <!-- Основной контент -->
     <div class="container">
         <?php include('./php/userData/getProductDetails.php'); ?>
+        
+        <!-- Секция отзывов -->
+        <div class="reviews-section">
+            <h2 class="section-title">Отзывы о товаре</h2>
+            
+            <!-- Форма добавления отзыва -->
+            <div class="add-review-form">
+            <h3>Оставить отзыв</h3>
+            <form id="reviewForm" method="POST" action="./php/userData/addReview.php">
+                <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+                
+                <div class="rating-input">
+                    <label>Ваша оценка:</label>
+                    <div class="stars-rating">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">★</label>
+                    </div>
+                </div>
+                
+                <div class="review-text-input">
+                    <label for="reviewText">Ваш отзыв:</label>
+                    <textarea id="reviewText" name="review_text" 
+                            placeholder="Поделитесь вашим мнением о товаре..." 
+                            rows="4"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-review-btn" id="submit-review-btn">Отправить отзыв</button>
+            </form>
+        </div>
+            
+            <!-- Список отзывов -->
+            <div class="reviews-list" id="reviewsList">
+                <?php include('./php/userData/getProductReviews.php'); ?>
+            </div>
+        </div>
     </div>
 
     <!-- Футер -->
@@ -84,7 +127,7 @@ if ($product_id <= 0) {
         </div>
     </footer>
 
-    <!-- Модальное окно связи -->
+    <!-- Модальное окно связи с продавцом -->
     <div id="sellerModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -104,5 +147,17 @@ if ($product_id <= 0) {
     </div>
     
     <script src="./js/modalWindow.js"></script>
+    <script src="./js/review/validateReviews.js"></script>
+    <script src="./js/commonValidate.js"></script>
+    <script>
+    function hideNotification() {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            notification.style.display = 'none';
+        }
+    }
+    
+    setTimeout(hideNotification, 5000);
+    </script>
 </body>
 </html>

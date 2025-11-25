@@ -25,6 +25,20 @@ if (!$masterData) {
 }
 
 $masterProducts = getMasterProducts($masterID);
+
+// Получаем рейтинг мастера
+$rating_sql = "SELECT AVG(r.rating) as avg_rating, COUNT(*) as review_count 
+               FROM reviews r
+               INNER JOIN products p ON r.productID = p.productID
+               WHERE p.masterID = ?";
+$rating_stmt = $connection->prepare($rating_sql);
+$rating_stmt->bind_param("i", $masterID);
+$rating_stmt->execute();
+$rating_result = $rating_stmt->get_result();
+$rating_data = $rating_result->fetch_assoc();
+
+$avg_rating = $rating_data['avg_rating'] ? round($rating_data['avg_rating'], 1) : 0;
+$review_count = $rating_data['review_count'];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -43,7 +57,7 @@ $masterProducts = getMasterProducts($masterID);
             <div class="nav-links">
                 <a href="mainUser.php#banner" class="nav-link">Главная</a>
                 <a href="mainUser.php#categories" class="nav-link">Категории</a>
-                <a href="allMasters.php" class="nav-link">Мастера</a>
+                <a href="mainUser.php#masters" class="nav-link">Мастера</a>
                 <a href="mainUser.php#about" class="nav-link">О нас</a>
                 <a href="mainUser.php#footer" class="nav-link">Контакты</a>
             </div>
@@ -65,6 +79,15 @@ $masterProducts = getMasterProducts($masterID);
             <div class="master-info">
                 <h1 class="master-name-large"><?php echo htmlspecialchars($masterData['masterName']); ?></h1>
                 <div class="master-specialty-large"><?php echo htmlspecialchars($masterData['direction']); ?></div>
+                
+                <div class="master-rating">
+                    <div class="master-rating-info">
+                        <span class="master-rating-value"><?php echo $avg_rating; ?></span>
+                        <span class="master-rating-count">(<?php echo $review_count; ?> отзывов)</span>
+                    </div>
+                    <div class="master-rating-stars"><?php echo displayRatingStars($avg_rating); ?></div>
+                </div>
+
                 <div class="master-category">Категория: <?php echo htmlspecialchars($masterData['categoryName']); ?></div>
                 <div class="master-description-full"><?php echo htmlspecialchars($masterData['aboutMaster']); ?></div>
                 
@@ -107,11 +130,11 @@ $masterProducts = getMasterProducts($masterID);
             <div class="footer-section">
                 <h3>Категории</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Дерево</a></li>
-                    <li><a href="#">Вязание</a></li>
-                    <li><a href="#">Керамика</a></li>
-                    <li><a href="#">Шитье</a></li>
-                    <li><a href="#">Бижутерия</a></li>
+                    <li><a href="./allProducts.php?category=Дерево">Дерево</a></li>
+                    <li><a href="./allProducts.php?category=Вязание">Вязание</a></li>
+                    <li><a href="./allProducts.php?category=Керамика">Керамика</a></li>
+                    <li><a href="./allProducts.php?category=Шитье">Шитье</a></li>
+                    <li><a href="./allProducts.php?category=Бижутерия">Бижутерия</a></li>
                 </ul>
             </div>
             <div class="footer-section">

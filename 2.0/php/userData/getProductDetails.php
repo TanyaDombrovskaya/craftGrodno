@@ -58,7 +58,7 @@ $sql = "SELECT
             p.countOfProduct,
             p.image,
             p.categoryID,
-            m.masterID,
+            p.masterID,
             m.masterName,
             m.phoneNumber,
             m.direction,
@@ -78,6 +78,33 @@ $result = $stmt->get_result();
 
 if ($result && $result->num_rows > 0) {
     $product = $result->fetch_assoc();
+    
+    // Получаем средний рейтинг товара
+    $rating_sql = "SELECT AVG(rating) as avg_rating, COUNT(*) as review_count 
+                   FROM reviews 
+                   WHERE productID = ?";
+    $rating_stmt = $connection->prepare($rating_sql);
+    $rating_stmt->bind_param("i", $product_id);
+    $rating_stmt->execute();
+    $rating_result = $rating_stmt->get_result();
+    $rating_data = $rating_result->fetch_assoc();
+    
+    $avg_rating = $rating_data['avg_rating'] ? round($rating_data['avg_rating'], 1) : 0;
+    $review_count = $rating_data['review_count'];
+    
+    // Получаем средний рейтинг мастера
+    $master_rating_sql = "SELECT AVG(r.rating) as avg_rating, COUNT(r.reviewID) as review_count
+                          FROM reviews r
+                          JOIN products p ON r.productID = p.productID
+                          WHERE p.masterID = ?";
+    $master_rating_stmt = $connection->prepare($master_rating_sql);
+    $master_rating_stmt->bind_param("i", $product['masterID']);
+    $master_rating_stmt->execute();
+    $master_rating_result = $master_rating_stmt->get_result();
+    $master_rating_data = $master_rating_result->fetch_assoc();
+    
+    $master_avg_rating = $master_rating_data['avg_rating'] ? round($master_rating_data['avg_rating'], 1) : 0;
+    $master_review_count = $master_rating_data['review_count'];
     
     // Форматирование цены
     $price = number_format($product['price'], 2, '.', ' ') . ' руб.';
@@ -143,6 +170,15 @@ if ($result && $result->num_rows > 0) {
                     <h1 class="product-title">' . htmlspecialchars($product['productName']) . '</h1>
                     <div class="product-category">' . htmlspecialchars($product['categoryName']) . '</div>
                     
+                    <!-- Средний рейтинг товара -->
+                    <div class="product-rating-section">
+                        <div class="rating-stars">' . displayRatingStars($avg_rating) . '</div>
+                        <div class="rating-info">
+                            <span class="rating-value">' . $avg_rating . '</span>
+                            <span class="rating-count">(' . $review_count . ' отзывов)</span>
+                        </div>
+                    </div>
+                    
                     <div class="product-price">' . $price . '</div>
                     
                     <div class="product-stock">
@@ -155,7 +191,7 @@ if ($result && $result->num_rows > 0) {
                     </div>
                     
                     <div class="product-actions">
-                        <button class="contact-seller" 
+                        <button class="add-to-cart" 
                                 data-seller-name="' . htmlspecialchars($product['masterName']) . '"
                                 data-seller-phone="' . htmlspecialchars($product['phoneNumber']) . '">
                             Связаться с продавцом
@@ -172,6 +208,16 @@ if ($result && $result->num_rows > 0) {
                     <div class="master-avatar-large">' . getMasterAvatar($product['masterName']) . '</div>
                     <div class="master-details">
                         <div class="master-name"><a href="./masterPage.php?id=' . $product['masterID'] . '">' . htmlspecialchars($product['masterName']) . '</a></div>
+                        
+                        <!-- Рейтинг мастера -->
+                        <div class="master-rating">
+                            <div class="rating-stars small">' . displayRatingStars($master_avg_rating) . '</div>
+                            <div class="rating-info">
+                                <span class="rating-value">' . $master_avg_rating . '</span>
+                                <span class="rating-count">(' . $master_review_count . ' отзывов)</span>
+                            </div>
+                        </div>
+                        
                         <div class="master-direction">' . htmlspecialchars($product['direction']) . '</div>
                         <div class="master-about">' . nl2br(htmlspecialchars($product['aboutMaster'])) . '</div>
                     </div>
@@ -203,3 +249,6 @@ if ($result && $result->num_rows > 0) {
 }
 
 $stmt->close();
+// Закрываем дополнительные statement'ы если они были созданы
+if (isset($rating_stmt)) $rating_stmt->close();
+if (isset($master_rating_stmt)) $master_rating_stmt->close();

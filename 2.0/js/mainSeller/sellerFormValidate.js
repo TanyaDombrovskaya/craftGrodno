@@ -1,7 +1,5 @@
 // Объединенный файл валидации для продавца
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('sellerValidate.js loaded');
-
     // Навигация
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
@@ -222,12 +220,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Валидация формы личных данных при отправке
     const masterForm = document.getElementById('master-form');
     if (masterForm) {
-        console.log('Master form found');
         
         masterForm.setAttribute('novalidate', 'novalidate');
         
         masterForm.addEventListener('submit', function(e) {
-            console.log('Master form submit event');
             clearAllFieldErrors();
             
             let hasError = false;
@@ -283,8 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            } else {
-                console.log('Form validation passed');
             }
         });
     }
@@ -292,12 +286,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Валидация формы добавления товара при отправке
     const productForm = document.getElementById('product-form');
     if (productForm) {
-        console.log('Product form found');
-        
         productForm.setAttribute('novalidate', 'novalidate');
         
         productForm.addEventListener('submit', function(e) {
-            console.log('Product form submit event');
             clearAllFieldErrors();
             
             let hasError = false;
@@ -336,8 +327,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            } else {
-                console.log('Product form validation passed');
             }
         });
     }

@@ -53,6 +53,29 @@ mysqli_stmt_execute($stmt5);
 $result5 = mysqli_stmt_get_result($stmt5);
 $phoneData = mysqli_fetch_assoc($result5);
 $phone = $phoneData['phoneNumber'] ?? '';
+
+// Шестой запрос - получаем рейтинг мастера
+$stmt6 = mysqli_prepare($connection, "SELECT m.masterID FROM masters m WHERE m.userID = ?");
+mysqli_stmt_bind_param($stmt6, "i", $userID);
+mysqli_stmt_execute($stmt6);
+$result6 = mysqli_stmt_get_result($stmt6);
+$masterData = mysqli_fetch_assoc($result6);
+$masterID = $masterData['masterID'] ?? null;
+
+$masterRating = 0;
+if ($masterID) {
+    $rating_sql = "SELECT AVG(r.rating) as avg_rating 
+                   FROM reviews r 
+                   JOIN products p ON r.productID = p.productID 
+                   WHERE p.masterID = ?";
+    $rating_stmt = $connection->prepare($rating_sql);
+    $rating_stmt->bind_param("i", $masterID);
+    $rating_stmt->execute();
+    $rating_result = $rating_stmt->get_result();
+    $rating_data = $rating_result->fetch_assoc();
+    $masterRating = $rating_data['avg_rating'] ? round($rating_data['avg_rating'], 1) : 0;
+    $rating_stmt->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -73,6 +96,12 @@ $phone = $phoneData['phoneNumber'] ?? '';
                 <a href="#add-product" class="nav-link">Добавить товар</a>
             </div>
             <div class="user-section">
+                <div class="user-rating">
+                    <div class="rating-square">
+                        <span class="rating-number"><?php echo $masterRating; ?></span>
+                        <span class="rating-star-all">★</span>
+                    </div>
+                </div>
                 <p class="user-name"><?php echo htmlspecialchars($_SESSION['user_login']); ?></p>
                 <a href="./php/logout.php" class="logout-button">Выйти</a>
             </div>

@@ -24,7 +24,7 @@ if (getUserRole() !== 'user') {
             <div class="nav-links">
                 <a href="mainUser.php#banner" class="nav-link">Главная</a>
                 <a href="mainUser.php#categories" class="nav-link">Категории</a>
-                <a href="allMasters.php" class="nav-link">Мастера</a>
+                <a href="mainUser.php#masters" class="nav-link">Мастера</a>
                 <a href="mainUser.php#about" class="nav-link">О нас</a>
                 <a href="mainUser.php#footer" class="nav-link">Контакты</a>
             </div>
@@ -57,11 +57,11 @@ if (getUserRole() !== 'user') {
             <div class="footer-section">
                 <h3>Категории</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Дерево</a></li>
-                    <li><a href="#">Вязание</a></li>
-                    <li><a href="#">Керамика</a></li>
-                    <li><a href="#">Шитье</a></li>
-                    <li><a href="#">Бижутерия</a></li>
+                    <li><a href="./allProducts.php?category=Дерево">Дерево</a></li>
+                    <li><a href="./allProducts.php?category=Вязание">Вязание</a></li>
+                    <li><a href="./allProducts.php?category=Керамика">Керамика</a></li>
+                    <li><a href="./allProducts.php?category=Шитье">Шитье</a></li>
+                    <li><a href="./allProducts.php?category=Бижутерия">Бижутерия</a></li>
                 </ul>
             </div>
             <div class="footer-section">

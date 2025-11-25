@@ -62,6 +62,19 @@ if ($result && $result->num_rows > 0):
         $icon = getProductIcon($product['productName']);
         $price = number_format($product['price'], 2, '.', ' ') . ' руб.';
         
+        // Получаем рейтинг товара
+        $rating_sql = "SELECT AVG(rating) as avg_rating, COUNT(*) as review_count 
+                       FROM reviews 
+                       WHERE productID = ?";
+        $rating_stmt = $connection->prepare($rating_sql);
+        $rating_stmt->bind_param("i", $product['productID']);
+        $rating_stmt->execute();
+        $rating_result = $rating_stmt->get_result();
+        $rating_data = $rating_result->fetch_assoc();
+        
+        $avg_rating = $rating_data['avg_rating'] ? round($rating_data['avg_rating'], 1) : 0;
+        $review_count = $rating_data['review_count'];
+        
         // Обработка изображения
         $image_html = '';
         $image_size = isset($product['image']) ? strlen($product['image']) : 0;
@@ -90,6 +103,16 @@ if ($result && $result->num_rows > 0):
             <div class="product-image"><?php echo $image_html; ?></div>
             <div class="product-info">
                 <h3 class="product-title"><a href="./productCard.php?id=<?php echo $product['productID']; ?>"><?php echo htmlspecialchars($product['productName']); ?></a></h3>
+                
+                <!-- Рейтинг товара -->
+                <div class="product-rating">
+                    <div class="product-rating-stars"><?php echo displayRatingStars($avg_rating); ?></div>
+                    <div class="product-rating-info">
+                        <span class="product-rating-value"><?php echo $avg_rating; ?></span>
+                        <span class="product-rating-count">(<?php echo $review_count; ?>)</span>
+                    </div>
+                </div>
+                
                 <p class="product-description"><?php echo htmlspecialchars($product['aboutProduct']); ?></p>
                 <div class="product-footer">
                     <div class="product-price"><?php echo $price; ?></div>
@@ -107,4 +130,3 @@ else:
     </div>
 <?php endif; 
 mysqli_stmt_close($stmt);
-?>

@@ -24,11 +24,11 @@ $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
         <div class="nav-container">
             <div class="logo">Grodno<span>Craft</span></div>
             <div class="nav-links">
-                <a href="./mainUserPage.php#banner" class="nav-link">Главная</a>
-                <a href="./mainUserPage.php#categories" class="nav-link">Категории</a>
+                <a href="./mainUser.php#banner" class="nav-link">Главная</a>
+                <a href="./mainUser.php#categories" class="nav-link">Категории</a>
                 <a href="./allMasters.php" class="nav-link">Мастера</a>
-                <a href="./mainUserPage.php#about" class="nav-link">О нас</a>
-                <a href="./mainUserPage.php#footer" class="nav-link">Контакты</a>
+                <a href="./mainUser.php#about" class="nav-link">О нас</a>
+                <a href="./mainUser.php#footer" class="nav-link">Контакты</a>
             </div>
             <div class="user-section">
                 <p class="user-name"><?php echo htmlspecialchars($_SESSION['user_login']); ?></p>

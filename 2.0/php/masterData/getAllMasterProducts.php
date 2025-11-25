@@ -66,6 +66,22 @@ if ($result && $result->num_rows > 0) {
         $icon = getProductIcon($product['productName']);
         $price = number_format($product['price'], 2, '.', ' ') . ' BYN';
         
+        // Получаем рейтинг товара
+        $rating_sql = "SELECT AVG(rating) as avg_rating, COUNT(*) as review_count 
+                       FROM reviews 
+                       WHERE productID = ?";
+        $rating_stmt = $connection->prepare($rating_sql);
+        $rating_stmt->bind_param("i", $product['productID']);
+        $rating_stmt->execute();
+        $rating_result = $rating_stmt->get_result();
+        $rating_data = $rating_result->fetch_assoc();
+        
+        $avg_rating = $rating_data['avg_rating'] ? round($rating_data['avg_rating'], 1) : 0;
+        $review_count = $rating_data['review_count'];
+        
+        // Определяем класс для товаров без отзывов
+        $rating_class = $review_count == 0 ? 'no-reviews' : '';
+        
         // Обработка изображения
         $image_html = '';
         $image_size = isset($product['image']) ? strlen($product['image']) : 0;
@@ -97,7 +113,18 @@ if ($result && $result->num_rows > 0) {
             </div>
             <div class="product-info">
                 <h3 class="product-title">' . htmlspecialchars($product['productName']) . '</h3>
+                
                 <p class="product-description">' . htmlspecialchars($product['aboutProduct']) . '</p>
+
+                <!-- Рейтинг товара -->
+                <div class="product-rating ' . $rating_class . '">
+                    <div class="rating-stars">' . displayRatingStars($avg_rating) . '</div>
+                    <div class="rating-info">
+                        <span class="rating-value">' . $avg_rating . '</span>
+                        <span class="rating-count">(' . $review_count . ')</span>
+                    </div>
+                </div>
+
                 <div class="product-footer">
                     <span class="product-price">' . $price . '</span>
                     <span class="product-count">Осталось: ' . $product['countOfProduct'] . ' шт.</span>
@@ -122,3 +149,9 @@ if ($result && $result->num_rows > 0) {
 }
 
 echo $products_html;
+
+// Закрываем соединения
+if (isset($rating_stmt)) {
+    $rating_stmt->close();
+}
+mysqli_stmt_close($stmt);

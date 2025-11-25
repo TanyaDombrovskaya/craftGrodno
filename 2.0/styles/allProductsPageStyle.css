@@ -1,27 +1,5 @@
 @import url("./mainUserStyle.css");
 
-/* Основной контейнер для сетки товаров */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    align-items: start;
-}
-
-/* Карточка товара - ширина определяется сеткой */
-.product-card {
-    background: var(--card-bg);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    transition: var(--transition);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    /* Убрано max-width - ширина теперь определяется сеткой */
-}
-
 .no-products {
     text-align: center;
     color: var(--gray);
@@ -33,19 +11,32 @@
     border: 1px solid var(--border);
 }
 
-.no-products h3 {
-    color: var(--dark);
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-}
-
 .no-products p {
     font-size: 1rem;
     opacity: 0.8;
 }
 
-/* Остальные стили остаются без изменений */
+/* Гарантируем одинаковую высоту карточек в сетке */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    align-items: stretch; /* Ключевое свойство для выравнивания высоты */
+}
+
+.product-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Занимает всю высоту ячейки сетки */
+}
+
+/* Остальные стили allproductsstyle.css остаются без изменений */
 .products-header {
     display: flex;
     justify-content: space-between;

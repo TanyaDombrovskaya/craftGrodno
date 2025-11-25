@@ -70,12 +70,6 @@ if (getUserRole() !== 'user') {
         <div class="masters-grid">
             <?php include('./php/userData/getMasters.php'); ?>
         </div>
-        
-        <div class="masters-cta">
-            <h3>Станьте частью нашего сообщества</h3>
-            <p>Присоединяйтесь к платформе GrodnoCraft и начните делиться своим творчеством с ценителями ручной работы</p>
-            <button class="cta-button">Стать мастером</button>
-        </div>
     </section>
 
     <!-- Секция "О нас" -->

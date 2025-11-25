@@ -50,3 +50,40 @@ function getCategoryIcon($categoryName) {
     
     return $icons[$categoryName] ?? '📦';
 }
+
+// Функция для отображения звезд рейтинга
+function displayRatingStars($rating) {
+    $stars = '';
+    $fullStars = floor($rating);
+    $hasHalfStar = ($rating - $fullStars) >= 0.5;
+    
+    for ($i = 1; $i <= 5; $i++) {
+        if ($i <= $fullStars) {
+            $stars .= '<span class="rating-star filled">★</span>';
+        } elseif ($i == $fullStars + 1 && $hasHalfStar) {
+            $stars .= '<span class="rating-star half">★</span>';
+        } else {
+            $stars .= '<span class="rating-star">★</span>';
+        }
+    }
+    
+    return $stars;
+}
+
+function displayMasterRatingStars($rating) {
+    $stars = '';
+    $fullStars = floor($rating);
+    $hasHalfStar = ($rating - $fullStars) >= 0.5;
+    
+    for ($i = 1; $i <= 5; $i++) {
+        if ($i <= $fullStars) {
+            $stars .= '<span class="master-rating-star filled">★</span>';
+        } elseif ($i == $fullStars + 1 && $hasHalfStar) {
+            $stars .= '<span class="master-rating-star half">★</span>';
+        } else {
+            $stars .= '<span class="master-rating-star">★</span>';
+        }
+    }
+    
+    return $stars;
+}
