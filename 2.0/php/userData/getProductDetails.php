@@ -174,8 +174,7 @@ if ($result && $result->num_rows > 0) {
                     <div class="product-rating-section">
                         <div class="rating-stars">' . displayRatingStars($avg_rating) . '</div>
                         <div class="rating-info">
-                            <span class="rating-value">' . $avg_rating . '</span>
-                            <span class="rating-count">(' . $review_count . ' отзывов)</span>
+                            <span class="rating-count"><span class="rating-value">' . $avg_rating . '</span>(' . $review_count . ' отзывов)</span>
                         </div>
                     </div>
                     
@@ -211,17 +210,16 @@ if ($result && $result->num_rows > 0) {
                         
                         <!-- Рейтинг мастера -->
                         <div class="master-rating">
-                            <div class="rating-stars small">' . displayRatingStars($master_avg_rating) . '</div>
+                            <div class="master-rating-stars">' . displayRatingStars($master_avg_rating) . '</div>
                             <div class="rating-info">
-                                <span class="rating-value">' . $master_avg_rating . '</span>
-                                <span class="rating-count">(' . $master_review_count . ' отзывов)</span>
+                                <span class="rating-master-value">' . $master_avg_rating . '<span class="rating-master-count">(' . $master_review_count . ' отзывов)</span></span>
                             </div>
                         </div>
                         
                         <div class="master-direction">' . htmlspecialchars($product['direction']) . '</div>
                         <div class="master-about">' . nl2br(htmlspecialchars($product['aboutMaster'])) . '</div>
                     </div>
-                </div>
+                </div>  
                 
                 <div class="master-stats-detailed">
                     <div class="master-stat-detailed">

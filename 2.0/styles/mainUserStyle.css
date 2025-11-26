@@ -73,6 +73,10 @@ body {
     color: var(--primary-light);
 }
 
+.menu-toggle {
+    display: none;
+}
+
 .nav-links {
     display: flex;
     gap: 2rem;
@@ -385,11 +389,12 @@ body {
 
 .rating-value {
     font-weight: 600;
-    color: #333;
+    color: var(--dark);
 }
 
 .rating-count {
-    color: #666;
+    font-weight: 600;
+    color: var(--dark);
 }
 
 /* Стиль для товаров без отзывов */
@@ -992,4 +997,240 @@ body {
     justify-content: center;
     max-width: 400px;
     margin: 0 auto;
+}
+
+/* Адаптивность для навбара с бургер-меню */
+@media (max-width: 1024px) {
+    .nav-container {
+        gap: 1.5rem;
+    }
+    
+    .nav-links {
+        gap: 1.2rem;
+    }
+    
+    .nav-link {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 768px) {    
+    .user-name {
+        display: none;
+    }
+
+    .nav-container {
+        flex-direction: row;
+        position: relative;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+    
+    .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+    }
+    
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(31, 41, 55, 0.85);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 1rem 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
+        margin-top: 16px;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .nav-link {
+        padding: 0.75rem 2rem;
+        width: 100%;
+        text-align: center;
+        opacity: 1;
+    }
+    
+    .nav-link::after {
+        display: none;
+    }
+    
+    .user-section {
+        gap: 0.75rem;
+        margin-left: 0; /* Убираем сдвиг для десктопной версии */
+    }
+    
+    /* Кнопка бургер-меню */
+    .menu-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 24px;
+        height: 18px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1001;
+        margin-right: 0; /* Убираем сдвиг для десктопной версии */
+    }
+    
+    .menu-toggle span {
+        display: block;
+        height: 2px;
+        width: 100%;
+        background: var(--white);
+        transition: var(--transition);
+        border-radius: 1px;
+        transform-origin: center;
+    }
+    
+    .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(4px, 5px);
+    }
+    
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: scale(0);
+    }
+    
+    .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -7px);
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+    
+    .logo {
+        font-size: 1.3rem;
+        padding-left: 0;
+    }
+    
+    .user-section {
+        gap: 0.5rem;
+    }
+    
+    .user-name {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+        display: none;
+    }
+    
+    .logout-button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .nav-links {
+        padding: 0.5rem 0;
+        margin-top: 13px;
+    }
+    
+    .nav-link {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .navbar {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .logout-button {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.75rem;
+    }
+    
+    .menu-toggle {
+        width: 20px;
+        height: 16px;
+    }
+
+    .nav-links {
+        margin-top: 8px;
+    }
+}
+
+/* Дополнительные стили для корректного позиционирования на всех экранах */
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+/* Для десктопной версии - скрываем бургер и сбрасываем позиционирование */
+.menu-toggle {
+    display: none;
+}
+
+/* На десктопе показываем обычное меню и сбрасываем все позиционирование */
+@media (min-width: 769px) {
+    .logo {
+        position: static;
+        transform: none;
+    }
+    
+    .nav-links {
+        display: flex;
+        margin-right: 0;
+    }
+    
+    .user-section {
+        margin-left: 0;
+    }
+    
+    /* Восстанавливаем порядок элементов как в HTML */
+    .nav-container {
+        justify-content: space-between;
+    }
+    
+    .logo {
+        order: 1;
+    }
+    
+    .nav-links {
+        order: 2;
+    }
+    
+    .user-section {
+        order: 3;
+    }
+}
+
+/* Показываем бургер только на мобильных */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+        order: 1; /* Бургер слева */
+    }
+    
+    .nav-links {
+        display: none;
+    }
+    
+    .logo {
+        order: 2; /* Логотип по центру */
+    }
+    
+    .user-section {
+        order: 3; /* User section справа */
+    }
 }

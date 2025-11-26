@@ -20,7 +20,15 @@ if (getUserRole() !== 'user') {
     <!-- Навигация -->
     <nav class="navbar">
         <div class="nav-container">
+            <!-- Кнопка бургер-меню -->
+            <button class="menu-toggle" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div class="logo">Grodno<span>Craft</span></div>
+
             <div class="nav-links">
                 <a href="#banner" class="nav-link">Главная</a>
                 <a href="#categories" class="nav-link">Категории</a>
@@ -158,5 +166,6 @@ if (getUserRole() !== 'user') {
     </div>
     
     <script src="./js/modalWindow.js"></script>
+    <script src="./js/toogleMenu.js"></script>
 </body>
 </html>

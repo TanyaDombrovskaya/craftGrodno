@@ -53,6 +53,13 @@ $review_count = $rating_data['review_count'];
     <!-- Навигация -->
     <nav class="navbar">
         <div class="nav-container">
+            <!-- Кнопка бургер-меню -->
+            <button class="menu-toggle" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div class="logo">Grodno<span>Craft</span></div>
             <div class="nav-links">
                 <a href="mainUser.php#banner" class="nav-link">Главная</a>
@@ -156,5 +163,6 @@ $review_count = $rating_data['review_count'];
             </div>
         </div>
     </footer>
+    <script src="./js/toogleMenu.js"></script>
 </body>
 </html>

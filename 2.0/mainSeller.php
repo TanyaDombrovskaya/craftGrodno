@@ -89,6 +89,13 @@ if ($masterID) {
 <body>
     <nav class="navbar">
         <div class="nav-container">
+            <!-- Кнопка бургер-меню -->
+            <button class="menu-toggle" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div class="logo">Grodno<span>Craft</span></div>
             <div class="nav-links">
                 <a href="#profile" class="nav-link">Личные данные</a>
@@ -320,6 +327,7 @@ if ($masterID) {
     <script src="./js/commonValidate.js"></script>
     <script src="./js/mainSeller/uploadImage.js"></script>
     <script src="./js/mainSeller/productManagment.js"></script>
+    <script src="./js/toogleMenu.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const productGrid = document.querySelector('.product-grid');
