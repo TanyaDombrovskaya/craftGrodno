@@ -395,23 +395,191 @@ function loadSales() {
     const container = document.getElementById('salesContainer');
     if (!container) return;
     
-    const period = document.getElementById('periodFilter')?.value || 'all';
-    const status = document.getElementById('statusFilter')?.value || 'all';
-    const dateFrom = document.getElementById('dateFrom')?.value || '';
-    const dateTo = document.getElementById('dateTo')?.value || '';
+    // Получаем значения фильтров
+    const periodSelect = document.getElementById('periodFilter');
+    const statusSelect = document.getElementById('statusFilter');
+    const dateFromInput = document.getElementById('dateFrom');
+    const dateToInput = document.getElementById('dateTo');
+    
+    const period = periodSelect ? periodSelect.value : 'all';
+    const status = statusSelect ? statusSelect.value : 'all';
+    const dateFrom = dateFromInput && dateFromInput.value ? dateFromInput.value : '';
+    const dateTo = dateToInput && dateToInput.value ? dateToInput.value : '';
+    
+    console.log('Фильтры:', { period, status, dateFrom, dateTo });
     
     container.innerHTML = '<div class="loading">Загрузка продаж...</div>';
     
-    fetch(`./php/masterData/getSellerSales.php?period=${period}&status=${status}&date_from=${dateFrom}&date_to=${dateTo}`)
-        .then(response => response.json())
+    // Формируем URL с параметрами
+    let url = './php/masterData/getSellerSales.php?';
+    url += `period=${encodeURIComponent(period)}`;
+    url += `&status=${encodeURIComponent(status)}`;
+    if (dateFrom) url += `&date_from=${encodeURIComponent(dateFrom)}`;
+    if (dateTo) url += `&date_to=${encodeURIComponent(dateTo)}`;
+    
+    console.log('Запрос к:', url);
+    
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('HTTP error ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
-            updateSalesStats(data.stats);
-            displaySales(data.sales);
+            console.log('Ответ сервера:', data);
+            if (data.error) {
+                container.innerHTML = `<div class="no-products">Ошибка: ${data.error}</div>`;
+                return;
+            }
+            if (data.stats) {
+                updateSalesStats(data.stats);
+            }
+            if (data.sales) {
+                displaySales(data.sales);
+            } else {
+                container.innerHTML = '<div class="no-products">Нет продаж по выбранным фильтрам</div>';
+            }
         })
         .catch(error => {
-            console.error('Error:', error);
-            container.innerHTML = '<div class="no-products">Ошибка загрузки продаж</div>';
+            console.error('Ошибка загрузки продаж:', error);
+            container.innerHTML = '<div class="no-products">Ошибка загрузки продаж: ' + error.message + '</div>';
         });
+}
+
+// Функция обновления статистики
+function updateSalesStats(stats) {
+    const totalCountEl = document.getElementById('totalSalesCount');
+    const totalRevenueEl = document.getElementById('totalRevenue');
+    const averageCheckEl = document.getElementById('averageCheck');
+    
+    if (totalCountEl) totalCountEl.textContent = stats.total_count || 0;
+    if (totalRevenueEl) totalRevenueEl.textContent = (stats.total_revenue || 0).toFixed(2) + ' руб.';
+    if (averageCheckEl) averageCheckEl.textContent = (stats.average_check || 0).toFixed(2) + ' руб.';
+}
+
+// Функция отображения продаж
+function displaySales(sales) {
+    const container = document.getElementById('salesContainer');
+    
+    if (!sales || sales.length === 0) {
+        container.innerHTML = '<div class="no-products">Нет продаж по выбранным фильтрам</div>';
+        return;
+    }
+    
+    let html = `
+        <div class="sales-table-wrapper">
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Товар</th>
+                        <th>Кол-во</th>
+                        <th>Сумма</th>
+                        <th>Покупатель</th>
+                        <th>Статус</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    sales.forEach(sale => {
+        const statusClass = getStatusClass(sale.status);
+        const statusText = getStatusText(sale.status);
+        const total = (parseFloat(sale.price) * parseInt(sale.quantity)).toFixed(2);
+        
+        html += `
+            <tr data-order-item-id="${sale.order_itemID}">
+                <td>${formatDateTime(sale.order_date)}</td>
+                <td>
+                    <a href="productCard.php?id=${sale.productID}" target="_blank" class="sale-product-link">
+                        ${escapeHtml(sale.productName)}
+                    </a>
+                </td>
+                <td>${sale.quantity}</td>
+                <td>${parseFloat(sale.price).toFixed(2)} руб.</td>
+                <td>
+                    ${escapeHtml(sale.buyer_name || 'Неизвестно')}
+                    <span class="buyer-login">(@${escapeHtml(sale.buyer_login || '')})</span>
+                </td>
+                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                <td>
+                    ${sale.status === 'approved' ? 
+                        `<button class="change-status-btn" onclick="updateOrderItemStatus(${sale.order_itemID}, 'transferred')">✅ Подтвердить</button>` : 
+                        sale.status === 'transferred' ? 
+                        `<span class="status-completed">✓ Передан</span>` :
+                        `<span class="status-waiting">⏳ Ожидает</span>`
+                    }
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+// Функция форматирования даты и времени
+function formatDateTime(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+// Функция получения класса статуса
+function getStatusClass(status) {
+    const classes = {
+        'pending': 'status-pending',
+        'approved': 'status-approved',
+        'transferred': 'status-transferred'
+    };
+    return classes[status] || 'status-pending';
+}
+
+// Функция получения текста статуса
+function getStatusText(status) {
+    const texts = {
+        'pending': 'Ожидает',
+        'approved': 'Подтвержден',
+        'transferred': 'Передан'
+    };
+    return texts[status] || status;
+}
+
+// Функция обновления статуса заказа
+function updateOrderItemStatus(orderItemId, newStatus) {
+    fetch('./php/masterData/updateOrderItemStatus.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `order_item_id=${orderItemId}&status=${newStatus}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Статус заказа обновлен', 'success');
+            loadSales(); // Перезагружаем список
+        } else {
+            showNotification(data.message || 'Ошибка при обновлении статуса', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Ошибка при обновлении статуса', 'error');
+    });
 }
 
 function updateSalesStats(stats) {

@@ -1,0 +1,207 @@
+/* styles/navigation.css - Современная стеклянная навигация */
+
+@import url("./variables.css");
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-container {
+    max-width: var(--breakpoint-xl);
+    margin: 0 auto;
+    padding: var(--spacing-4) var(--spacing-5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.logo {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--spacing-6);
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--gray-300);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-2) 0;
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-gradient);
+    transition: var(--transition-normal);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--white);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.balance-display {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    background: rgba(255, 255, 255, 0.05);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(4px);
+}
+
+.balance-icon {
+    font-size: var(--font-size-base);
+}
+
+.balance-amount-nav {
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-light);
+    font-size: var(--font-size-sm);
+}
+
+.balance-currency {
+    color: var(--gray-400);
+    font-size: var(--font-size-xs);
+}
+
+.user-name-link {
+    color: var(--gray-300);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-2) var(--spacing-3);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: var(--transition-fast);
+    font-size: var(--font-size-sm);
+}
+
+.user-name-link:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--white);
+    border-radius: var(--radius-full);
+    transition: var(--transition-fast);
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+.cart-counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    background: var(--accent);
+    color: var(--white);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    border-radius: var(--radius-full);
+    padding: 0 var(--spacing-1);
+    margin-left: var(--spacing-1);
+}
+
+@media (max-width: var(--breakpoint-md)) {
+    .nav-container {
+        padding: var(--spacing-3) var(--spacing-4);
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--gray-900);
+        padding: var(--spacing-4);
+        gap: var(--spacing-3);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .nav-link {
+        padding: var(--spacing-3);
+        text-align: center;
+    }
+    
+    .balance-display {
+        display: none;
+    }
+}

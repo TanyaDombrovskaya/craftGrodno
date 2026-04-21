@@ -1,0 +1,185 @@
+/* styles/master-card.css - Современные карточки мастеров */
+
+@import url("./variables.css");
+
+.masters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-6);
+}
+
+.master-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-6);
+    text-align: center;
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.master-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-light);
+}
+
+.master-avatar {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto var(--spacing-4);
+    background: var(--primary-gradient);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--white);
+    transition: var(--transition-normal);
+}
+
+.master-card:hover .master-avatar {
+    transform: scale(1.05);
+}
+
+.master-name {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--gray-900);
+    margin-bottom: var(--spacing-1);
+}
+
+.master-specialty {
+    color: var(--primary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-3);
+}
+
+.master-description {
+    color: var(--gray-500);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    margin-bottom: var(--spacing-4);
+    flex: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.master-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: var(--spacing-3) 0;
+    margin: var(--spacing-3) 0;
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.master-stat {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--gray-900);
+    display: block;
+}
+
+.stat-name {
+    font-size: var(--font-size-xs);
+    color: var(--gray-500);
+}
+
+/* Рейтинг мастера */
+.master-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin: var(--spacing-2) 0;
+}
+
+.master-rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.master-rating-star {
+    color: var(--gray-300);
+    font-size: var(--font-size-sm);
+}
+
+.master-rating-star.filled {
+    color: var(--warning);
+}
+
+.master-rating-star.half {
+    background: linear-gradient(90deg, var(--warning) 50%, var(--gray-300) 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.master-rating-info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-1);
+    font-size: var(--font-size-xs);
+    color: var(--gray-500);
+}
+
+.master-rating-value {
+    font-weight: var(--font-weight-bold);
+    color: var(--gray-700);
+}
+
+/* Кнопка */
+.view-master-button {
+    margin-top: auto;
+    padding: var(--spacing-2) var(--spacing-4);
+    background: var(--primary-gradient);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-semibold);
+    transition: var(--transition-fast);
+    display: inline-block;
+}
+
+.view-master-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Адаптивность */
+@media (max-width: var(--breakpoint-md)) {
+    .masters-grid {
+        gap: var(--spacing-4);
+    }
+    
+    .master-card {
+        padding: var(--spacing-4);
+    }
+    
+    .master-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: var(--font-size-2xl);
+    }
+    
+    .master-name {
+        font-size: var(--font-size-lg);
+    }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+    .masters-grid {
+        gap: var(--spacing-3);
+    }
+}

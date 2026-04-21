@@ -1,23 +1,32 @@
-@import url("./mainUserStyle.css");
+/* styles/allMastersPageStyle.css - Страница всех мастеров */
+
+@import url("./variables.css");
+@import url("./navigation.css");
+@import url("./master-card.css");
+@import url("./ratings.css");
 
 .masters-page {
-    padding: 40px 0;
+    padding: var(--spacing-6) 0;
 }
 
 .page-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: var(--spacing-8);
 }
 
 .page-header h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 10px;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    background: linear-gradient(135deg, var(--gray-900), var(--gray-700));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: var(--spacing-3);
 }
 
 .page-header p {
-    font-size: 1.1rem;
-    color: #7f8c8d;
+    font-size: var(--font-size-lg);
+    color: var(--gray-500);
     max-width: 600px;
     margin: 0 auto;
 }
@@ -25,362 +34,115 @@
 .masters-grid-all {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-bottom: 40px;
-    justify-items: center;
+    gap: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
 }
 
 .no-masters {
     text-align: center;
-    padding: 60px 20px;
-    color: #7f8c8d;
+    padding: var(--spacing-8);
+    color: var(--gray-500);
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--gray-200);
     grid-column: 1 / -1;
 }
 
 .no-masters h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-2);
+    color: var(--gray-800);
 }
 
-.view-master-button {
-    text-decoration: none;
+/* styles/cartStyle.css - добавить в конец файла */
+
+/* Футер */
+.footer {
+    background: var(--gray-900);
+    color: var(--gray-400);
+    padding: var(--spacing-8) 0;
+    margin-top: var(--spacing-8);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-@import url("./mainUserStyle.css");
-
-.masters-page {
-    padding: 40px 0;
-}
-
-.page-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.page-header h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 10px;
-}
-
-.page-header p {
-    font-size: 1.1rem;
-    color: #7f8c8d;
-    max-width: 600px;
+.footer-content {
+    max-width: var(--breakpoint-xl);
     margin: 0 auto;
-}
-
-.masters-grid-all {
+    padding: 0 var(--spacing-5);
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-bottom: 40px;
-    justify-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-6);
 }
 
-.no-masters {
-    text-align: center;
-    padding: 60px 20px;
-    color: #7f8c8d;
-    grid-column: 1 / -1;
+.footer-section h3 {
+    color: var(--white);
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-3);
 }
 
-.no-masters h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+.footer-links {
+    list-style: none;
 }
 
-.view-master-button {
+.footer-links li {
+    margin-bottom: var(--spacing-2);
+}
+
+.footer-links a {
+    color: var(--gray-400);
     text-decoration: none;
+    transition: var(--transition-fast);
 }
 
-/* Адаптивность для страницы всех мастеров */
-@media (max-width: 1200px) {
+.footer-links a:hover {
+    color: var(--primary-light);
+}
+
+@media (max-width: var(--breakpoint-md)) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 0 var(--spacing-4);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: var(--breakpoint-lg)) {
     .masters-grid-all {
         grid-template-columns: repeat(2, 1fr);
-        gap: 25px;
-    }
-    
-    .page-header h1 {
-        font-size: 2.2rem;
+        gap: var(--spacing-5);
     }
 }
 
-@media (max-width: 992px) {
+@media (max-width: var(--breakpoint-md)) {
     .masters-page {
-        padding: 30px 0;
-    }
-    
-    .page-header {
-        margin-bottom: 30px;
+        padding: var(--spacing-4) 0;
     }
     
     .page-header h1 {
-        font-size: 2rem;
+        font-size: var(--font-size-3xl);
     }
     
     .page-header p {
-        font-size: 1rem;
-        padding: 0 20px;
-    }
-    
-    .masters-grid-all {
-        gap: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .masters-page {
-        padding: 20px 0;
-    }
-    
-    .page-header {
-        margin-bottom: 25px;
-    }
-    
-    .page-header h1 {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
-    }
-    
-    .page-header p {
-        font-size: 0.95rem;
-        padding: 0 15px;
+        font-size: var(--font-size-base);
+        padding: 0 var(--spacing-4);
     }
     
     .masters-grid-all {
         grid-template-columns: 1fr;
-        gap: 20px;
-        max-width: 500px;
+        gap: var(--spacing-4);
+        max-width: 400px;
         margin-left: auto;
         margin-right: auto;
     }
-    
-    .master-card {
-        width: 100%;
-        max-width: 400px;
-    }
 }
 
-@media (max-width: 576px) {
-    .masters-page {
-        padding: 15px 0;
-    }
-    
-    .page-header {
-        margin-bottom: 20px;
-    }
-    
+@media (max-width: var(--breakpoint-sm)) {
     .page-header h1 {
-        font-size: 1.6rem;
+        font-size: var(--font-size-2xl);
     }
     
     .page-header p {
-        font-size: 0.9rem;
-        padding: 0 10px;
-    }
-    
-    .masters-grid-all {
-        gap: 15px;
-    }
-    
-    .master-card {
-        padding: 1.25rem;
-    }
-    
-    .master-avatar {
-        width: 70px;
-        height: 70px;
-        font-size: 1.5rem;
-    }
-    
-    .master-name {
-        font-size: 1.1rem;
-    }
-    
-    .master-specialty {
-        font-size: 0.85rem;
-    }
-    
-    .master-description {
-        font-size: 0.85rem;
-    }
-    
-    .stat-value {
-        font-size: 1rem;
-    }
-    
-    .stat-name {
-        font-size: 0.75rem;
-    }
-    
-    .view-master-button {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .page-header h1 {
-        font-size: 1.5rem;
-    }
-    
-    .page-header p {
-        font-size: 0.85rem;
-    }
-    
-    .masters-grid-all {
-        gap: 12px;
-    }
-    
-    .master-card {
-        padding: 1rem;
-    }
-    
-    .master-avatar {
-        width: 60px;
-        height: 60px;
-        font-size: 1.3rem;
-    }
-    
-    .master-name {
-        font-size: 1rem;
-    }
-    
-    .master-specialty {
-        font-size: 0.8rem;
-    }
-    
-    .master-description {
-        font-size: 0.8rem;
-        margin-bottom: 1rem;
-    }
-    
-    .master-stats {
-        margin-bottom: 1rem;
-        padding: 0.8rem 0;
-    }
-    
-    .stat-value {
-        font-size: 0.9rem;
-    }
-    
-    .stat-name {
-        font-size: 0.7rem;
-    }
-    
-    .view-master-button {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-    }
-    
-    .no-masters {
-        padding: 40px 15px;
-    }
-    
-    .no-masters h3 {
-        font-size: 1.3rem;
-    }
-}
-
-@media (max-width: 360px) {
-    .page-header h1 {
-        font-size: 1.4rem;
-    }
-    
-    .page-header p {
-        font-size: 0.8rem;
-    }
-    
-    .master-card {
-        padding: 0.8rem;
-    }
-    
-    .master-avatar {
-        width: 55px;
-        height: 55px;
-        font-size: 1.2rem;
-    }
-    
-    .master-name {
-        font-size: 0.95rem;
-    }
-    
-    .master-specialty {
-        font-size: 0.75rem;
-    }
-    
-    .master-description {
-        font-size: 0.75rem;
-    }
-    
-    .master-stats {
-        margin-bottom: 0.8rem;
-        padding: 0.6rem 0;
-    }
-    
-    .stat-value {
-        font-size: 0.85rem;
-    }
-    
-    .stat-name {
-        font-size: 0.65rem;
-    }
-    
-    .view-master-button {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
-    }
-}
-
-/* Адаптивность для контейнера */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 0 10px;
-    }
-}
-
-/* Адаптивность для карточек мастеров */
-.master-card {
-    transition: all 0.3s ease;
-}
-
-@media (max-width: 768px) {
-    .master-card:hover {
-        transform: translateY(-2px);
-    }
-}
-
-/* Улучшенная читаемость на маленьких экранах */
-@media (max-width: 480px) {
-    .master-description {
-        -webkit-line-clamp: 3; /* Ограничиваем количество строк */
-        line-clamp: 3;
-    }
-}
-
-/* Адаптивность для рейтинга мастеров */
-@media (max-width: 576px) {
-    .master-rating-info {
-        flex-direction: column;
-        gap: 2px;
-    }
-    
-    .master-rating-value {
-        font-size: 1rem;
-    }
-    
-    .master-rating-count {
-        font-size: 0.75rem;
-    }
-    
-    .master-rating-stars {
-        gap: 2px;
+        font-size: var(--font-size-sm);
     }
 }

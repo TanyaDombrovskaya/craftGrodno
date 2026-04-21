@@ -2,9 +2,7 @@
 require_once(__DIR__ . "/../checkAuth.php");
 require_once(__DIR__ . "/../init.php");
 
-// Включаем отображение ошибок для отладки
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+header('Content-Type: application/json');
 
 checkAuth();
 
@@ -18,11 +16,6 @@ $userID = getUserId();
 // Получаем masterID
 $masterSql = "SELECT masterID FROM masters WHERE userID = ?";
 $masterStmt = $connection->prepare($masterSql);
-if (!$masterStmt) {
-    echo json_encode(['error' => 'Ошибка подготовки запроса master: ' . $connection->error]);
-    exit();
-}
-
 $masterStmt->bind_param("i", $userID);
 $masterStmt->execute();
 $masterResult = $masterStmt->get_result();
@@ -36,49 +29,103 @@ if (!$master) {
 $masterID = $master['masterID'];
 $masterStmt->close();
 
-// Простой запрос без фильтров для проверки
+// Получаем параметры фильтрации из GET
+$period = isset($_GET['period']) ? $_GET['period'] : 'all';
+$status = isset($_GET['status']) ? $_GET['status'] : 'all';
+$dateFrom = isset($_GET['date_from']) && !empty($_GET['date_from']) ? $_GET['date_from'] : null;
+$dateTo = isset($_GET['date_to']) && !empty($_GET['date_to']) ? $_GET['date_to'] : null;
+
+// Базовый WHERE
+$whereConditions = ["oi.masterID = ?"];
+$params = [$masterID];
+$types = "i";
+
+// Фильтр по статусу
+if ($status !== 'all') {
+    $whereConditions[] = "oi.status = ?";
+    $params[] = $status;
+    $types .= "s";
+}
+
+// Фильтр по дате от
+if ($dateFrom) {
+    $whereConditions[] = "DATE(o.order_date) >= ?";
+    $params[] = $dateFrom;
+    $types .= "s";
+}
+
+// Фильтр по дате до
+if ($dateTo) {
+    $whereConditions[] = "DATE(o.order_date) <= ?";
+    $params[] = $dateTo;
+    $types .= "s";
+}
+
+// Фильтр по периоду (today, week, month, year)
+if ($period !== 'all') {
+    switch ($period) {
+        case 'today':
+            $whereConditions[] = "DATE(o.order_date) = CURDATE()";
+            break;
+        case 'week':
+            $whereConditions[] = "o.order_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
+            break;
+        case 'month':
+            $whereConditions[] = "o.order_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
+            break;
+        case 'year':
+            $whereConditions[] = "o.order_date >= DATE_SUB(NOW(), INTERVAL 1 YEAR)";
+            break;
+    }
+}
+
+$whereClause = implode(" AND ", $whereConditions);
+
+// Запрос для списка продаж
 $sql = "SELECT 
             oi.order_itemID,
             oi.quantity,
             oi.price,
             oi.status,
             o.order_date,
+            o.orderID,
             p.productID,
             p.productName,
-            u.name as buyer_name
+            u.name as buyer_name,
+            u.login as buyer_login
         FROM order_items oi
         JOIN orders o ON oi.orderID = o.orderID
         JOIN products p ON oi.productID = p.productID
         JOIN users u ON o.userID = u.userID
-        WHERE oi.masterID = ?
-        ORDER BY o.order_date DESC
-        LIMIT 10";
+        WHERE $whereClause
+        ORDER BY o.order_date DESC";
 
 $stmt = $connection->prepare($sql);
-if (!$stmt) {
-    echo json_encode(['error' => 'Ошибка подготовки запроса: ' . $connection->error]);
-    exit();
+if (!empty($params) && count($params) > 1) {
+    $stmt->bind_param($types, ...$params);
+} elseif (!empty($params)) {
+    $stmt->bind_param($types, $params[0]);
 }
-
-$stmt->bind_param("i", $masterID);
 $stmt->execute();
 $result = $stmt->get_result();
 
 $sales = [];
 $totalRevenue = 0;
+
 while ($row = $result->fetch_assoc()) {
     $totalRevenue += $row['price'] * $row['quantity'];
     $sales[] = $row;
 }
 
+// Статистика
 $stats = [
     'total_count' => count($sales),
-    'total_revenue' => $totalRevenue,
-    'average_check' => count($sales) > 0 ? $totalRevenue / count($sales) : 0
+    'total_revenue' => round($totalRevenue, 2),
+    'average_check' => count($sales) > 0 ? round($totalRevenue / count($sales), 2) : 0
 ];
 
-header('Content-Type: application/json');
 echo json_encode(['sales' => $sales, 'stats' => $stats]);
 
 $stmt->close();
+$connection->close();
 ?>

@@ -1,0 +1,105 @@
+/* styles/ratings.css - Стили рейтингов */
+
+@import url("./variables.css");
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin: var(--spacing-2) 0;
+    flex-wrap: wrap;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-star {
+    color: var(--gray-300);
+    font-size: var(--font-size-sm);
+    transition: var(--transition-fast);
+}
+
+.rating-star.filled {
+    color: var(--warning);
+}
+
+.rating-star.half {
+    background: linear-gradient(90deg, var(--warning) 50%, var(--gray-300) 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.rating-info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-1);
+    font-size: var(--font-size-xs);
+    color: var(--gray-500);
+}
+
+.rating-value {
+    font-weight: var(--font-weight-bold);
+    color: var(--gray-700);
+}
+
+.rating-count {
+    font-weight: var(--font-weight-normal);
+}
+
+/* Рейтинг мастера */
+.master-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin-top: var(--spacing-2);
+}
+
+.master-rating-stars {
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+}
+
+.master-rating-star {
+    color: var(--gray-300);
+    font-size: var(--font-size-sm);
+}
+
+.master-rating-star.filled {
+    color: var(--warning);
+}
+
+.master-rating-star.half {
+    background: linear-gradient(90deg, var(--warning) 50%, var(--gray-300) 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.master-rating-info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-1);
+    justify-content: center;
+    font-size: var(--font-size-xs);
+    margin-top: var(--spacing-1);
+    color: var(--gray-500);
+}
+
+.master-rating-value {
+    font-weight: var(--font-weight-bold);
+    color: var(--gray-700);
+}
+
+/* Товары без отзывов */
+.no-reviews .rating-stars {
+    opacity: 0.5;
+}
+
+.no-reviews .rating-info {
+    color: var(--gray-400);
+}
