@@ -307,6 +307,26 @@
     color: var(--primary-light);
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.cart-page {
+    flex: 1;
+}
+
+.footer {
+    margin-top: auto;
+}
+
 @media (max-width: var(--breakpoint-md)) {
     .footer-content {
         grid-template-columns: 1fr;

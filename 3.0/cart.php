@@ -12,7 +12,7 @@ if (getUserRole() !== 'user') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - Корзина</title>
+    <title>ГродноАрт - Корзина</title>
     <link rel="stylesheet" href="./styles/cartStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -22,7 +22,7 @@ if (getUserRole() !== 'user') {
             <button class="menu-toggle" aria-label="Открыть меню">
                 <span></span><span></span><span></span>
             </button>
-            <div class="logo">Grodno<span>Craft</span></div>
+            <div class="logo">Гродно<span>Арт</span></div>
             <div class="nav-links">
                 <a href="mainUser.php" class="nav-link">Главная</a>
                 <a href="mainUser.php#categories" class="nav-link">Категории</a>
@@ -51,7 +51,7 @@ if (getUserRole() !== 'user') {
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>GrodnoCraft</h3>
+                <h3>ГродноАрт</h3>
                 <p>Платформа для ремесленников и ценителей ручной работы</p>
             </div>
             <div class="footer-section">

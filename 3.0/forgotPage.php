@@ -6,7 +6,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Восстановление пароля - GrodnoCraft</title>
+    <title>Восстановление пароля - ГродноАрт</title>
     <link rel="stylesheet" href="./styles/forgotStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -14,7 +14,7 @@ session_start();
     <div class="container">
         <div class="form-section">
             <form method="POST" action="./php/changePass.php">
-                <h1 class="logo">Grodno<span>Craft</span></h1>
+                <h1 class="logo">Гродно<span>Арт</span></h1>
 
                 <div class="form-group">
                     <label for="login-input">Логин</label>

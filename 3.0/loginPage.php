@@ -29,7 +29,7 @@ header("Expires: 0");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - Вход</title>
+    <title>ГродноАрт - Вход</title>
     <link rel="stylesheet" href="./styles/loginStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -39,7 +39,7 @@ header("Expires: 0");
         
         <div class="form-section">
             <form method="POST" action="./php/login.php">
-                <h1 class="logo">Grodno<span>Craft</span></h1>
+                <h1 class="logo">Гродно<span>Арт</span></h1>
 
                 <div class="form-group">
                     <label for="login-input">Логин</label>

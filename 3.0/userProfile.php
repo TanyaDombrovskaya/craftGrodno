@@ -25,7 +25,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - Личный кабинет</title>
+    <title>ГродноАрт - Личный кабинет</title>
     <link rel="stylesheet" href="./styles/userProfileStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -35,7 +35,7 @@ $stmt->close();
             <button class="menu-toggle" aria-label="Открыть меню">
                 <span></span><span></span><span></span>
             </button>
-            <div class="logo">Grodno<span>Craft</span></div>
+            <div class="logo">Гродно<span>Арт</span></div>
             <div class="nav-links">
                 <a href="mainUser.php" class="nav-link">Главная</a>
                 <a href="allProducts.php" class="nav-link">Товары</a>

@@ -32,7 +32,7 @@ if (!$productExists) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GrodnoCraft - Товар не найден</title>
+        <title>ГродноАрт - Товар не найден</title>
         <link rel="stylesheet" href="./styles/mainUserStyle.css">
         <link rel="icon" href="./styles/image/icon.png">
     </head>
@@ -42,7 +42,7 @@ if (!$productExists) {
                 <button class="menu-toggle" aria-label="Открыть меню">
                     <span></span><span></span><span></span>
                 </button>
-                <div class="logo">Grodno<span>Craft</span></div>
+                <div class="logo">Гродно<span>Арт</span></div>
                 <div class="nav-links">
                     <a href="mainUser.php" class="nav-link">Главная</a>
                     <a href="allProducts.php" class="nav-link">Товары</a>
@@ -82,7 +82,7 @@ if (!$productExists) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - Страница товара</title>
+    <title>ГродноАрт - Страница товара</title>
     <link rel="stylesheet" href="./styles/productCardStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -97,7 +97,7 @@ if (!$productExists) {
                 <span></span>
             </button>
 
-            <div class="logo">Grodno<span>Craft</span></div>
+            <div class="logo">Гродно<span>Арт</span></div>
 
             <div class="nav-links">
                 <a href="mainUser.php" class="nav-link">Главная</a>
@@ -167,7 +167,7 @@ if (!$productExists) {
     <footer class="footer" id="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>GrodnoCraft</h3>
+                <h3>ГродноАрт</h3>
                 <p>Платформа для ремесленников и ценителей ручной работы</p>
             </div>
             <div class="footer-section">

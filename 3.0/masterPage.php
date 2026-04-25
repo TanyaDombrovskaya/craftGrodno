@@ -45,7 +45,7 @@ $review_count = $rating_data['review_count'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - <?php echo htmlspecialchars($masterData['masterName']); ?></title>
+    <title>ГродноАрт - <?php echo htmlspecialchars($masterData['masterName']); ?></title>
     <link rel="stylesheet" href="./styles/masterPageStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -60,7 +60,7 @@ $review_count = $rating_data['review_count'];
                 <span></span>
             </button>
 
-            <div class="logo">Grodno<span>Craft</span></div>
+            <div class="logo">Гродно<span>Арт</span></div>
             <div class="nav-links">
                 <a href="mainUser.php#banner" class="nav-link">Главная</a>
                 <a href="mainUser.php#categories" class="nav-link">Категории</a>
@@ -135,7 +135,7 @@ $review_count = $rating_data['review_count'];
     <footer class="footer" id="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>GrodnoCraft</h3>
+                <h3>ГродноАрт</h3>
                 <p>Платформа для ремесленников и ценителей ручной работы</p>
             </div>
             <div class="footer-section">

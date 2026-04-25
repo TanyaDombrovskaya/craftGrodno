@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - Регистрация</title>
+    <title>ГродноАрт - Регистрация</title>
     <link rel="stylesheet" href="./styles/registerStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -11,7 +11,7 @@
     <div class="container">        
         <div class="form-section">
             <form method="POST" action="./php/register.php">
-                <h1 class="logo">Grodno<span>Craft</span></h1>
+                <h1 class="logo">Гродно<span>Арт</span></h1>
                 
                 <div class="user-type-toggle">
                     <input type="radio" id="user-type-user" name="user_type" value="user" checked>

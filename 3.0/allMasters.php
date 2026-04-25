@@ -3,7 +3,7 @@ require_once('./php/checkAuth.php');
 checkAuth();
 
 if (getUserRole() !== 'user') {
-    header("Location: /craftGrodno/3.0/oginPage.php");
+    header("Location: /craftGrodno/3.0/loginPage.php");  // Исправлено: было oginPage.php
     exit();
 }
 ?>
@@ -12,7 +12,7 @@ if (getUserRole() !== 'user') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - Все мастера</title>
+    <title>ГродноАрт - Все мастера</title>
     <link rel="stylesheet" href="./styles/allMastersPageStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -27,13 +27,14 @@ if (getUserRole() !== 'user') {
                 <span></span>
             </button>
 
-            <div class="logo">Grodno<span>Craft</span></div>
+            <div class="logo">Гродно<span>Арт</span></div>
             <div class="nav-links">
                 <a href="mainUser.php#banner" class="nav-link">Главная</a>
                 <a href="mainUser.php#categories" class="nav-link">Категории</a>
                 <a href="mainUser.php#masters" class="nav-link">Мастера</a>
                 <a href="mainUser.php#about" class="nav-link">О нас</a>
                 <a href="mainUser.php#footer" class="nav-link">Контакты</a>
+                <a href="cart.php" class="nav-link">Корзина</a>
             </div>
             <div class="user-section">
                 <div class="balance-display" id="balanceDisplay">
@@ -61,7 +62,7 @@ if (getUserRole() !== 'user') {
     <footer class="footer" id="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>GrodnoCraft</h3>
+                <h3>ГродноАрт</h3>
                 <p>Платформа для ремесленников и ценителей ручной работы</p>
             </div>
             <div class="footer-section">
@@ -93,6 +94,8 @@ if (getUserRole() !== 'user') {
             </div>
         </div>
     </footer>
+    
+    <script src="./js/cart.js"></script>
     <script src="./js/toogleMenu.js"></script>
 </body>
 </html>

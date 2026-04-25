@@ -68,7 +68,7 @@ mysqli_stmt_close($count_stmt);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - Панель продавца</title>
+    <title>ГроноАрт - Панель продавца</title>
     <link rel="stylesheet" href="./styles/mainSellerStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -81,7 +81,7 @@ mysqli_stmt_close($count_stmt);
                 <span></span>
             </button>
 
-            <div class="logo">Grodno<span>Craft</span></div>
+            <div class="logo">Гродно<span>Арт</span></div>
 
             <div class="user-section">
                 <div class="balance-display">

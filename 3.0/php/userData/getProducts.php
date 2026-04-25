@@ -49,7 +49,7 @@ $sql = "SELECT
         LEFT JOIN category c ON p.categoryID = c.categoryID
         WHERE p.productName IS NOT NULL 
         ORDER BY p.countOfProduct DESC 
-        LIMIT 6";
+        LIMIT 4";
 
 $result = $connection->query($sql);
 

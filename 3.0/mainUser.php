@@ -12,7 +12,7 @@ if (getUserRole() !== 'user') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrodnoCraft - Магазин ремесленных изделий</title>
+    <title>ГродноАрт - Магазин ремесленных изделий</title>
     <link rel="stylesheet" href="./styles/mainUserStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -27,7 +27,7 @@ if (getUserRole() !== 'user') {
                 <span></span>
             </button>
 
-            <div class="logo">Grodno<span>Craft</span></div>
+            <div class="logo">Гродно<span>Арт</span></div>
 
             <div class="nav-links">
                 <a href="#banner" class="nav-link">Главная</a>
@@ -88,7 +88,7 @@ if (getUserRole() !== 'user') {
     <section class="about-section" id="about">
         <div class="about-content">
             <div class="about-text">
-                <h2>О GrodnoCraft</h2>
+                <h2>О ГродноАрт</h2>
                 <p>Мы - сообщество талантливых ремесленников из Гродно и Гродненской области, объединенные любовью к традиционному искусству и стремлением сохранить культурное наследие нашего региона.</p>
                 <p>Наша платформа создана для того, чтобы мастера могли делиться своим творчеством, а ценители ручной работы - находить уникальные изделия, созданные с душой и вниманием к деталям.</p>
                 
@@ -117,7 +117,7 @@ if (getUserRole() !== 'user') {
     <footer class="footer" id="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>GrodnoCraft</h3>
+                <h3>ГродноАрт</h3>
                 <p>Платформа для ремесленников и ценителей ручной работы</p>
             </div>
             <div class="footer-section">
