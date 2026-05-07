@@ -70,7 +70,7 @@ try {
                 VALUES ($categoryID, $masterID, '$product_name_escaped', '$product_about_escaped', $price, $count, 0x$image_hex)";
         
         if (mysqli_query($connection, $sql)) {
-            header("Location: /craftGrodno/2.0/mainSeller.php?success=product");
+            header("Location: /craftGrodno/3.0/mainSeller.php?success=product");
             exit();
         } else {
             throw new Exception("Ошибка SQL: " . mysqli_error($connection));
@@ -82,7 +82,7 @@ try {
         
         if (mysqli_stmt_execute($stmt)) {
             mysqli_stmt_close($stmt);
-            header("Location: /craftGrodno/2.0/mainSeller.php?success=product");
+            header("Location: /craftGrodno/3.0/mainSeller.php?success=product");
             exit();
         } else {
             throw new Exception("Ошибка выполнения запроса: " . mysqli_stmt_error($stmt));

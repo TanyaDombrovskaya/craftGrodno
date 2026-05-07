@@ -16,6 +16,7 @@
     display: grid;
     grid-template-columns: 320px 1fr;
     gap: var(--spacing-6);
+    align-items: start;
 }
 
 /* ========== БОКОВАЯ ПАНЕЛЬ ========== */
@@ -182,6 +183,8 @@
     padding: var(--spacing-6);
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--gray-200);
+    min-height: auto;
+    height: auto;
 }
 
 .seller-tab {
@@ -448,8 +451,10 @@
 .product-rating {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--spacing-2);
     margin: var(--spacing-1) 0;
+    font-size: 20px;
 }
 
 .product-footer {
@@ -690,30 +695,25 @@
     color: var(--primary);
 }
 
-/* ========== УВЕДОМЛЕНИЯ ========== */
-.notification {
-    position: fixed;
-    top: var(--spacing-5);
-    right: var(--spacing-5);
-    padding: var(--spacing-3) var(--spacing-5);
-    border-radius: var(--radius-lg);
-    color: var(--white);
-    font-weight: var(--font-weight-medium);
-    z-index: 10001;
-    animation: slideInRight 0.3s ease;
-    box-shadow: var(--shadow-lg);
+/* Дополнительные статусы */
+.status-delivering {
+    background: #FEF3C7;
+    color: #D97706;
 }
 
-.notification.success {
-    background: var(--primary-gradient);
+.status-delivered {
+    background: #DBEAFE;
+    color: #2563EB;
 }
 
-.notification.error {
-    background: var(--error);
+.status-completed {
+    background: #D1FAE5;
+    color: #059669;
 }
 
-.notification.info {
-    background: var(--info);
+.status-collecting {
+    background: #FEF3C7;
+    color: #D97706;
 }
 
 @keyframes slideInRight {

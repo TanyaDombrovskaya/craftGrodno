@@ -1,40 +1,79 @@
-// Обработка удаления товаров
+// js/mainSeller/deleteProduct.js - исправленная версия
+
 document.addEventListener('DOMContentLoaded', function() {
     const deleteModal = document.getElementById('deleteModal');
-    const deleteMessage = document.getElementById('deleteMessage');
-    const productNameToDelete = document.getElementById('productNameToDelete');
-    const closeModalBtn = deleteModal.querySelector('.close-modal');
-    const cancelBtn = deleteModal.querySelector('.cancel-button');
-    const confirmDeleteBtn = deleteModal.querySelector('.confirm-delete-button');
+    const productNameToDelete = document.getElementById('deleteProductName');
+    const confirmDeleteBtn = document.querySelector('.confirm-delete-btn');
+    const cancelBtns = document.querySelectorAll('.cancel-btn, .close-modal');
     
     let productToDeleteId = null;
+    let productCardToDelete = null;
 
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('delete-product-btn')) {
-            productToDeleteId = e.target.getAttribute('data-product-id');
-            const productName = e.target.getAttribute('data-product-name');
+    // Используем делегирование для динамических кнопок
+    document.body.addEventListener('click', function(e) {
+        // Ищем кнопку удаления (родительский элемент или саму кнопку)
+        const deleteBtn = e.target.closest('.delete-product-btn');
+        
+        if (deleteBtn) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            productNameToDelete.textContent = productName;
-            deleteModal.style.display = 'block';
+            productToDeleteId = deleteBtn.getAttribute('data-product-id');
+            const productName = deleteBtn.getAttribute('data-product-name');
+            productCardToDelete = deleteBtn.closest('.product-card');
+            
+            if (productNameToDelete) {
+                productNameToDelete.textContent = productName;
+            }
+            if (deleteModal) {
+                deleteModal.style.display = 'flex';
+            }
         }
     });
     
     function closeDeleteModal() {
-        deleteModal.style.display = 'none';
+        if (deleteModal) {
+            deleteModal.style.display = 'none';
+        }
         productToDeleteId = null;
+        productCardToDelete = null;
     }
     
-    closeModalBtn.addEventListener('click', closeDeleteModal);
-    cancelBtn.addEventListener('click', closeDeleteModal);
+    // Закрытие по кнопкам отмены
+    cancelBtns.forEach(btn => {
+        btn.addEventListener('click', closeDeleteModal);
+    });
     
-    confirmDeleteBtn.addEventListener('click', function() {
-        if (productToDeleteId) {
-            deleteProduct(productToDeleteId);
+    // Закрытие по клику вне окна
+    window.addEventListener('click', function(e) {
+        if (e.target === deleteModal) {
+            closeDeleteModal();
         }
     });
     
-    // Функция удаления товара
+    // Закрытие по Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && deleteModal && deleteModal.style.display === 'flex') {
+            closeDeleteModal();
+        }
+    });
+    
+    // Подтверждение удаления
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (productToDeleteId) {
+                deleteProduct(productToDeleteId);
+            }
+        });
+    }
+    
     function deleteProduct(productId) {
+        if (!confirmDeleteBtn) return;
+        
+        const originalText = confirmDeleteBtn.textContent;
+        confirmDeleteBtn.disabled = true;
+        confirmDeleteBtn.textContent = 'Удаление...';
+        
         fetch('./php/masterData/deleteProduct.php', {
             method: 'POST',
             headers: {
@@ -46,14 +85,19 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(result => {
             if (result === 'success') {
                 showMessage('Товар успешно удален', 'success');
-                const productCard = document.querySelector(`[data-product-id="${productId}"]`);
-                if (productCard) {
-                    productCard.remove();
+                
+                // Удаляем карточку из DOM
+                if (productCardToDelete && productCardToDelete.parentNode) {
+                    productCardToDelete.remove();
                 }
+                
+                // Проверяем, остались ли товары
                 const productGrid = document.querySelector('.product-grid');
                 if (productGrid && productGrid.children.length === 0) {
                     productGrid.innerHTML = '<div class="no-products">У вас пока нет товаров</div>';
                 }
+            } else if (result === 'not_owner') {
+                showMessage('У вас нет прав для удаления этого товара', 'error');
             } else {
                 showMessage('Ошибка при удалении товара', 'error');
             }
@@ -63,6 +107,10 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             showMessage('Ошибка при удалении товара', 'error');
             closeDeleteModal();
+        })
+        .finally(() => {
+            confirmDeleteBtn.disabled = false;
+            confirmDeleteBtn.textContent = originalText;
         });
     }
 });

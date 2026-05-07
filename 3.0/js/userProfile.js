@@ -166,35 +166,43 @@ function loadOrders() {
             
             let html = '';
             orders.forEach(order => {
-                const statusClass = getStatusClass(order.status);
-                const statusText = getStatusText(order.status);
+                const orderStatusClass = getStatusClass(order.status);
+                const orderStatusText = getStatusText(order.status);
                 
                 html += `
                     <div class="order-card">
                         <div class="order-header">
                             <span class="order-number">Заказ №${order.orderID}</span>
                             <span class="order-date">${formatDate(order.order_date)}</span>
-                            <span class="order-status ${statusClass}">${statusText}</span>
+                            <span class="order-status ${orderStatusClass}">${orderStatusText}</span>
                         </div>
                         <div class="order-items">
-                            ${order.items.map(item => `
-                                <div class="order-item">
-                                    <div class="order-item-info">
-                                        ${item.product_exists ? `
-                                            <a href="productCard.php?id=${item.productID}" class="order-item-link">
-                                                ${escapeHtml(item.productName)}
-                                            </a>
-                                        ` : `
-                                            <span class="order-item-deleted">
-                                                ${escapeHtml(item.productName)} 
-                                                <span class="deleted-badge">(товар удален)</span>
-                                            </span>
-                                        `}
-                                        <span class="order-item-quantity">× ${item.quantity}</span>
+                            ${order.items.map(item => {
+                                const itemStatusClass = getStatusClass(item.item_status);
+                                const itemStatusText = getStatusText(item.item_status);
+                                
+                                return `
+                                    <div class="order-item">
+                                        <div class="order-item-info">
+                                            ${item.product_exists ? `
+                                                <a href="productCard.php?id=${item.productID}" class="order-item-link">
+                                                    ${escapeHtml(item.productName)}
+                                                </a>
+                                            ` : `
+                                                <span class="order-item-deleted">
+                                                    ${escapeHtml(item.productName)} 
+                                                    <span class="deleted-badge">(товар удален)</span>
+                                                </span>
+                                            `}
+                                            <span class="order-item-quantity">× ${item.quantity}</span>
+                                        </div>
+                                        <div class="order-item-price">${parseFloat(item.price).toFixed(2)} руб.</div>
+                                        <div class="order-item-status">
+                                            <span class="status-badge ${itemStatusClass}">${itemStatusText}</span>
+                                        </div>
                                     </div>
-                                    <div class="order-item-price">${parseFloat(item.price).toFixed(2)} руб.</div>
-                                </div>
-                            `).join('')}
+                                `;
+                            }).join('')}
                         </div>
                         <div class="order-total">
                             Итого: <span>${parseFloat(order.total_amount).toFixed(2)} руб.</span>
@@ -211,6 +219,30 @@ function loadOrders() {
         });
 }
 
+function getStatusText(status) {
+    const texts = {
+        'pending': 'Ожидает одобрения',
+        'approved': 'Подтверждён',
+        'collecting': 'Собирается',
+        'delivering': 'Доставляется',
+        'delivered': 'Доставлен',
+        'completed': 'Завершён'
+    };
+    return texts[status] || status;
+}
+
+function getStatusClass(status) {
+    const classes = {
+        'pending': 'status-pending',
+        'approved': 'status-approved',
+        'collecting': 'status-collecting',
+        'delivering': 'status-delivering',
+        'delivered': 'status-delivered',
+        'completed': 'status-completed'
+    };
+    return classes[status] || 'status-pending';
+}
+
 function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('ru-RU', {
@@ -220,56 +252,6 @@ function formatDate(dateString) {
         hour: '2-digit',
         minute: '2-digit'
     });
-}
-
-function getStatusClass(status) {
-    const classes = {
-        'pending': 'status-pending',
-        'approved': 'status-approved',
-        'transferred': 'status-transferred',
-        'completed': 'status-completed'
-    };
-    return classes[status] || 'status-pending';
-}
-
-function getStatusText(status) {
-    const texts = {
-        'pending': 'Ожидает подтверждения',
-        'approved': 'Подтвержден',
-        'transferred': 'Передан мастеру',
-        'completed': 'Завершен'
-    };
-    return texts[status] || status;
-}
-
-function showMessage(message, type) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `notification ${type}`;
-    msgDiv.textContent = message;
-    msgDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-    `;
-    
-    if (type === 'success') {
-        msgDiv.style.backgroundColor = '#10b981';
-    } else if (type === 'error') {
-        msgDiv.style.backgroundColor = '#ef4444';
-    } else {
-        msgDiv.style.backgroundColor = '#3b82f6';
-    }
-    
-    document.body.appendChild(msgDiv);
-    
-    setTimeout(() => {
-        msgDiv.remove();
-    }, 3000);
 }
 
 function escapeHtml(text) {

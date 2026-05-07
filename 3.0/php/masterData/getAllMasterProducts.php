@@ -149,9 +149,4 @@ if ($result && $result->num_rows > 0) {
 }
 
 echo $products_html;
-
-// // Закрываем соединения
-// if (isset($rating_stmt)) {
-//     $rating_stmt->close();
-// }
 mysqli_stmt_close($stmt);

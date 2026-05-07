@@ -11,6 +11,7 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
 }
 
 $login_error = isset($_SESSION['login_error']) ? $_SESSION['login_error'] : '';
+$error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 $previous_login = isset($_SESSION['previous_login']) ? $_SESSION['previous_login'] : '';
 
 $body_class = '';
@@ -18,6 +19,8 @@ if ($login_error === 'password') {
     $body_class = 'password-error';
 } elseif ($login_error === 'login') {
     $body_class = 'login-error';
+} elseif ($login_error === 'blocked') {
+    $body_class = 'blocked-error';
 }
 
 header("Cache-Control: no-cache, no-store, must-revalidate");
@@ -40,6 +43,12 @@ header("Expires: 0");
         <div class="form-section">
             <form method="POST" action="./php/login.php">
                 <h1 class="logo">Гродно<span>Арт</span></h1>
+
+                <?php if ($login_error === 'blocked' && $error_message): ?>
+                <div class="error-message-blocked" style="background: #FEE2E2; color: #DC2626; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #DC2626;">
+                    ⚠️ <?php echo htmlspecialchars($error_message); ?>
+                </div>
+                <?php endif; ?>
 
                 <div class="form-group">
                     <label for="login-input">Логин</label>
@@ -65,9 +74,17 @@ header("Expires: 0");
     <script src="./js/commonValidate.js"></script>
     <script src="./js/login/authError.js"></script>
     <script src="./js/login/validateLogin.js"></script>
+    <script>
+        // Дополнительная обработка ошибки блокировки
+        if (document.body.classList.contains('blocked-error')) {
+            // Можно добавить дополнительную логику
+            console.log('Пользователь заблокирован');
+        }
+    </script>
 </body>
 </html>
 <?php
 unset($_SESSION['login_error']);
+unset($_SESSION['error_message']);
 unset($_SESSION['previous_login']);
 ?>

@@ -36,5 +36,5 @@ if ($stmt->execute()) {
     $_SESSION['review_error'] = "Произошла ошибка при добавлении отзыва";
 }
 
-header("Location: /craftGrodno/2.0/productCard.php?id=" . $product_id);
+header("Location: /craftGrodno/3.0/productCard.php?id=" . $product_id);
 exit();

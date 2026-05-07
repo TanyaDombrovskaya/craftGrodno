@@ -118,5 +118,6 @@ $stmt->close();
     <script src="./js/cart.js"></script>
     <script src="./js/userProfile.js"></script>
     <script src="./js/toogleMenu.js"></script>
+    <script src="./js/commonValidate.js"></script>
 </body>
 </html>

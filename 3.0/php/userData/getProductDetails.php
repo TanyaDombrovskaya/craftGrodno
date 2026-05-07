@@ -204,19 +204,20 @@ if ($result && $result->num_rows > 0) {
                 <div class="master-info">
                     <div class="master-avatar-large">' . getMasterAvatar($product['masterName']) . '</div>
                     <div class="master-details">
-                        <div class="master-name"><a href="./masterPage.php?id=' . $product['masterID'] . '">' . htmlspecialchars($product['masterName']) . '</a></div>
-                        
-                        <!-- Рейтинг мастера -->
-                        <div class="master-rating">
-                            <div class="master-rating-stars">' . displayRatingStars($master_avg_rating) . '</div>
-                            <div class="rating-info">
-                                <span class="rating-master-value">' . $master_avg_rating . '<span class="rating-master-count">(' . $master_review_count . ' отзывов)</span></span>
-                            </div>
+                    <div class="master-name"><a href="./masterPage.php?id=' . $product['masterID'] . '">' . htmlspecialchars($product['masterName']) . '</a></div>
+                    
+                    <div class="master-direction">' . htmlspecialchars($product['direction']) . '</div>
+                    
+                    <!-- Рейтинг мастера (под именем и направлением) -->
+                    <div class="master-rating">
+                        <div class="master-rating-stars">' . displayRatingStars($master_avg_rating) . '</div>
+                        <div class="rating-info">
+                            <span class="rating-master-value">' . $master_avg_rating . '<span class="rating-master-count">(' . $master_review_count . ' отзывов)</span></span>
                         </div>
-                        
-                        <div class="master-direction">' . htmlspecialchars($product['direction']) . '</div>
-                        <div class="master-about">' . nl2br(htmlspecialchars($product['aboutMaster'])) . '</div>
                     </div>
+                    
+                    <div class="master-about">' . nl2br(htmlspecialchars($product['aboutMaster'])) . '</div>
+                </div>
                 </div>  
                 
                 <div class="master-stats-detailed">

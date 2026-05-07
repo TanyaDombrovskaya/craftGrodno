@@ -11,6 +11,7 @@
     display: grid;
     grid-template-columns: 320px 1fr;
     gap: var(--spacing-6);
+    align-items: start;
 }
 
 /* Боковая панель */
@@ -151,6 +152,8 @@
     padding: var(--spacing-6);
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--gray-200);
+    min-height: auto;
+    height: auto;
 }
 
 .profile-tab {
@@ -275,6 +278,25 @@
     font-weight: var(--font-weight-semibold);
 }
 
+.status-transferred {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+/* Статусы заказов */
+.order-item-status {
+    min-width: 130px;
+    text-align: right;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
 .status-pending {
     background: #FEF3C7;
     color: #D97706;
@@ -285,14 +307,42 @@
     color: #2563EB;
 }
 
-.status-transferred {
-    background: #D1FAE5;
-    color: #059669;
+.status-collecting {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.status-delivering {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.status-delivered {
+    background: #DBEAFE;
+    color: #2563EB;
 }
 
 .status-completed {
     background: #D1FAE5;
     color: #059669;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 576px) {
+    .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .order-item-status {
+        text-align: left;
+        align-self: flex-start;
+    }
+    
+    .order-item-price {
+        align-self: flex-end;
+    }
 }
 
 .order-items {

@@ -133,16 +133,16 @@ function updateProduct() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showNotification('Товар успешно обновлен!', 'success');
+            showMessage('Товар успешно обновлен!', 'success');
             closeEditModal();
             loadProducts();
         } else {
-            showNotification('Ошибка при обновлении товара: ' + data.message, 'error');
+            showMessage('Ошибка при обновлении товара: ' + data.message, 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        showNotification('Произошла ошибка при обновлении товара', 'error');
+        showMessage('Произошла ошибка при обновлении товара', 'error');
     })
     .finally(() => {
         if (submitBtn) {
@@ -183,42 +183,6 @@ function setupImagePreview() {
             }
         });
     }
-}
-
-// Функция для показа уведомлений
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 5px;
-        color: white;
-        z-index: 10001;
-        font-weight: 500;
-        max-width: 300px;
-        animation: slideIn 0.3s ease;
-    `;
-    
-    if (type === 'success') {
-        notification.style.background = 'linear-gradient(135deg, #10b981, #34d399)';
-    } else {
-        notification.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
-    }
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
 }
 
 // Функция для загрузки товаров

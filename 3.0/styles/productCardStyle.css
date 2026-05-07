@@ -182,6 +182,7 @@
     padding: var(--spacing-6);
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--gray-200);
+    margin-top: var(--spacing-6);
 }
 
 .section-title {
@@ -241,11 +242,58 @@
     color: var(--primary);
     font-weight: var(--font-weight-medium);
     margin-bottom: var(--spacing-2);
+    font-size: var(--font-size-sm);
+}
+
+/* Рейтинг мастера */
+.master-rating {
+    display: flex;
+    align-items: start;
+    gap: var(--spacing-2);
+    margin: var(--spacing-2) 0;
+    flex-wrap: wrap;
+}
+
+.master-rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.master-rating-stars .rating-star {
+    font-size: var(--font-size-base);
+    color: var(--gray-400);
+}
+
+.master-rating-stars .rating-star.filled {
+    color: var(--warning);
+}
+
+.rating-info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-1);
+}
+
+.rating-master-value {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--gray-700);
+}
+
+.rating-master-count {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-normal);
+    color: var(--gray-500);
 }
 
 .master-about {
     color: var(--gray-600);
     line-height: var(--line-height-relaxed);
+    margin-top: var(--spacing-2);
+    font-size: var(--font-size-sm);
 }
 
 .master-stats-detailed {

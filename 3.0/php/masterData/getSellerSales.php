@@ -29,7 +29,7 @@ if (!$master) {
 $masterID = $master['masterID'];
 $masterStmt->close();
 
-// Получаем параметры фильтрации из GET
+// Получаем параметры фильтрации
 $period = isset($_GET['period']) ? $_GET['period'] : 'all';
 $status = isset($_GET['status']) ? $_GET['status'] : 'all';
 $dateFrom = isset($_GET['date_from']) && !empty($_GET['date_from']) ? $_GET['date_from'] : null;
@@ -40,7 +40,7 @@ $whereConditions = ["oi.masterID = ?"];
 $params = [$masterID];
 $types = "i";
 
-// Фильтр по статусу
+// Фильтр по статусу (добавлен 'collecting')
 if ($status !== 'all') {
     $whereConditions[] = "oi.status = ?";
     $params[] = $status;
@@ -61,7 +61,7 @@ if ($dateTo) {
     $types .= "s";
 }
 
-// Фильтр по периоду (today, week, month, year)
+// Фильтр по периоду
 if ($period !== 'all') {
     switch ($period) {
         case 'today':
@@ -81,7 +81,6 @@ if ($period !== 'all') {
 
 $whereClause = implode(" AND ", $whereConditions);
 
-// Запрос для списка продаж
 $sql = "SELECT 
             oi.order_itemID,
             oi.quantity,
@@ -117,7 +116,6 @@ while ($row = $result->fetch_assoc()) {
     $sales[] = $row;
 }
 
-// Статистика
 $stats = [
     'total_count' => count($sales),
     'total_revenue' => round($totalRevenue, 2),

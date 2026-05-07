@@ -1,0 +1,704 @@
+/* styles/adminStyle.css - Панель администратора */
+
+@import url("./variables.css");
+@import url("./navigation.css");
+@import url("./modals.css");
+
+.admin-container {
+    max-width: var(--breakpoint-xl);
+    margin: 0 auto;
+    padding: var(--spacing-6) var(--spacing-5);
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--spacing-6);
+}
+
+/* Боковая панель */
+.admin-sidebar {
+    background: var(--white);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-5);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    position: sticky;
+    top: 6rem;
+    height: fit-content;
+}
+
+.admin-avatar {
+    text-align: center;
+    padding-bottom: var(--spacing-4);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.avatar-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-gradient);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-3xl);
+    margin: 0 auto var(--spacing-3);
+    color: var(--white);
+}
+
+.admin-avatar h2 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--gray-900);
+    margin-bottom: var(--spacing-1);
+}
+
+.admin-role {
+    color: var(--gray-500);
+    font-size: var(--font-size-sm);
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-4);
+}
+
+.admin-nav-btn {
+    background: none;
+    border: none;
+    padding: var(--spacing-3) var(--spacing-4);
+    text-align: left;
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    border-radius: var(--radius-lg);
+    transition: var(--transition-fast);
+    color: var(--gray-700);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.admin-nav-btn:hover {
+    background: var(--gray-100);
+    color: var(--gray-900);
+}
+
+.admin-nav-btn.active {
+    background: var(--primary-gradient);
+    color: var(--white);
+}
+
+.admin-logout-btn {
+    background: var(--error);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-3) var(--spacing-4);
+    text-align: center;
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    border-radius: var(--radius-lg);
+    transition: var(--transition-fast);
+    text-decoration: none;
+    margin-top: var(--spacing-3);
+    display: block;
+}
+
+.admin-logout-btn:hover {
+    background: var(--error-dark);
+    transform: translateY(-2px);
+}
+
+/* Основной контент */
+.admin-content {
+    background: var(--white);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-6);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+}
+
+.admin-tab {
+    display: none;
+}
+
+.admin-tab.active {
+    display: block;
+}
+
+.tab-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    background: linear-gradient(135deg, var(--gray-900), var(--gray-700));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: var(--spacing-5);
+    padding-bottom: var(--spacing-2);
+    border-bottom: 2px solid var(--primary-light);
+}
+
+/* Фильтры */
+.orders-filters,
+.products-filters {
+    background: var(--gray-50);
+    padding: var(--spacing-4);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--spacing-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
+    align-items: flex-end;
+    border: 1px solid var(--gray-200);
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 150px;
+}
+
+.filter-group label {
+    font-size: var(--font-size-sm);
+    display: block;
+    margin-bottom: var(--spacing-1);
+    color: var(--gray-600);
+}
+
+.filter-group input,
+.filter-group select {
+    width: 100%;
+    padding: var(--spacing-2);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    background: var(--white);
+}
+
+.filter-btn {
+    background: var(--primary-gradient);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-fast);
+    height: 38px;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Таблица заказов */
+.orders-container {
+    overflow-x: auto;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+    padding: var(--spacing-3);
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.orders-table th {
+    background: var(--gray-100);
+    font-weight: var(--font-weight-semibold);
+    color: var(--gray-700);
+}
+
+.orders-table tr:hover {
+    background: var(--gray-50);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+}
+
+.status-pending {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.status-approved {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.status-transferred {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.status-delivering {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.status-delivered {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.status-completed {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.change-status-btn {
+    background: var(--primary-gradient);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: var(--font-size-xs);
+    transition: var(--transition-fast);
+}
+
+.change-status-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Таблица заказов */
+.orders-table-wrapper {
+    overflow-x: auto;
+    margin-top: var(--spacing-4);
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+}
+
+.orders-table th,
+.orders-table td {
+    padding: var(--spacing-3);
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.orders-table th {
+    background: var(--gray-100);
+    font-weight: var(--font-weight-semibold);
+    position: sticky;
+    top: 0;
+}
+
+.orders-table tbody tr:hover {
+    background: var(--gray-50);
+}
+
+.orders-table input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.batch-status-btn {
+    background: var(--primary-gradient);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-fast);
+    margin-left: auto;
+}
+
+.batch-status-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.change-status-btn {
+    background: var(--secondary);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: var(--font-size-xs);
+    transition: var(--transition-fast);
+}
+
+.change-status-btn:hover {
+    background: var(--secondary-dark);
+    transform: translateY(-2px);
+}
+
+.status-collecting {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+/* Карточки товаров на модерацию */
+.products-moderation-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.moderation-card {
+    background: var(--gray-50);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-4);
+    border: 1px solid var(--gray-200);
+    transition: var(--transition-fast);
+}
+
+.moderation-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.moderation-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-3);
+}
+
+.moderation-card h4 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-1);
+}
+
+.moderation-card .price {
+    color: var(--primary);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-2);
+}
+
+.moderation-card .master {
+    color: var(--gray-500);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-3);
+}
+
+.moderation-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-3);
+}
+
+.approve-btn {
+    background: var(--success);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    flex: 1;
+    transition: var(--transition-fast);
+}
+
+.approve-btn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.reject-btn {
+    background: var(--error);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    flex: 1;
+    transition: var(--transition-fast);
+}
+
+.reject-btn:hover {
+    background: #DC2626;
+    transform: translateY(-2px);
+}
+
+.status-pending-badge {
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-2);
+    background: #FEF3C7;
+    color: #D97706;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-2);
+}
+
+.status-approved-badge {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.status-rejected-badge {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.rejection-reason {
+    font-size: var(--font-size-xs);
+    color: var(--error);
+    margin-top: var(--spacing-2);
+    padding: var(--spacing-2);
+    background: #FEE2E2;
+    border-radius: var(--radius-md);
+}
+
+/* Отзывы */
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.review-card {
+    background: var(--gray-50);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-4);
+    border: 1px solid var(--gray-200);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-3);
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+}
+
+.review-product {
+    font-weight: var(--font-weight-semibold);
+    color: var(--gray-900);
+}
+
+.review-author {
+    color: var(--gray-500);
+    font-size: var(--font-size-sm);
+}
+
+.review-text {
+    color: var(--gray-700);
+    margin-bottom: var(--spacing-3);
+    line-height: var(--line-height-relaxed);
+}
+
+.review-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: flex-end;
+}
+
+.edit-review-btn {
+    background: var(--secondary);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+}
+
+.edit-review-btn:hover {
+    background: var(--secondary-dark);
+}
+
+.delete-review-btn {
+    background: var(--error);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+}
+
+.delete-review-btn:hover {
+    background: #DC2626;
+}
+
+/* Таблица пользователей */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.users-table th {
+    background: #f8fafc;
+    font-weight: 600;
+}
+
+.users-table tr:hover {
+    background: #f8fafc;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.role-user {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.role-seller {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.role-admin {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.status-online {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.status-offline {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+.status-blocked {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.block-user-btn {
+    background: #F59E0B;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.unblock-user-btn {
+    background: #10B981;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.delete-user-btn {
+    background: #EF4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.block-confirm-btn {
+    background: #F59E0B;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.users-filters {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+/* Модальные окна */
+.reject-form textarea,
+.status-form textarea,
+.edit-review-form textarea {
+    width: 100%;
+    padding: var(--spacing-3);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    resize: vertical;
+}
+
+.reject-confirm-btn,
+.status-confirm-btn,
+.save-review-btn {
+    background: var(--primary-gradient);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+}
+
+/* Адаптивность */
+@media (max-width: var(--breakpoint-lg)) {
+    .admin-container {
+        grid-template-columns: 240px 1fr;
+        gap: var(--spacing-4);
+    }
+}
+
+@media (max-width: var(--breakpoint-md)) {
+    .admin-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-sidebar {
+        position: static;
+    }
+    
+    .admin-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .admin-nav-btn {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .products-moderation-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .orders-filters,
+    .products-filters {
+        flex-direction: column;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+}

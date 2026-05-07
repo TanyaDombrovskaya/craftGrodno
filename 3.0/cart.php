@@ -83,6 +83,7 @@ if (getUserRole() !== 'user') {
         </div>
     </footer>
 
+    <script src="./js/commonValidate.js"></script>
     <script src="./js/cart.js"></script>
     <script src="./js/toogleMenu.js"></script>
 </body>

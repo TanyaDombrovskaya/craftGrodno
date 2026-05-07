@@ -1,3 +1,5 @@
+// js/seller.js - Исправленная версия без дубликатов
+
 let currentDeleteProductId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -89,7 +91,6 @@ function initWithdrawModal() {
         }
     });
     
-    // Переключение между полями ввода
     if (withdrawMethod) {
         withdrawMethod.addEventListener('change', function() {
             if (this.value === 'card') {
@@ -109,9 +110,7 @@ function initWithdrawModal() {
     if (amountInput) {
         amountInput.addEventListener('input', function(e) {
             let value = this.value;
-            // Удаляем все нецифровые символы
             value = value.replace(/[^\d]/g, '');
-            // Преобразуем в число
             if (value) {
                 let numValue = parseInt(value, 10);
                 if (!isNaN(numValue)) {
@@ -123,22 +122,18 @@ function initWithdrawModal() {
                 this.value = '';
             }
             
-            // Убираем ошибку при вводе
             this.classList.remove('error');
             const errorMsg = this.parentNode.querySelector('.error-message');
             if (errorMsg) errorMsg.remove();
         });
         
-        // Запрещаем ввод нечисловых символов при нажатии клавиш
         amountInput.addEventListener('keypress', function(e) {
             const charCode = e.which ? e.which : e.keyCode;
-            // Разрешаем только цифры (0-9)
             if (charCode < 48 || charCode > 57) {
                 e.preventDefault();
             }
         });
         
-        // Запрещаем вставку нечисловых символов
         amountInput.addEventListener('paste', function(e) {
             e.preventDefault();
             const pastedText = (e.clipboardData || window.clipboardData).getData('text');
@@ -149,44 +144,35 @@ function initWithdrawModal() {
         });
     }
     
-    // Валидация номера карты - только цифры и пробелы
+    // Валидация номера карты
     const cardInput = document.getElementById('cardNumber');
     if (cardInput) {
         cardInput.addEventListener('input', function(e) {
             let value = this.value;
-            // Удаляем все кроме цифр и пробелов
             value = value.replace(/[^\d\s]/g, '');
-            // Удаляем пробелы для подсчета
             const cleanValue = value.replace(/\s/g, '');
             
             if (cleanValue.length > 16) {
-                // Обрезаем до 16 цифр
                 const trimmed = cleanValue.slice(0, 16);
-                // Форматируем с пробелами
                 let formatted = trimmed.replace(/(\d{4})(?=\d)/g, '$1 ');
                 this.value = formatted;
             } else {
-                // Форматируем с пробелами
                 let formatted = cleanValue.replace(/(\d{4})(?=\d)/g, '$1 ');
                 this.value = formatted;
             }
             
-            // Убираем ошибку при вводе
             this.classList.remove('error');
             const errorMsg = this.parentNode.querySelector('.error-message');
             if (errorMsg) errorMsg.remove();
         });
         
-        // Запрещаем ввод нецифровых символов
         cardInput.addEventListener('keypress', function(e) {
             const charCode = e.which ? e.which : e.keyCode;
-            // Разрешаем только цифры (0-9)
             if (charCode < 48 || charCode > 57) {
                 e.preventDefault();
             }
         });
         
-        // Валидация при вставке
         cardInput.addEventListener('paste', function(e) {
             e.preventDefault();
             const pastedText = (e.clipboardData || window.clipboardData).getData('text');
@@ -204,10 +190,8 @@ function initWithdrawModal() {
     if (phoneInput) {
         phoneInput.addEventListener('input', function(e) {
             let value = this.value;
-            // Разрешаем только цифры, + и пробелы
             value = value.replace(/[^\d\+\s]/g, '');
             
-            // Проверяем формат
             const cleanValue = value.replace(/\s/g, '');
             if (cleanValue && !cleanValue.match(/^\+375\d{9}$/)) {
                 this.classList.add('error');
@@ -218,11 +202,9 @@ function initWithdrawModal() {
             }
         });
         
-        // Запрещаем ввод недопустимых символов
         phoneInput.addEventListener('keypress', function(e) {
             const charCode = e.which ? e.which : e.keyCode;
             const char = String.fromCharCode(charCode);
-            // Разрешаем цифры, + и пробел
             if (!/[\d\+\s]/.test(char) && charCode !== 8 && charCode !== 46) {
                 e.preventDefault();
             }
@@ -235,7 +217,6 @@ function initWithdrawModal() {
 }
 
 function resetWithdrawForm() {
-    // Сбрасываем поля
     const amountInput = document.getElementById('withdrawAmount');
     const cardInput = document.getElementById('cardNumber');
     const phoneInput = document.getElementById('phoneNumber');
@@ -252,13 +233,11 @@ function resetWithdrawForm() {
     }
     if (methodSelect) methodSelect.value = 'card';
     
-    // Показываем поле карты, скрываем телефон
     const cardGroup = document.getElementById('cardNumberGroup');
     const phoneGroup = document.getElementById('phoneNumberGroup');
     if (cardGroup) cardGroup.style.display = 'block';
     if (phoneGroup) phoneGroup.style.display = 'none';
     
-    // Удаляем все сообщения об ошибках
     document.querySelectorAll('.error-message').forEach(msg => msg.remove());
 }
 
@@ -278,23 +257,19 @@ function withdrawFunds() {
     let accountDetails = '';
     let isValid = true;
     
-    // Удаляем старые сообщения об ошибках
     document.querySelectorAll('.error-message').forEach(msg => msg.remove());
     
-    // Валидация суммы
     if (!amount || amount <= 0) {
         showMessage('Введите корректную сумму', 'error');
         return;
     }
     
-    // Получаем доступный баланс
     const availableAmount = parseFloat(document.getElementById('availableAmount').textContent);
     if (parseFloat(amount) > availableAmount) {
         showMessage('Сумма вывода не может превышать доступный баланс', 'error');
         return;
     }
     
-    // Валидация в зависимости от способа вывода
     if (method === 'card') {
         const cardInput = document.getElementById('cardNumber');
         const cardNumber = cardInput.value;
@@ -353,7 +328,6 @@ function withdrawFunds() {
 }
 
 function showFieldError(input, message) {
-    // Удаляем существующую ошибку
     const existingError = input.parentNode.querySelector('.error-message');
     if (existingError) existingError.remove();
     
@@ -364,7 +338,6 @@ function showFieldError(input, message) {
     errorDiv.textContent = message;
     input.parentNode.appendChild(errorDiv);
     
-    // Убираем ошибку при вводе
     input.addEventListener('input', function onInput() {
         input.classList.remove('error');
         const msg = input.parentNode.querySelector('.error-message');
@@ -383,7 +356,6 @@ function loadSellerProducts() {
         .then(response => response.text())
         .then(html => {
             container.innerHTML = html;
-            // События для кнопок редактирования и удаления будут обрабатываться productManagment.js
         })
         .catch(error => {
             console.error('Error:', error);
@@ -395,7 +367,6 @@ function loadSales() {
     const container = document.getElementById('salesContainer');
     if (!container) return;
     
-    // Получаем значения фильтров
     const periodSelect = document.getElementById('periodFilter');
     const statusSelect = document.getElementById('statusFilter');
     const dateFromInput = document.getElementById('dateFrom');
@@ -406,28 +377,17 @@ function loadSales() {
     const dateFrom = dateFromInput && dateFromInput.value ? dateFromInput.value : '';
     const dateTo = dateToInput && dateToInput.value ? dateToInput.value : '';
     
-    console.log('Фильтры:', { period, status, dateFrom, dateTo });
-    
     container.innerHTML = '<div class="loading">Загрузка продаж...</div>';
     
-    // Формируем URL с параметрами
     let url = './php/masterData/getSellerSales.php?';
     url += `period=${encodeURIComponent(period)}`;
     url += `&status=${encodeURIComponent(status)}`;
     if (dateFrom) url += `&date_from=${encodeURIComponent(dateFrom)}`;
     if (dateTo) url += `&date_to=${encodeURIComponent(dateTo)}`;
     
-    console.log('Запрос к:', url);
-    
     fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('HTTP error ' + response.status);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log('Ответ сервера:', data);
             if (data.error) {
                 container.innerHTML = `<div class="no-products">Ошибка: ${data.error}</div>`;
                 return;
@@ -443,143 +403,8 @@ function loadSales() {
         })
         .catch(error => {
             console.error('Ошибка загрузки продаж:', error);
-            container.innerHTML = '<div class="no-products">Ошибка загрузки продаж: ' + error.message + '</div>';
+            container.innerHTML = '<div class="no-products">Ошибка загрузки продаж</div>';
         });
-}
-
-// Функция обновления статистики
-function updateSalesStats(stats) {
-    const totalCountEl = document.getElementById('totalSalesCount');
-    const totalRevenueEl = document.getElementById('totalRevenue');
-    const averageCheckEl = document.getElementById('averageCheck');
-    
-    if (totalCountEl) totalCountEl.textContent = stats.total_count || 0;
-    if (totalRevenueEl) totalRevenueEl.textContent = (stats.total_revenue || 0).toFixed(2) + ' руб.';
-    if (averageCheckEl) averageCheckEl.textContent = (stats.average_check || 0).toFixed(2) + ' руб.';
-}
-
-// Функция отображения продаж
-function displaySales(sales) {
-    const container = document.getElementById('salesContainer');
-    
-    if (!sales || sales.length === 0) {
-        container.innerHTML = '<div class="no-products">Нет продаж по выбранным фильтрам</div>';
-        return;
-    }
-    
-    let html = `
-        <div class="sales-table-wrapper">
-            <table class="sales-table">
-                <thead>
-                    <tr>
-                        <th>Дата</th>
-                        <th>Товар</th>
-                        <th>Кол-во</th>
-                        <th>Сумма</th>
-                        <th>Покупатель</th>
-                        <th>Статус</th>
-                        <th>Действие</th>
-                    </tr>
-                </thead>
-                <tbody>
-    `;
-    
-    sales.forEach(sale => {
-        const statusClass = getStatusClass(sale.status);
-        const statusText = getStatusText(sale.status);
-        const total = (parseFloat(sale.price) * parseInt(sale.quantity)).toFixed(2);
-        
-        html += `
-            <tr data-order-item-id="${sale.order_itemID}">
-                <td>${formatDateTime(sale.order_date)}</td>
-                <td>
-                    <a href="productCard.php?id=${sale.productID}" target="_blank" class="sale-product-link">
-                        ${escapeHtml(sale.productName)}
-                    </a>
-                </td>
-                <td>${sale.quantity}</td>
-                <td>${parseFloat(sale.price).toFixed(2)} руб.</td>
-                <td>
-                    ${escapeHtml(sale.buyer_name || 'Неизвестно')}
-                    <span class="buyer-login">(@${escapeHtml(sale.buyer_login || '')})</span>
-                </td>
-                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                <td>
-                    ${sale.status === 'approved' ? 
-                        `<button class="change-status-btn" onclick="updateOrderItemStatus(${sale.order_itemID}, 'transferred')">✅ Подтвердить</button>` : 
-                        sale.status === 'transferred' ? 
-                        `<span class="status-completed">✓ Передан</span>` :
-                        `<span class="status-waiting">⏳ Ожидает</span>`
-                    }
-                </td>
-            </tr>
-        `;
-    });
-    
-    html += `
-                </tbody>
-            </table>
-        </div>
-    `;
-    
-    container.innerHTML = html;
-}
-
-// Функция форматирования даты и времени
-function formatDateTime(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-// Функция получения класса статуса
-function getStatusClass(status) {
-    const classes = {
-        'pending': 'status-pending',
-        'approved': 'status-approved',
-        'transferred': 'status-transferred'
-    };
-    return classes[status] || 'status-pending';
-}
-
-// Функция получения текста статуса
-function getStatusText(status) {
-    const texts = {
-        'pending': 'Ожидает',
-        'approved': 'Подтвержден',
-        'transferred': 'Передан'
-    };
-    return texts[status] || status;
-}
-
-// Функция обновления статуса заказа
-function updateOrderItemStatus(orderItemId, newStatus) {
-    fetch('./php/masterData/updateOrderItemStatus.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `order_item_id=${orderItemId}&status=${newStatus}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('Статус заказа обновлен', 'success');
-            loadSales(); // Перезагружаем список
-        } else {
-            showNotification(data.message || 'Ошибка при обновлении статуса', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Ошибка при обновлении статуса', 'error');
-    });
 }
 
 function updateSalesStats(stats) {
@@ -600,7 +425,7 @@ function displaySales(sales) {
         return;
     }
     
-    let html = '<table class="sales-table"><thead><tr>';
+    let html = '<div class="sales-table-wrapper"><table class="sales-table"><thead><tr>';
     html += '<th>Дата</th><th>Товар</th><th>Кол-во</th><th>Сумма</th><th>Покупатель</th><th>Статус</th><th>Действие</th>';
     html += '</tr></thead><tbody>';
     
@@ -608,28 +433,49 @@ function displaySales(sales) {
         const statusClass = getStatusClass(sale.status);
         const statusText = getStatusText(sale.status);
         
-        html += `<tr data-order-item-id="${sale.order_item_id}">`;
-        html += `<td>${sale.order_date}</td>`;
-        html += `<td><a href="productCard.php?id=${sale.product_id}" target="_blank">${escapeHtml(sale.product_name)}</a></td>`;
+        html += `<tr data-order-item-id="${sale.order_itemID}">`;
+        html += `<td>${formatDateTime(sale.order_date)}</td>`;
+        html += `<td><a href="productCard.php?id=${sale.productID}" target="_blank" class="sale-product-link">${escapeHtml(sale.productName)}</a></td>`;
         html += `<td>${sale.quantity}</td>`;
         html += `<td>${parseFloat(sale.price).toFixed(2)} руб.</td>`;
-        html += `<td>${escapeHtml(sale.buyer_name)}</td>`;
+        html += `<td>${escapeHtml(sale.buyer_name || 'Неизвестно')}<br><small>@${escapeHtml(sale.buyer_login || '')}</small></td>`;
         html += `<td><span class="status-badge ${statusClass}">${statusText}</span></td>`;
         html += `<td>`;
+        
+        // Кнопки для мастера в зависимости от статуса
         if (sale.status === 'approved') {
-            html += `<button class="change-status-btn" onclick="updateOrderItemStatus(${sale.order_item_id}, 'transferred')">Подтвердить передачу</button>`;
+            html += `<button class="change-status-btn" onclick="updateOrderItemStatus(${sale.order_itemID}, 'collecting')">Начать сборку</button>`;
+        } else if (sale.status === 'collecting') {
+            html += `<button class="change-status-btn" onclick="updateOrderItemStatus(${sale.order_itemID}, 'delivering')">Отправить</button>`;
+        } else if (sale.status === 'delivering') {
+            html += `<button class="change-status-btn" onclick="updateOrderItemStatus(${sale.order_itemID}, 'delivered')">Подтвердить доставку</button>`;
+        } else if (sale.status === 'delivered') {
+            html += `<span class="status-completed">✓ Ожидает подтверждения</span>`;
+        } else if (sale.status === 'completed') {
+            html += `<span class="status-completed">✓ Заказ завершён</span>`;
+        } else if (sale.status === 'pending') {
+            html += `<span class="status-waiting">Ожидает одобрения менеджера</span>`;
         } else {
-            html += `<span class="status-disabled">—</span>`;
+            html += `<span class="status-waiting">${statusText}</span>`;
         }
+        
         html += `</td>`;
         html += `</tr>`;
     });
     
-    html += '</tbody></table>';
+    html += '</tbody></table></div>';
     container.innerHTML = html;
 }
 
 function updateOrderItemStatus(orderItemId, newStatus) {
+    const btn = document.querySelector(`button[onclick*="updateOrderItemStatus(${orderItemId},"]`);
+    let originalText = '';
+    if (btn) {
+        originalText = btn.textContent;
+        btn.textContent = '⏳ Обновление...';
+        btn.disabled = true;
+    }
+    
     fetch('./php/masterData/updateOrderItemStatus.php', {
         method: 'POST',
         headers: {
@@ -640,63 +486,60 @@ function updateOrderItemStatus(orderItemId, newStatus) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showMessage('Статус заказа обновлен', 'success');
+            showMessage(data.message, 'success');
             loadSales();
         } else {
-            showMessage(data.message, 'error');
+            showMessage(data.message || 'Ошибка при обновлении статуса', 'error');
+            if (btn) {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
         }
     })
     .catch(error => {
         console.error('Error:', error);
         showMessage('Ошибка при обновлении статуса', 'error');
+        if (btn) {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
     });
+}
+
+function formatDateTime(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function getStatusText(status) {
+    const texts = {
+        'pending': 'Ожидает одобрения',
+        'approved': 'Одобрен',
+        'collecting': 'Собирается',
+        'delivering': 'Доставляется',
+        'delivered': 'Доставлен',
+        'completed': 'Завершён'
+    };
+    return texts[status] || status;
 }
 
 function getStatusClass(status) {
     const classes = {
         'pending': 'status-pending',
         'approved': 'status-approved',
-        'transferred': 'status-transferred'
+        'collecting': 'status-collecting',
+        'delivering': 'status-delivering',
+        'delivered': 'status-delivered',
+        'completed': 'status-completed'
     };
     return classes[status] || 'status-pending';
-}
-
-function getStatusText(status) {
-    const texts = {
-        'pending': 'Ожидает',
-        'approved': 'Подтвержден',
-        'transferred': 'Передан'
-    };
-    return texts[status] || status;
-}
-
-function showMessage(message, type) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `notification ${type}`;
-    msgDiv.textContent = message;
-    msgDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        z-index: 10001;
-        animation: slideIn 0.3s ease;
-    `;
-    
-    if (type === 'success') {
-        msgDiv.style.backgroundColor = '#10b981';
-    } else if (type === 'error') {
-        msgDiv.style.backgroundColor = '#ef4444';
-    } else {
-        msgDiv.style.backgroundColor = '#3b82f6';
-    }
-    
-    document.body.appendChild(msgDiv);
-    setTimeout(() => {
-        if (msgDiv.parentNode) msgDiv.parentNode.removeChild(msgDiv);
-    }, 3000);
 }
 
 function escapeHtml(text) {
@@ -706,7 +549,7 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Функции для модального окна удаления (если не определены в deleteProduct.js)
+// Функции для модального окна удаления
 window.confirmDelete = function() {
     if (currentDeleteProductId) {
         fetch('./php/masterData/deleteProduct.php', {

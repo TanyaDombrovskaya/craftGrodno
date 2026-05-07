@@ -19,8 +19,24 @@ if ($stmt) {
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
+        
+        // Проверка на блокировку
+        if ($user['is_blocked'] == 1) {
+            $_SESSION['login_error'] = 'blocked';
+            $_SESSION['error_message'] = 'Ваш аккаунт заблокирован. Обратитесь к администратору.';
+            $_SESSION['previous_login'] = $login;
+            header("Location: /craftGrodno/3.0/loginPage.php");
+            exit();
+        }
 
         if ($hash_pass == $user["password"]) {
+            // Обновляем время последней активности
+            $updateSql = "UPDATE users SET last_activity = NOW() WHERE userID = ?";
+            $updateStmt = $connection->prepare($updateSql);
+            $updateStmt->bind_param("i", $user['userID']);
+            $updateStmt->execute();
+            $updateStmt->close();
+            
             $_SESSION['user_id'] = $user['userID'];
             $_SESSION['user_role'] = $user['role'];
             $_SESSION['user_login'] = $user['login'];
@@ -31,6 +47,8 @@ if ($stmt) {
                 header("Location: /craftGrodno/3.0/mainUser.php");
             } else if ($user["role"] == "seller") {
                 header("Location: /craftGrodno/3.0/mainSeller.php");
+            } else if ($user["role"] == "admin") {
+                header("Location: /craftGrodno/3.0/admin.php");
             }
             exit();
         } else {
@@ -47,3 +65,4 @@ if ($stmt) {
 }
 
 $connection->close();
+?>

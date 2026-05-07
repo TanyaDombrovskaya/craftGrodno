@@ -46,3 +46,86 @@ document.querySelectorAll('#login-input, #name-input, #email-input, #password-in
         }
     });
 });
+
+// ========== ЕДИНАЯ ФУНКЦИЯ УВЕДОМЛЕНИЙ ДЛЯ ВСЕЙ СИСТЕМЫ ==========
+function showMessage(message, type) {
+    // Удаляем существующее уведомление, если есть
+    const existingNotification = document.querySelector('.global-notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = `global-notification ${type}`;
+    notification.textContent = message;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        padding: 14px 28px;
+        border-radius: 12px;
+        color: white;
+        z-index: 10001;
+        font-weight: 600;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.3px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(4px);
+        animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: default;
+    `;
+    
+    // Цвета в стиле сайта (градиенты)
+    if (type === 'success') {
+        notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+    } else if (type === 'error') {
+        notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+    } else if (type === 'info') {
+        notification.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
+    } else {
+        notification.style.background = 'linear-gradient(135deg, #6366F1, #8B5CF6)';
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Анимация исчезновения
+    setTimeout(() => {
+        notification.style.animation = 'fadeOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Добавляем CSS анимации, если их нет
+if (!document.querySelector('#global-notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'global-notification-styles';
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}

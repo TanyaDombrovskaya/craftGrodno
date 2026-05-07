@@ -168,6 +168,7 @@ $review_count = $rating_data['review_count'];
         </div>
     </footer>
     <script src="./js/toogleMenu.js"></script>
+    <script src="./js/commonValidate.js"></script>
     <script src="./js/cart.js"></script>
 </body>
 </html>

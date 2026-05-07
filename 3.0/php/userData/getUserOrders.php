@@ -19,8 +19,9 @@ $result = $stmt->get_result();
 
 $orders = [];
 while ($order = $result->fetch_assoc()) {
-    // Получаем товары в заказе
-    $itemsSql = "SELECT oi.quantity, oi.price, p.productID, p.productName, p.countOfProduct
+    // Получаем товары в заказе с их статусами
+    $itemsSql = "SELECT oi.order_itemID, oi.quantity, oi.price, oi.status as item_status,
+                        p.productID, p.productName, p.countOfProduct
                  FROM order_items oi 
                  LEFT JOIN products p ON oi.productID = p.productID 
                  WHERE oi.orderID = ?";

@@ -249,37 +249,6 @@ function checkout() {
     });
 }
 
-// Функция показа уведомлений
-function showMessage(message, type) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `notification ${type}`;
-    msgDiv.textContent = message;
-    msgDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-    `;
-    
-    if (type === 'success') {
-        msgDiv.style.backgroundColor = '#10b981';
-    } else if (type === 'error') {
-        msgDiv.style.backgroundColor = '#ef4444';
-    } else {
-        msgDiv.style.backgroundColor = '#3b82f6';
-    }
-    
-    document.body.appendChild(msgDiv);
-    
-    setTimeout(() => {
-        msgDiv.remove();
-    }, 3000);
-}
-
 // Функция отображения ошибки
 function showCartError() {
     const container = document.getElementById('cartContainer');

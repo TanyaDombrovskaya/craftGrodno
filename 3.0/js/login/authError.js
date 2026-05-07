@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
             showFieldError(loginInput, 'Пользователь не найден');
             loginInput.value = '';
         }
+        
+    } else if (body.classList.contains('blocked-error')) {
+        // Ошибка блокировки уже отображается в HTML, но можно добавить дополнительное уведомление
+        if (loginInput) {
+            loginInput.value = '';
+        }
+        if (passwordInput) {
+            passwordInput.value = '';
+        }
     }
     
     if (loginInput) {
