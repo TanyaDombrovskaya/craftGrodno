@@ -47,7 +47,10 @@ if (!$productExists) {
                     <a href="mainUser.php" class="nav-link">Главная</a>
                     <a href="allProducts.php" class="nav-link">Товары</a>
                     <a href="allMasters.php" class="nav-link">Мастера</a>
-                    <a href="cart.php" class="nav-link">Корзина <span class="cart-counter" style="display:none;">0</span></a>
+                    <a href="cart.php" class="nav-link">
+                        Корзина
+                        <span class="cart-counter">0</span>
+                    </a>
                 </div>
                 <div class="user-section">
                     <div class="balance-display" id="balanceDisplay">

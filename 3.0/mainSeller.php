@@ -248,22 +248,15 @@ mysqli_stmt_close($count_stmt);
 
                 <div class="sales-filters">
                     <div class="filter-group">
-                        <label>Период:</label>
-                        <select id="periodFilter">
-                            <option value="all">Все время</option>
-                            <option value="today">Сегодня</option>
-                            <option value="week">Эта неделя</option>
-                            <option value="month">Этот месяц</option>
-                            <option value="year">Этот год</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
                         <label>Статус:</label>
                         <select id="statusFilter">
                             <option value="all">Все</option>
                             <option value="pending">Ожидает</option>
-                            <option value="approved">Подтвержден</option>
-                            <option value="transferred">Передан</option>
+                            <option value="approved">Подтверждён</option>
+                            <option value="collecting">Собирается</option>
+                            <option value="delivering">Доставляется</option>
+                            <option value="delivered">Доставлен</option>
+                            <option value="completed">Завершён</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -275,6 +268,7 @@ mysqli_stmt_close($count_stmt);
                         <input type="date" id="dateTo">
                     </div>
                     <button id="applySalesFilter" class="filter-btn">Применить</button>
+                    <button id="resetSalesFilter" class="reset-filter-btn">Сбросить</button>
                 </div>
 
                 <div class="sales-stats" id="salesStats">

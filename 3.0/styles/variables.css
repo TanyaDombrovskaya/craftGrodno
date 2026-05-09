@@ -2,53 +2,53 @@
 
 :root {
     /* Основные цвета - новая палитра */
-    --primary: #6366F1;
-    --primary-dark: #4F46E5;
-    --primary-light: #818CF8;
-    --primary-gradient: linear-gradient(135deg, #6366F1, #8B5CF6);
+    --primary: #E88538;
+    --primary-dark: #D16A22;
+    --primary-light: #F09D5E;
+    --primary-gradient: linear-gradient(135deg, #E88538, #D16A22);
     
-    --secondary: #8B5CF6;
-    --secondary-dark: #7C3AED;
-    --secondary-light: #A78BFA;
+    --secondary: #61353B;
+    --secondary-dark: #4A282D;
+    --secondary-light: #7A4650;
     
-    --accent: #EC4899;
-    --accent-dark: #DB2777;
-    --accent-light: #F472B6;
+    --accent: #82625A;
+    --accent-dark: #664A43;
+    --accent-light: #9E7E75;
     
     /* Нейтральные цвета */
     --white: #FFFFFF;
-    --black: #0F172A;
-    --black-light: #1E293B;
-    --black-lighter: #334155;
+    --black: #191A1E;
+    --black-light: #2A2B30;
+    --black-lighter: #3B3C42;
     
     /* Серые */
-    --gray-50: #F8FAFC;
-    --gray-100: #F1F5F9;
-    --gray-200: #E2E8F0;
-    --gray-300: #CBD5E1;
-    --gray-400: #94A3B8;
-    --gray-500: #64748B;
-    --gray-600: #475569;
-    --gray-700: #334155;
-    --gray-800: #1E293B;
-    --gray-900: #0F172A;
+    --gray-50: #F8F8F9;
+    --gray-100: #F0F0F2;
+    --gray-200: #E2E2E5;
+    --gray-300: #D0D0D4;
+    --gray-400: #B8B8BE;
+    --gray-500: #9A9AA2;
+    --gray-600: #85858F;
+    --gray-700: #6A6A73;
+    --gray-800: #4F4F57;
+    --gray-900: #191A1E;
     
     /* Семантические */
-    --success: #10B981;
-    --success-dark: #059669;
-    --error: #EF4444;
-    --error-dark: #DC2626;
-    --warning: #F59E0B;
-    --info: #3B82F6;
+    --success: #61353B;
+    --success-dark: #4A282D;
+    --error: #E88538;
+    --error-dark: #D16A22;
+    --warning: #E88538;
+    --info: #85858F;
     
     /* Тени */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.12);
     --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
-    --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.3);
+    --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.2);
+    --shadow-glow: 0 0 30px rgba(232, 133, 56, 0.3);
     
     /* Скругления */
     --radius-sm: 6px;
@@ -120,31 +120,12 @@ body {
     font-size: var(--font-size-base);
     line-height: var(--line-height-normal);
     color: var(--gray-800);
-    background: var(--gray-50);
+    background: var(--white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 /* Контейнер */
-.container {
-    max-width: var(--breakpoint-xl);
-    margin: 0 auto;
-    padding: 0 var(--spacing-5);
-    width: 100%;
-}
-
-@media (max-width: var(--breakpoint-lg)) {
-    .container {
-        padding: 0 var(--spacing-4);
-    }
-}
-
-@media (max-width: var(--breakpoint-md)) {
-    .container {
-        padding: 0 var(--spacing-3);
-    }
-}
-
 .container {
     max-width: var(--breakpoint-xl);
     margin: 0 auto;

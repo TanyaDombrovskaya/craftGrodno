@@ -35,7 +35,10 @@ if (getUserRole() !== 'user') {
                 <a href="#masters" class="nav-link">Мастера</a>
                 <a href="#about" class="nav-link">О нас</a>
                 <a href="#footer" class="nav-link">Контакты</a>
-                <a href="cart.php" class="nav-link">Корзина <span class="cart-counter" style="display:none;">0</span></a>
+                <a href="cart.php" class="nav-link">
+                    Корзина
+                    <span class="cart-counter">0</span>
+                </a>
             </div>
             <div class="user-section">
                 <div class="balance-display" id="balanceDisplay">
@@ -59,8 +62,14 @@ if (getUserRole() !== 'user') {
         <!-- Категории -->
         <section class="categories" id="categories">
             <h2>Категории</h2>
-            <div class="category-grid">
-                <?php include('./php/userData/getCategories.php'); ?>
+            <div class="category-carousel-container">
+                <button class="carousel-btn prev-btn" id="prevCategoryBtn">&#10094;</button>
+                <div class="category-carousel-wrapper">
+                    <div class="category-carousel" id="categoryCarousel">
+                        <div class="loading">Загрузка...</div>
+                    </div>
+                </div>
+                <button class="carousel-btn next-btn" id="nextCategoryBtn">&#10095;</button>
             </div>
         </section>
 
@@ -151,6 +160,7 @@ if (getUserRole() !== 'user') {
     </footer>
     
     <script src="./js/commonValidate.js"></script>
+    <script src="./js/categoryCarousel.js"></script>
     <script src="./js/toogleMenu.js"></script>
     <script src="./js/cart.js"></script>
 </body>

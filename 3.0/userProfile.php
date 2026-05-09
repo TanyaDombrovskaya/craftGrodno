@@ -40,7 +40,10 @@ $stmt->close();
                 <a href="mainUser.php" class="nav-link">Главная</a>
                 <a href="allProducts.php" class="nav-link">Товары</a>
                 <a href="allMasters.php" class="nav-link">Мастера</a>
-                <a href="cart.php" class="nav-link">Корзина <span class="cart-counter" style="display:none;">0</span></a>
+                <a href="cart.php" class="nav-link">
+                    Корзина
+                    <span class="cart-counter">0</span>
+                </a>
             </div>
             <div class="user-section">
                 <a href="userProfile.php" class="user-name-link"><?php echo htmlspecialchars($_SESSION['user_login']); ?></a>
@@ -91,6 +94,33 @@ $stmt->close();
             <!-- Вкладка истории заказов -->
             <div class="profile-tab" id="tab-orders">
                 <h2 class="tab-title">История заказов</h2>
+                
+                <!-- Фильтры -->
+                <div class="orders-filters">
+                    <div class="filter-group">
+                        <label>Статус:</label>
+                        <select id="orderStatusFilter">
+                            <option value="all">Все</option>
+                            <option value="pending">Ожидает</option>
+                            <option value="approved">Подтверждён</option>
+                            <option value="collecting">Собирается</option>
+                            <option value="delivering">Доставляется</option>
+                            <option value="delivered">Доставлен</option>
+                            <option value="completed">Завершён</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Дата от:</label>
+                        <input type="date" id="dateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label>Дата до:</label>
+                        <input type="date" id="dateTo">
+                    </div>
+                    <button id="applyOrdersFilter" class="filter-btn">Применить</button>
+                    <button id="resetOrdersFilter" class="reset-filter-btn">Сбросить</button>
+                </div>
+
                 <div id="ordersContainer" class="orders-container">
                     <div class="loading">Загрузка заказов...</div>
                 </div>

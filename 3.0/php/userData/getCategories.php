@@ -1,6 +1,15 @@
 <?php
 require_once(__DIR__ . "/../init.php");
 
+// Пути к изображениям для категорий
+$categoryImages = [
+    'Дерево' => './styles/image/categories/wood.jpg',
+    'Вязание' => './styles/image/categories/knitting.jpg',
+    'Керамика' => './styles/image/categories/ceramics.jpg',
+    'Шитье' => './styles/image/categories/sewing.jpg',
+    'Бижутерия' => './styles/image/categories/jewelry.jpg',
+];
+
 $sql = "SELECT 
             c.categoryID, 
             c.categoryName, 
@@ -13,19 +22,15 @@ $sql = "SELECT
 
 $result = $connection->query($sql);
 
-$categories_html = '';
-
+$categories = [];
 if ($result && $result->num_rows > 0) {
     while($category = $result->fetch_assoc()) {
-        $icon = getCategoryIcon($category['categoryName']);
-        
-        $categories_html .= '
-        <a href="./allProducts.php?category=' . urlencode($category['categoryName']) . '" class="category-card">
-            <div class="category-icon">' . $icon . '</div>
-            <div class="category-name">' . htmlspecialchars($category['categoryName']) . '</div>
-            <div class="category-count">' . $category['product_count'] . ' ' . getProductCountText($category['product_count']) . '</div>
-        </a>';
+        $categoryName = $category['categoryName'];
+        $category['image'] = $categoryImages[$categoryName] ?? './styles/image/icon.png';
+        $categories[] = $category;
     }
 }
 
-echo $categories_html;
+header('Content-Type: application/json');
+echo json_encode($categories);
+?>

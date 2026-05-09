@@ -1,5 +1,3 @@
-// js/seller.js - Исправленная версия без дубликатов
-
 let currentDeleteProductId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -40,9 +38,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Фильтры продаж
-    const filterBtn = document.getElementById('applySalesFilter');
-    if (filterBtn) {
-        filterBtn.addEventListener('click', loadSales);
+    const applyFilterBtn = document.getElementById('applySalesFilter');
+    if (applyFilterBtn) {
+        applyFilterBtn.addEventListener('click', loadSales);
+    }
+    
+    const resetFilterBtn = document.getElementById('resetSalesFilter');
+    if (resetFilterBtn) {
+        resetFilterBtn.addEventListener('click', resetSalesFilters);
+    }
+    
+    // Загрузка продаж если активна вкладка
+    if (document.getElementById('tab-sales') && document.getElementById('tab-sales').classList.contains('active')) {
+        loadSales();
     }
 });
 
@@ -367,27 +375,36 @@ function loadSales() {
     const container = document.getElementById('salesContainer');
     if (!container) return;
     
-    const periodSelect = document.getElementById('periodFilter');
+    // Получаем значения фильтров (убран период)
     const statusSelect = document.getElementById('statusFilter');
     const dateFromInput = document.getElementById('dateFrom');
     const dateToInput = document.getElementById('dateTo');
     
-    const period = periodSelect ? periodSelect.value : 'all';
     const status = statusSelect ? statusSelect.value : 'all';
     const dateFrom = dateFromInput && dateFromInput.value ? dateFromInput.value : '';
     const dateTo = dateToInput && dateToInput.value ? dateToInput.value : '';
     
+    console.log('Фильтры:', { status, dateFrom, dateTo });
+    
     container.innerHTML = '<div class="loading">Загрузка продаж...</div>';
     
+    // Формируем URL с параметрами (убран period)
     let url = './php/masterData/getSellerSales.php?';
-    url += `period=${encodeURIComponent(period)}`;
     url += `&status=${encodeURIComponent(status)}`;
     if (dateFrom) url += `&date_from=${encodeURIComponent(dateFrom)}`;
     if (dateTo) url += `&date_to=${encodeURIComponent(dateTo)}`;
     
+    console.log('Запрос к:', url);
+    
     fetch(url)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('HTTP error ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Ответ сервера:', data);
             if (data.error) {
                 container.innerHTML = `<div class="no-products">Ошибка: ${data.error}</div>`;
                 return;
@@ -395,7 +412,7 @@ function loadSales() {
             if (data.stats) {
                 updateSalesStats(data.stats);
             }
-            if (data.sales) {
+            if (data.sales && data.sales.length > 0) {
                 displaySales(data.sales);
             } else {
                 container.innerHTML = '<div class="no-products">Нет продаж по выбранным фильтрам</div>';
@@ -403,8 +420,21 @@ function loadSales() {
         })
         .catch(error => {
             console.error('Ошибка загрузки продаж:', error);
-            container.innerHTML = '<div class="no-products">Ошибка загрузки продаж</div>';
+            container.innerHTML = '<div class="no-products">Ошибка загрузки продаж: ' + error.message + '</div>';
         });
+}
+
+// Функция сброса фильтров
+function resetSalesFilters() {
+    const statusSelect = document.getElementById('statusFilter');
+    const dateFromInput = document.getElementById('dateFrom');
+    const dateToInput = document.getElementById('dateTo');
+    
+    if (statusSelect) statusSelect.value = 'all';
+    if (dateFromInput) dateFromInput.value = '';
+    if (dateToInput) dateToInput.value = '';
+    
+    loadSales();
 }
 
 function updateSalesStats(stats) {

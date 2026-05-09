@@ -1,3 +1,6 @@
+// cart.js - Исправленная версия без дублирования
+
+// Функция добавления товара в корзину
 function addToCart(productId) {
     console.log('Добавление товара ID:', productId);
     
@@ -10,11 +13,9 @@ function addToCart(productId) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Ответ сервера:', data);
         if (data.success) {
             showMessage('Товар добавлен в корзину', 'success');
             updateCartCounter();
-            // Обновляем статус кнопки
             updateCartButtonStatus(productId, true);
         } else {
             showMessage(data.message || 'Ошибка при добавлении', 'error');
@@ -26,7 +27,7 @@ function addToCart(productId) {
     });
 }
 
-// Функция обновления счетчика
+// Функция обновления счетчика корзины
 function updateCartCounter() {
     fetch('./php/userData/getCartCount.php')
         .then(response => response.json())
@@ -37,13 +38,59 @@ function updateCartCounter() {
             if (counter) {
                 if (data.count > 0) {
                     counter.textContent = data.count;
-                    counter.style.display = 'inline';
+                    counter.style.display = 'inline-flex';
                 } else {
-                    counter.style.display = 'none';
+                    counter.textContent = '0';
+                    counter.style.display = 'inline-flex';
                 }
             }
         })
         .catch(error => console.error('Ошибка загрузки счетчика:', error));
+}
+
+// Функция удаления товара из корзины
+function removeFromCart(cartId) {
+    if (!confirm('Удалить товар из корзины?')) return;
+    
+    // Получаем productId из карточки
+    const cartItem = document.querySelector(`.cart-product-card[data-cart-id="${cartId}"]`);
+    let productId = null;
+    
+    if (cartItem) {
+        const titleLink = cartItem.querySelector('.cart-product-title a');
+        if (titleLink) {
+            const href = titleLink.getAttribute('href');
+            const match = href.match(/productCard\.php\?id=(\d+)/);
+            if (match) {
+                productId = parseInt(match[1]);
+            }
+        }
+    }
+    
+    fetch('./php/userData/removeFromCart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `cart_id=${cartId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showMessage('Товар удален из корзины', 'success');
+            loadCart();
+            updateCartCounter();
+            if (productId) {
+                updateCartButtonStatus(productId, false);
+            }
+        } else {
+            showMessage(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        showMessage('Ошибка при удалении товара', 'error');
+    });
 }
 
 // Функция загрузки корзины
@@ -85,7 +132,6 @@ function displayCart(items) {
         const itemTotal = parseFloat(item.price) * parseInt(item.quantity);
         total += itemTotal;
         
-        // Формируем HTML изображения (как в mainUser)
         let imageHtml = '';
         if (item.has_image && item.image_src) {
             imageHtml = `<img src="${item.image_src}" alt="${escapeHtml(item.productName)}" class="cart-product-image-img">`;
@@ -94,7 +140,6 @@ function displayCart(items) {
             imageHtml = `<div class="cart-product-image-icon">${icon}</div>`;
         }
         
-        // Создаем карточку товара в стиле mainUser
         html += `
             <div class="cart-product-card" data-cart-id="${item.cartID}">
                 <div class="cart-product-image">
@@ -160,53 +205,8 @@ function updateCartQuantity(cartId, newQuantity) {
     });
 }
 
-function removeFromCart(cartId) {
-    if (!confirm('Удалить товар из корзины?')) return;
-    
-    // Получаем productId из карточки
-    const cartItem = document.querySelector(`.cart-product-card[data-cart-id="${cartId}"]`);
-    let productId = null;
-    
-    if (cartItem) {
-        const titleLink = cartItem.querySelector('.cart-product-title a');
-        if (titleLink) {
-            const href = titleLink.getAttribute('href');
-            const match = href.match(/productCard\.php\?id=(\d+)/);
-            if (match) {
-                productId = parseInt(match[1]);
-            }
-        }
-    }
-    
-    fetch('./php/userData/removeFromCart.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `cart_id=${cartId}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            loadCart();
-            updateCartCounter();
-            // Обновляем статус кнопки на странице товаров
-            if (productId) {
-                updateCartButtonStatus(productId, false);
-            }
-            showMessage('Товар удален из корзины', 'success');
-        } else {
-            showMessage(data.message, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-        showMessage('Ошибка при удалении товара', 'error');
-    });
-}
-
+// Функция оформления заказа
 function checkout() {
-    // Проверяем, есть ли товары в корзине
     const cartItems = document.querySelectorAll('.cart-product-card');
     if (cartItems.length === 0) {
         showMessage('Корзина пуста', 'error');
@@ -230,12 +230,9 @@ function checkout() {
     .then(data => {
         if (data.success) {
             showMessage(data.message, 'success');
-            // Обновляем баланс
             updateBalanceDisplay();
-            // Очищаем корзину
             loadCart();
             updateCartCounter();
-            // Перенаправляем на страницу заказов через 2 секунды
             setTimeout(() => {
                 window.location.href = 'userProfile.php?tab=orders';
             }, 2000);
@@ -263,25 +260,6 @@ function showCartError() {
     }
 }
 
-// Вспомогательные функции
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function formatPrice(price) {
-    return parseFloat(price).toFixed(2) + ' руб.';
-}
-
-// Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    updateCartCounter();
-    if (document.getElementById('cartContainer')) {
-        loadCart();
-    }
-});
-
 // Функция для получения списка товаров в корзине
 function getCartProductIds() {
     fetch('./php/userData/getCartProductIds.php')
@@ -296,11 +274,9 @@ function getCartProductIds() {
 
 // Функция для обновления всех кнопок на странице
 function updateAllCartButtons(cartProductIds) {
-    // Находим все кнопки добавления в корзину
     const addButtons = document.querySelectorAll('.add-to-cart-btn');
     
     addButtons.forEach(button => {
-        // Извлекаем ID товара из атрибута onclick
         const onclickAttr = button.getAttribute('onclick');
         if (onclickAttr) {
             const match = onclickAttr.match(/addToCart\((\d+)\)/);
@@ -308,13 +284,11 @@ function updateAllCartButtons(cartProductIds) {
                 const productId = parseInt(match[1]);
                 
                 if (cartProductIds.includes(productId)) {
-                    // Товар уже в корзине
                     button.innerHTML = '✓ В корзине';
                     button.disabled = true;
                     button.style.opacity = '0.7';
                     button.style.cursor = 'default';
                 } else {
-                    // Товар не в корзине
                     button.innerHTML = '🛒 В корзину';
                     button.disabled = false;
                     button.style.opacity = '1';
@@ -325,7 +299,7 @@ function updateAllCartButtons(cartProductIds) {
     });
 }
 
-// Функция обновления статуса конкретного товара (после добавления)
+// Функция обновления статуса конкретного товара
 function updateCartButtonStatus(productId, isInCart) {
     const buttons = document.querySelectorAll('.add-to-cart-btn');
     
@@ -350,21 +324,6 @@ function updateCartButtonStatus(productId, isInCart) {
     });
 }
 
-// Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    updateCartCounter();
-    
-    // Проверяем, какие товары в корзине (для всех страниц)
-    if (typeof getCartProductIds === 'function') {
-        getCartProductIds();
-    }
-    
-    // Если это страница корзины - загружаем корзину
-    if (document.getElementById('cartContainer')) {
-        loadCart();
-    }
-});
-
 // Функция получения баланса пользователя
 function updateBalanceDisplay() {
     fetch('./php/userData/getBalance.php')
@@ -378,7 +337,40 @@ function updateBalanceDisplay() {
         .catch(error => console.error('Ошибка получения баланса:', error));
 }
 
-// Обновляем инициализацию
+// Функция для получения иконки товара
+function getCartProductIcon(productName) {
+    const name = productName.toLowerCase();
+    const iconMap = [
+        { keywords: ['дерево', 'деревян', 'доска', 'ложк'], icon: '🔨' },
+        { keywords: ['вязан', 'шерст', 'варежк', 'плед', 'коврик'], icon: '🧶' },
+        { keywords: ['керамик', 'глин', 'кружка'], icon: '⚱️' },
+        { keywords: ['шить', 'льнян', 'вышив', 'скатерть', 'салфетк'], icon: '🧵' },
+        { keywords: ['бижутери', 'колье', 'камен', 'серьги', 'гвоздики'], icon: '💎' }
+    ];
+    
+    for (let group of iconMap) {
+        for (let keyword of group.keywords) {
+            if (name.includes(keyword)) {
+                return group.icon;
+            }
+        }
+    }
+    return '📦';
+}
+
+// Вспомогательные функции
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatPrice(price) {
+    return parseFloat(price).toFixed(2) + ' руб.';
+}
+
+// ИНИЦИАЛИЗАЦИЯ (ТОЛЬКО ОДИН РАЗ)
 document.addEventListener('DOMContentLoaded', function() {
     updateCartCounter();
     updateBalanceDisplay();

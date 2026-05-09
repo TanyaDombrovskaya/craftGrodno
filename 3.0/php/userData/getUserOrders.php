@@ -11,9 +11,49 @@ if (getUserRole() !== 'user') {
 
 $userID = getUserId();
 
-$sql = "SELECT orderID, order_date, total_amount, status FROM orders WHERE userID = ? ORDER BY order_date DESC";
+// Получаем параметры фильтрации
+$status = isset($_GET['status']) ? $_GET['status'] : 'all';
+$dateFrom = isset($_GET['date_from']) && !empty($_GET['date_from']) ? $_GET['date_from'] : null;
+$dateTo = isset($_GET['date_to']) && !empty($_GET['date_to']) ? $_GET['date_to'] : null;
+
+// Формируем WHERE условия
+$whereConditions = ["o.userID = ?"];
+$params = [$userID];
+$types = "i";
+
+if ($status !== 'all') {
+    $whereConditions[] = "oi.status = ?";
+    $params[] = $status;
+    $types .= "s";
+}
+
+if ($dateFrom) {
+    $whereConditions[] = "DATE(o.order_date) >= ?";
+    $params[] = $dateFrom;
+    $types .= "s";
+}
+
+if ($dateTo) {
+    $whereConditions[] = "DATE(o.order_date) <= ?";
+    $params[] = $dateTo;
+    $types .= "s";
+}
+
+$whereClause = implode(" AND ", $whereConditions);
+
+// Получаем заказы с учетом фильтров
+$sql = "SELECT DISTINCT o.orderID, o.order_date, o.total_amount 
+        FROM orders o
+        JOIN order_items oi ON o.orderID = oi.orderID
+        WHERE $whereClause
+        ORDER BY o.order_date DESC";
+
 $stmt = $connection->prepare($sql);
-$stmt->bind_param("i", $userID);
+if (count($params) > 1) {
+    $stmt->bind_param($types, ...$params);
+} else {
+    $stmt->bind_param($types, $params[0]);
+}
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -32,7 +72,6 @@ while ($order = $result->fetch_assoc()) {
     
     $items = [];
     while ($item = $itemsResult->fetch_assoc()) {
-        // Проверяем, существует ли товар
         $item['product_exists'] = !is_null($item['productID']);
         $items[] = $item;
     }

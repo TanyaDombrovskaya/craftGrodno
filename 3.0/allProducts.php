@@ -36,7 +36,10 @@ $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
                 <a href="./allMasters.php" class="nav-link">Мастера</a>
                 <a href="./mainUser.php#about" class="nav-link">О нас</a>
                 <a href="./mainUser.php#footer" class="nav-link">Контакты</a>
-                <a href="cart.php" class="nav-link">Корзина <span class="cart-counter" style="display:none;">0</span></a>
+                <a href="cart.php" class="nav-link">
+                    Корзина
+                    <span class="cart-counter">0</span>
+                </a>
             </div>
             <div class="user-section">
                 <div class="balance-display" id="balanceDisplay">
@@ -163,6 +166,7 @@ $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
         </div>
     </footer>
 
+    <script src="./js/commonValidate.js"></script>
     <script src="./js/allProducts/searchProducts.js"></script>
     <script src="./js/allProducts/filterProduct.js"></script>
     <script src="./js/toogleMenu.js"></script>

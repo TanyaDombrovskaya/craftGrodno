@@ -77,15 +77,15 @@ function showMessage(message, type) {
         cursor: default;
     `;
     
-    // Цвета в стиле сайта (градиенты)
+    // НОВАЯ ЦВЕТОВАЯ СХЕМА
     if (type === 'success') {
-        notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        notification.style.background = 'linear-gradient(135deg, #E88538, #D16A22)';
     } else if (type === 'error') {
-        notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        notification.style.background = 'linear-gradient(135deg, #E88538, #D16A22)';
     } else if (type === 'info') {
-        notification.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
+        notification.style.background = 'linear-gradient(135deg, #61353B, #4A282D)';
     } else {
-        notification.style.background = 'linear-gradient(135deg, #6366F1, #8B5CF6)';
+        notification.style.background = 'linear-gradient(135deg, #E88538, #D16A22)';
     }
     
     document.body.appendChild(notification);

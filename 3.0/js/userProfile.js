@@ -72,6 +72,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('tab-orders').classList.contains('active')) {
         loadOrders();
     }
+
+    // Фильтры заказов
+    const applyFiltersBtn = document.getElementById('applyOrdersFilter');
+    if (applyFiltersBtn) {
+        applyFiltersBtn.addEventListener('click', loadOrders);
+    }
+
+    const resetFiltersBtn = document.getElementById('resetOrdersFilter');
+    if (resetFiltersBtn) {
+        resetFiltersBtn.addEventListener('click', resetOrdersFilter);
+    }
 });
 
 function updateProfile() {
@@ -148,17 +159,28 @@ function topupBalance() {
 
 function loadOrders() {
     const container = document.getElementById('ordersContainer');
+    
+    // Получаем значения фильтров
+    const status = document.getElementById('orderStatusFilter')?.value || 'all';
+    const dateFrom = document.getElementById('dateFrom')?.value || '';
+    const dateTo = document.getElementById('dateTo')?.value || '';
+    
     container.innerHTML = '<div class="loading">Загрузка заказов...</div>';
     
-    fetch('./php/userData/getUserOrders.php')
+    // Формируем URL с параметрами
+    let url = `./php/userData/getUserOrders.php?status=${encodeURIComponent(status)}`;
+    if (dateFrom) url += `&date_from=${encodeURIComponent(dateFrom)}`;
+    if (dateTo) url += `&date_to=${encodeURIComponent(dateTo)}`;
+    
+    fetch(url)
         .then(response => response.json())
         .then(orders => {
             if (!orders || orders.length === 0) {
                 container.innerHTML = `
                     <div class="empty-orders">
-                        <h3>У вас пока нет заказов</h3>
-                        <p>Перейдите в каталог и выберите товары для покупки</p>
-                        <a href="allProducts.php" class="continue-shopping">Перейти к покупкам</a>
+                        <h3>Заказы не найдены</h3>
+                        <p>Попробуйте изменить параметры фильтрации</p>
+                        <button onclick="resetOrdersFilter()" class="continue-shopping">Сбросить фильтры</button>
                     </div>
                 `;
                 return;
@@ -166,24 +188,21 @@ function loadOrders() {
             
             let html = '';
             orders.forEach(order => {
-                const orderStatusClass = getStatusClass(order.status);
-                const orderStatusText = getStatusText(order.status);
-                
                 html += `
                     <div class="order-card">
                         <div class="order-header">
                             <span class="order-number">Заказ №${order.orderID}</span>
                             <span class="order-date">${formatDate(order.order_date)}</span>
-                            <span class="order-status ${orderStatusClass}">${orderStatusText}</span>
                         </div>
                         <div class="order-items">
                             ${order.items.map(item => {
                                 const itemStatusClass = getStatusClass(item.item_status);
                                 const itemStatusText = getStatusText(item.item_status);
+                                const totalPrice = (parseFloat(item.price) * parseInt(item.quantity)).toFixed(2);
                                 
                                 return `
                                     <div class="order-item">
-                                        <div class="order-item-info">
+                                        <div class="order-item-name">
                                             ${item.product_exists ? `
                                                 <a href="productCard.php?id=${item.productID}" class="order-item-link">
                                                     ${escapeHtml(item.productName)}
@@ -196,9 +215,11 @@ function loadOrders() {
                                             `}
                                             <span class="order-item-quantity">× ${item.quantity}</span>
                                         </div>
-                                        <div class="order-item-price">${parseFloat(item.price).toFixed(2)} руб.</div>
-                                        <div class="order-item-status">
-                                            <span class="status-badge ${itemStatusClass}">${itemStatusText}</span>
+                                        <div class="order-item-right">
+                                            <div class="order-item-price">${totalPrice} руб.</div>
+                                            <div class="order-item-status">
+                                                <span class="status-badge ${itemStatusClass}">${itemStatusText}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 `;
@@ -217,6 +238,19 @@ function loadOrders() {
             console.error('Error:', error);
             container.innerHTML = '<div class="empty-orders"><h3>Ошибка загрузки заказов</h3></div>';
         });
+}
+
+// Функция сброса фильтров
+function resetOrdersFilter() {
+    const statusSelect = document.getElementById('orderStatusFilter');
+    const dateFromInput = document.getElementById('dateFrom');
+    const dateToInput = document.getElementById('dateTo');
+    
+    if (statusSelect) statusSelect.value = 'all';
+    if (dateFromInput) dateFromInput.value = '';
+    if (dateToInput) dateToInput.value = '';
+    
+    loadOrders();
 }
 
 function getStatusText(status) {

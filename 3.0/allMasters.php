@@ -34,7 +34,10 @@ if (getUserRole() !== 'user') {
                 <a href="mainUser.php#masters" class="nav-link">Мастера</a>
                 <a href="mainUser.php#about" class="nav-link">О нас</a>
                 <a href="mainUser.php#footer" class="nav-link">Контакты</a>
-                <a href="cart.php" class="nav-link">Корзина</a>
+                <a href="cart.php" class="nav-link">
+                    Корзина
+                    <span class="cart-counter">0</span>
+                </a>
             </div>
             <div class="user-section">
                 <div class="balance-display" id="balanceDisplay">

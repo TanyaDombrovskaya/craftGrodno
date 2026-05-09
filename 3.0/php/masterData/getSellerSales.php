@@ -29,8 +29,7 @@ if (!$master) {
 $masterID = $master['masterID'];
 $masterStmt->close();
 
-// Получаем параметры фильтрации
-$period = isset($_GET['period']) ? $_GET['period'] : 'all';
+// Получаем параметры фильтрации (убран period)
 $status = isset($_GET['status']) ? $_GET['status'] : 'all';
 $dateFrom = isset($_GET['date_from']) && !empty($_GET['date_from']) ? $_GET['date_from'] : null;
 $dateTo = isset($_GET['date_to']) && !empty($_GET['date_to']) ? $_GET['date_to'] : null;
@@ -40,7 +39,7 @@ $whereConditions = ["oi.masterID = ?"];
 $params = [$masterID];
 $types = "i";
 
-// Фильтр по статусу (добавлен 'collecting')
+// Фильтр по статусу
 if ($status !== 'all') {
     $whereConditions[] = "oi.status = ?";
     $params[] = $status;
@@ -59,24 +58,6 @@ if ($dateTo) {
     $whereConditions[] = "DATE(o.order_date) <= ?";
     $params[] = $dateTo;
     $types .= "s";
-}
-
-// Фильтр по периоду
-if ($period !== 'all') {
-    switch ($period) {
-        case 'today':
-            $whereConditions[] = "DATE(o.order_date) = CURDATE()";
-            break;
-        case 'week':
-            $whereConditions[] = "o.order_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
-            break;
-        case 'month':
-            $whereConditions[] = "o.order_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)";
-            break;
-        case 'year':
-            $whereConditions[] = "o.order_date >= DATE_SUB(NOW(), INTERVAL 1 YEAR)";
-            break;
-    }
 }
 
 $whereClause = implode(" AND ", $whereConditions);
@@ -100,9 +81,9 @@ $sql = "SELECT
         ORDER BY o.order_date DESC";
 
 $stmt = $connection->prepare($sql);
-if (!empty($params) && count($params) > 1) {
+if (count($params) > 1) {
     $stmt->bind_param($types, ...$params);
-} elseif (!empty($params)) {
+} else {
     $stmt->bind_param($types, $params[0]);
 }
 $stmt->execute();
