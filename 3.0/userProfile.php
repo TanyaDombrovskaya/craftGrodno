@@ -11,8 +11,8 @@ require_once('./php/init.php');
 
 $userID = getUserId();
 
-// Получаем данные пользователя
-$sql = "SELECT login, name, email, balance FROM users WHERE userID = ?";
+// Получаем данные пользователя (включая аватар)
+$sql = "SELECT login, name, email, balance, avatar, avatar_mime_type FROM users WHERE userID = ?";
 $stmt = $connection->prepare($sql);
 $stmt->bind_param("i", $userID);
 $stmt->execute();
@@ -40,10 +40,7 @@ $stmt->close();
                 <a href="mainUser.php" class="nav-link">Главная</a>
                 <a href="allProducts.php" class="nav-link">Товары</a>
                 <a href="allMasters.php" class="nav-link">Мастера</a>
-                <a href="cart.php" class="nav-link">
-                    Корзина
-                    <span class="cart-counter">0</span>
-                </a>
+                <a href="cart.php" class="nav-link">Корзина <span class="cart-counter">0</span></a>
             </div>
             <div class="user-section">
                 <a href="userProfile.php" class="user-name-link"><?php echo htmlspecialchars($_SESSION['user_login']); ?></a>
@@ -54,15 +51,36 @@ $stmt->close();
     <div class="container profile-page">
         <div class="profile-sidebar">
             <div class="profile-avatar">
-                <div class="avatar-icon">👤</div>
+                <div class="avatar-container" id="avatarContainer">
+                    <?php
+                    if (!empty($user['avatar'])) {
+                        $avatarData = base64_encode($user['avatar']);
+                        $avatarMime = $user['avatar_mime_type'];
+                        echo '<img src="data:' . $avatarMime . ';base64,' . $avatarData . '" alt="Аватар" class="avatar-image">';
+                    } else {
+                        echo '<div class="avatar-placeholder">👤</div>';
+                    }
+                    ?>
+                    <div class="avatar-overlay">
+                        <label class="avatar-upload-btn-overlay">
+                        📷
+                        </label>
+                    </div>
+                </div>
                 <h2><?php echo htmlspecialchars($user['name']); ?></h2>
                 <p class="profile-login">@<?php echo htmlspecialchars($user['login']); ?></p>
+                
+                <form id="avatarUploadForm" method="POST" action="./php/userData/uploadAvatar.php" enctype="multipart/form-data" style="display: none;">
+                    <input type="file" name="avatar" id="avatarFileInput" accept="image/*">
+                </form>
             </div>
+            
             <div class="profile-balance">
                 <div class="balance-label">Баланс</div>
                 <div class="balance-amount" id="balanceAmount"><?php echo number_format($user['balance'], 2, '.', ' '); ?> руб.</div>
                 <button class="topup-btn" id="showTopupModal">Пополнить баланс</button>
             </div>
+            
             <div class="profile-nav">
                 <button class="profile-nav-btn active" data-tab="profile">Личные данные</button>
                 <button class="profile-nav-btn" data-tab="orders">История заказов</button>
@@ -71,7 +89,6 @@ $stmt->close();
         </div>
 
         <div class="profile-content">
-            <!-- Вкладка личных данных -->
             <div class="profile-tab active" id="tab-profile">
                 <h2 class="tab-title">Личные данные</h2>
                 <form id="profileForm" class="profile-form">
@@ -91,36 +108,8 @@ $stmt->close();
                 </form>
             </div>
 
-            <!-- Вкладка истории заказов -->
             <div class="profile-tab" id="tab-orders">
                 <h2 class="tab-title">История заказов</h2>
-                
-                <!-- Фильтры -->
-                <div class="orders-filters">
-                    <div class="filter-group">
-                        <label>Статус:</label>
-                        <select id="orderStatusFilter">
-                            <option value="all">Все</option>
-                            <option value="pending">Ожидает</option>
-                            <option value="approved">Подтверждён</option>
-                            <option value="collecting">Собирается</option>
-                            <option value="delivering">Доставляется</option>
-                            <option value="delivered">Доставлен</option>
-                            <option value="completed">Завершён</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Дата от:</label>
-                        <input type="date" id="dateFrom">
-                    </div>
-                    <div class="filter-group">
-                        <label>Дата до:</label>
-                        <input type="date" id="dateTo">
-                    </div>
-                    <button id="applyOrdersFilter" class="filter-btn">Применить</button>
-                    <button id="resetOrdersFilter" class="reset-filter-btn">Сбросить</button>
-                </div>
-
                 <div id="ordersContainer" class="orders-container">
                     <div class="loading">Загрузка заказов...</div>
                 </div>
@@ -145,9 +134,30 @@ $stmt->close();
         </div>
     </div>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const avatarContainer = document.getElementById('avatarContainer');
+        const avatarFileInput = document.getElementById('avatarFileInput');
+        const avatarUploadForm = document.getElementById('avatarUploadForm');
+        
+        if (avatarContainer) {
+            avatarContainer.addEventListener('click', function() {
+                avatarFileInput.click();
+            });
+        }
+        
+        if (avatarFileInput) {
+            avatarFileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    avatarUploadForm.submit();
+                }
+            });
+        }
+    });
+    </script>
+    
     <script src="./js/cart.js"></script>
     <script src="./js/userProfile.js"></script>
     <script src="./js/toogleMenu.js"></script>
-    <script src="./js/commonValidate.js"></script>
 </body>
 </html>

@@ -27,19 +27,34 @@
     border-color: var(--primary-light);
 }
 
+/* Аватар мастера в карточке - фиксированный размер */
+.master-avatar-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.master-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .master-avatar {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto var(--spacing-4);
-    background: var(--primary-gradient);
-    border-radius: var(--radius-full);
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
     color: var(--white);
-    transition: var(--transition-normal);
+    font-weight: 600;
+    font-size: 1.5rem;
 }
 
 .master-card:hover .master-avatar {

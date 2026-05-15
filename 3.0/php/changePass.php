@@ -38,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         unset($_SESSION['previous_email']);
                         $_SESSION['success_message'] = "Пароль успешно изменен!";
                         echo "<script>
-                            alert('Пароль успешно изменен!');
                             window.location.href = '../loginPage.php';
                         </script>";
                         exit();

@@ -12,7 +12,7 @@ require_once('./php/init.php');
 
 $userID = getUserId();
 
-// Получаем данные мастера
+// Получаем данные мастера (включая avatar и avatar_mime_type через m.*)
 $sql = "SELECT m.*, c.categoryName, u.login, u.name as userName 
         FROM masters m 
         JOIN users u ON m.userID = u.userID 
@@ -68,7 +68,7 @@ mysqli_stmt_close($count_stmt);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ГроноАрт - Панель продавца</title>
+    <title>ГродноАрт - Панель продавца</title>
     <link rel="stylesheet" href="./styles/mainSellerStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -76,9 +76,7 @@ mysqli_stmt_close($count_stmt);
     <nav class="navbar">
         <div class="nav-container">
             <button class="menu-toggle" aria-label="Открыть меню">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
 
             <div class="logo">Гродно<span>Арт</span></div>
@@ -97,9 +95,28 @@ mysqli_stmt_close($count_stmt);
         <!-- Боковая панель -->
         <div class="seller-sidebar">
             <div class="seller-avatar">
-                <div class="avatar-icon">🎨</div>
+                <div class="avatar-container" id="avatarContainer">
+                    <?php
+                    if (!empty($master['avatar'])) {
+                        $avatarData = base64_encode($master['avatar']);
+                        $avatarMime = $master['avatar_mime_type'];
+                        echo '<img src="data:' . $avatarMime . ';base64,' . $avatarData . '" alt="Аватар" class="avatar-image">';
+                    } else {
+                        echo '<div class="avatar-placeholder">🎨</div>';
+                    }
+                    ?>
+                    <div class="avatar-overlay">
+                        <label class="avatar-upload-btn-overlay">
+                            📸
+                        </label>
+                    </div>
+                </div>
                 <h2><?php echo htmlspecialchars($master['masterName'] ?? $_SESSION['user_name']); ?></h2>
                 <p class="seller-login">@<?php echo htmlspecialchars($_SESSION['user_login']); ?></p>
+                
+                <form id="avatarUploadForm" method="POST" action="./php/userData/uploadAvatar.php" enctype="multipart/form-data" style="display: none;">
+                    <input type="file" name="avatar" id="avatarFileInput" accept="image/*">
+                </form>
             </div>
 
             <div class="seller-rating">
@@ -248,11 +265,21 @@ mysqli_stmt_close($count_stmt);
 
                 <div class="sales-filters">
                     <div class="filter-group">
+                        <label>Период:</label>
+                        <select id="periodFilter">
+                            <option value="all">Все время</option>
+                            <option value="today">Сегодня</option>
+                            <option value="week">Эта неделя</option>
+                            <option value="month">Этот месяц</option>
+                            <option value="year">Этот год</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
                         <label>Статус:</label>
                         <select id="statusFilter">
                             <option value="all">Все</option>
                             <option value="pending">Ожидает</option>
-                            <option value="approved">Подтверждён</option>
+                            <option value="approved">Подтвержден</option>
                             <option value="collecting">Собирается</option>
                             <option value="delivering">Доставляется</option>
                             <option value="delivered">Доставлен</option>
@@ -268,7 +295,6 @@ mysqli_stmt_close($count_stmt);
                         <input type="date" id="dateTo">
                     </div>
                     <button id="applySalesFilter" class="filter-btn">Применить</button>
-                    <button id="resetSalesFilter" class="reset-filter-btn">Сбросить</button>
                 </div>
 
                 <div class="sales-stats" id="salesStats">
@@ -320,14 +346,12 @@ mysqli_stmt_close($count_stmt);
                         </select>
                     </div>
                     
-                    <!-- Поле для номера карты (показывается по умолчанию) -->
-                    <div class="form-group" id="cardNumberGroup">
+                    <div class="form-group" id="cardNumberGroup" style="display: block;">
                         <label for="cardNumber">Номер карты</label>
                         <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19">
                         <small class="input-hint">Введите 16 цифр без пробелов или с пробелами</small>
                     </div>
                     
-                    <!-- Поле для номера телефона (скрыто по умолчанию) -->
                     <div class="form-group" id="phoneNumberGroup" style="display: none;">
                         <label for="phoneNumber">Номер телефона</label>
                         <input type="tel" id="phoneNumber" placeholder="+375 XX XXX-XX-XX">
@@ -411,6 +435,28 @@ mysqli_stmt_close($count_stmt);
             </div>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const avatarContainer = document.getElementById('avatarContainer');
+        const avatarFileInput = document.getElementById('avatarFileInput');
+        const avatarUploadForm = document.getElementById('avatarUploadForm');
+        
+        if (avatarContainer) {
+            avatarContainer.addEventListener('click', function() {
+                avatarFileInput.click();
+            });
+        }
+        
+        if (avatarFileInput) {
+            avatarFileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    avatarUploadForm.submit();
+                }
+            });
+        }
+    });
+    </script>
 
     <script src="./js/cart.js"></script>
     <script src="./js/seller.js"></script>

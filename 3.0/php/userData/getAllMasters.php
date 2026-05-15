@@ -8,6 +8,8 @@ $sql = "SELECT
             m.countOfProducts,
             m.aboutMaster,
             m.direction,
+            m.avatar,
+            m.avatar_mime_type,
             u.userID
         FROM masters m
         LEFT JOIN users u ON m.userID = u.userID
@@ -21,7 +23,15 @@ $masters_html = '';
 
 if ($result && $result->num_rows > 0) {
     while($master = $result->fetch_assoc()) {
-        $avatar = getMasterAvatar($master['masterName']);
+        // Формируем аватар (фиксированный размер 80x80)
+        if (!empty($master['avatar'])) {
+            $avatarData = base64_encode($master['avatar']);
+            $avatarMime = $master['avatar_mime_type'];
+            $avatarHtml = '<img src="data:' . $avatarMime . ';base64,' . $avatarData . '" alt="аватар" class="master-avatar-img">';
+        } else {
+            $avatarHtml = '<div class="master-avatar">' . getMasterAvatar($master['masterName']) . '</div>';
+        }
+        
         $experience = formatExperience($master['experience']);
         $productCountText = $master['countOfProducts'] . ' ' . getProductCountText($master['countOfProducts']);
         
@@ -41,7 +51,9 @@ if ($result && $result->num_rows > 0) {
 
         $masters_html .= '
         <div class="master-card">
-            <div class="master-avatar">' . $avatar . '</div>
+            <div class="master-avatar-wrapper">
+                ' . $avatarHtml . '
+            </div>
             <div class="master-name">' . htmlspecialchars($master['masterName']) . '</div>
             <div class="master-specialty">' . htmlspecialchars($master['direction']) . '</div>
             <div class="master-description">' . htmlspecialchars($master['aboutMaster']) . '</div>
@@ -82,3 +94,4 @@ echo $masters_html;
 if (isset($rating_stmt)) {
     $rating_stmt->close();
 }
+?>
