@@ -1,0 +1,25 @@
+# Включение rewrite engine
+RewriteEngine On
+
+# ПЕРЕНАПРАВЛЕНИЕ НА HTTPS - ТОЛЬКО ДЛЯ ПРОДАКШЕНА!
+# Раскомментируйте эти строки только на живом сервере с SSL
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Защита от XSS
+Header set X-XSS-Protection "1; mode=block"
+
+# Защита от кликджекинга
+Header set X-Frame-Options "DENY"
+
+# Защита от MIME-типов
+Header set X-Content-Type-Options "nosniff"
+
+# HSTS - ТОЛЬКО ДЛЯ ПРОДАКШЕНА!
+# Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+# Защита от доступа к скрытым файлам
+RedirectMatch 403 /\..*$
+
+# Защита от доступа к config
+RedirectMatch 403 /config/.*$

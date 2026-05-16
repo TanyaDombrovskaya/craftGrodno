@@ -4,28 +4,18 @@ session_start();
 if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
     if ($_SESSION['user_role'] == 'user') {
         header("Location: /craftGrodno/3.0/mainUser.php");
+        exit();
     } else if ($_SESSION['user_role'] == 'seller') {
         header("Location: /craftGrodno/3.0/mainSeller.php");
+        exit();
     }
-    exit();
 }
 
 $login_error = isset($_SESSION['login_error']) ? $_SESSION['login_error'] : '';
-$error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
 $previous_login = isset($_SESSION['previous_login']) ? $_SESSION['previous_login'] : '';
 
-$body_class = '';
-if ($login_error === 'password') {
-    $body_class = 'password-error';
-} elseif ($login_error === 'login') {
-    $body_class = 'login-error';
-} elseif ($login_error === 'blocked') {
-    $body_class = 'blocked-error';
-}
-
-header("Cache-Control: no-cache, no-store, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
+unset($_SESSION['login_error']);
+unset($_SESSION['previous_login']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +26,7 @@ header("Expires: 0");
     <link rel="stylesheet" href="./styles/loginStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
-<body class="<?php echo $body_class; ?>">
+<body>
     <div class="container">
         <div class="image-section"></div>
         
@@ -44,16 +34,10 @@ header("Expires: 0");
             <form method="POST" action="./php/login.php">
                 <h1 class="logo">Гродно<span>Арт</span></h1>
 
-                <?php if ($login_error === 'blocked' && $error_message): ?>
-                <div class="error-message-blocked" style="background: #FEE2E2; color: #DC2626; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #DC2626;">
-                    ⚠️ <?php echo htmlspecialchars($error_message); ?>
-                </div>
-                <?php endif; ?>
-
                 <div class="form-group">
                     <label for="login-input">Логин</label>
                     <input type="text" id="login-input" name="login" placeholder="Логин" 
-                           value="<?php echo isset($_SESSION['previous_login']) ? htmlspecialchars($_SESSION['previous_login']) : ''; ?>">
+                           value="<?php echo htmlspecialchars($previous_login); ?>">
                 </div>
 
                 <div class="form-group">
@@ -72,19 +56,19 @@ header("Expires: 0");
     </div>
 
     <script src="./js/commonValidate.js"></script>
-    <script src="./js/login/authError.js"></script>
     <script src="./js/login/validateLogin.js"></script>
     <script>
-        // Дополнительная обработка ошибки блокировки
-        if (document.body.classList.contains('blocked-error')) {
-            // Можно добавить дополнительную логику
-            console.log('Пользователь заблокирован');
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if ($login_error === 'password'): ?>
+            const passwordInput = document.getElementById('password-input');
+            showFieldError(passwordInput, 'Неверный пароль');
+            passwordInput.value = '';
+        <?php elseif ($login_error === 'login'): ?>
+            const loginInput = document.getElementById('login-input');
+            showFieldError(loginInput, 'Пользователь не найден');
+            loginInput.value = '';
+        <?php endif; ?>
+    });
     </script>
 </body>
 </html>
-<?php
-unset($_SESSION['login_error']);
-unset($_SESSION['error_message']);
-unset($_SESSION['previous_login']);
-?>

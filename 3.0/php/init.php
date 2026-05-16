@@ -1,6 +1,5 @@
 <?php
-
-require_once("db.php");
+require_once(__DIR__ . "/db.php");
 
 // Общие функции
 function getProductCountText($count) {
@@ -51,7 +50,6 @@ function getCategoryIcon($categoryName) {
     return $icons[$categoryName] ?? '📦';
 }
 
-// Функция для отображения звезд рейтинга
 function displayRatingStars($rating) {
     $stars = '';
     $fullStars = floor($rating);
@@ -66,7 +64,6 @@ function displayRatingStars($rating) {
             $stars .= '<span class="rating-star">★</span>';
         }
     }
-    
     return $stars;
 }
 
@@ -84,6 +81,6 @@ function displayMasterRatingStars($rating) {
             $stars .= '<span class="master-rating-star">★</span>';
         }
     }
-    
     return $stars;
 }
+?>

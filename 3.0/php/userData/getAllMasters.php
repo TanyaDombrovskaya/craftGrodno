@@ -8,8 +8,8 @@ $sql = "SELECT
             m.countOfProducts,
             m.aboutMaster,
             m.direction,
-            m.avatar,
-            m.avatar_mime_type,
+            u.avatar,     
+            u.avatar_mime_type,
             u.userID
         FROM masters m
         LEFT JOIN users u ON m.userID = u.userID

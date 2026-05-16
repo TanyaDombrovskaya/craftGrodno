@@ -1,12 +1,22 @@
 <?php
 session_start();
+
+$forgot_error = isset($_SESSION['forgot_error']) ? $_SESSION['forgot_error'] : '';
+$error_field = isset($_SESSION['error_field']) ? $_SESSION['error_field'] : '';
+$previous_login = isset($_SESSION['previous_login']) ? $_SESSION['previous_login'] : '';
+$previous_email = isset($_SESSION['previous_email']) ? $_SESSION['previous_email'] : '';
+
+unset($_SESSION['forgot_error']);
+unset($_SESSION['error_field']);
+unset($_SESSION['previous_login']);
+unset($_SESSION['previous_email']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Восстановление пароля - ГродноАрт</title>
+    <title>Восстановление пароля</title>
     <link rel="stylesheet" href="./styles/forgotStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
 </head>
@@ -19,13 +29,13 @@ session_start();
                 <div class="form-group">
                     <label for="login-input">Логин</label>
                     <input type="text" id="login-input" name="login" placeholder="Логин" 
-                           value="<?php echo isset($_SESSION['previous_login']) ? htmlspecialchars($_SESSION['previous_login']) : ''; ?>">
+                           value="<?php echo htmlspecialchars($previous_login); ?>">
                 </div>
 
                 <div class="form-group">
                     <label for="email-input">E-mail</label>
                     <input type="text" id="email-input" name="email" placeholder="E-mail" 
-                           value="<?php echo isset($_SESSION['previous_email']) ? htmlspecialchars($_SESSION['previous_email']) : ''; ?>">
+                           value="<?php echo htmlspecialchars($previous_email); ?>">
                 </div>
 
                 <div class="form-group">
@@ -49,10 +59,16 @@ session_start();
 
     <script src="./js/forgot/forgotValidate.js"></script>
     <script src="./js/commonValidate.js"></script>
-    <script src="./js/forgot/changePassError.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if ($error_field === 'login'): ?>
+            showFieldError(document.getElementById('login-input'), '<?php echo htmlspecialchars($forgot_error); ?>');
+        <?php elseif ($error_field === 'email'): ?>
+            showFieldError(document.getElementById('email-input'), '<?php echo htmlspecialchars($forgot_error); ?>');
+        <?php elseif ($error_field === 'password'): ?>
+            showFieldError(document.getElementById('password-input'), '<?php echo htmlspecialchars($forgot_error); ?>');
+        <?php endif; ?>
+    });
+    </script>
 </body>
 </html>
-<?php
-unset($_SESSION['previous_login']);
-unset($_SESSION['previous_email']);
-?>

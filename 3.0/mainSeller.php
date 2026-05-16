@@ -12,8 +12,7 @@ require_once('./php/init.php');
 
 $userID = getUserId();
 
-// Получаем данные мастера (включая avatar и avatar_mime_type через m.*)
-$sql = "SELECT m.*, c.categoryName, u.login, u.name as userName 
+$sql = "SELECT m.*, u.login, u.name as userName, u.avatar, u.avatar_mime_type 
         FROM masters m 
         JOIN users u ON m.userID = u.userID 
         LEFT JOIN category c ON m.categoryID = c.categoryID 

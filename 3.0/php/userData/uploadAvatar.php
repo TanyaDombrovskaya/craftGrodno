@@ -48,16 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['avatar'])) {
         exit();
     }
     
-    // Обновляем БД
-    if ($role === 'user') {
-        $sql = "UPDATE users SET avatar = ?, avatar_mime_type = ? WHERE userID = ?";
-        $stmt = $connection->prepare($sql);
-        $stmt->bind_param("ssi", $avatarData, $fileType, $userID);
-    } else {
-        $sql = "UPDATE masters SET avatar = ?, avatar_mime_type = ? WHERE userID = ?";
-        $stmt = $connection->prepare($sql);
-        $stmt->bind_param("ssi", $avatarData, $fileType, $userID);
-    }
+    // Обновляем только таблицу users
+    $sql = "UPDATE users SET avatar = ?, avatar_mime_type = ? WHERE userID = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("ssi", $avatarData, $fileType, $userID);
     
     if ($stmt->execute()) {
         $_SESSION['avatar_success'] = 'Аватар успешно обновлен';

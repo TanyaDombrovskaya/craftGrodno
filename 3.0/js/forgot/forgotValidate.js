@@ -1,46 +1,31 @@
-document.getElementById('replace-password').addEventListener('click', function(event) {
-    event.preventDefault();
-    
+document.getElementById('replace-password').addEventListener('click', function(e) {
+    e.preventDefault();
     clearAllFieldErrors();
 
     const login = document.getElementById('login-input');
     const email = document.getElementById('email-input');
     const password = document.getElementById('password-input');
-    const confirmPassword = document.getElementById('confirm-password-input');
-
-    const loginText = login.value.trim();
-    const emailText = email.value.trim();
-    const passwordText = password.value.trim();
-    const confirmPasswordText = confirmPassword.value.trim();
+    const confirm = document.getElementById('confirm-password-input');
 
     let hasError = false;
 
-    if (!loginText) {
+    if (!login.value.trim()) {
         showFieldError(login, 'Заполните поле Логин');
         hasError = true;
     }
-
-    if (!emailText) {
+    if (!email.value.trim()) {
         showFieldError(email, 'Заполните поле Email');
         hasError = true;
-    } else if (!validateEmail(emailText)) {
-        showFieldError(email, 'Введите корректный e-mail (только английские символы)');
-        hasError = true;
     }
-
-    if (!passwordText) {
+    if (!password.value.trim()) {
         showFieldError(password, 'Заполните поле Пароль');
         hasError = true;
-    } else if (!validatePassword(passwordText)) {
-        showFieldError(password, 'Пароль должен быть от 8 до 25 символов');
+    } else if (password.value.length < 8) {
+        showFieldError(password, 'Пароль должен быть не менее 8 символов');
         hasError = true;
     }
-
-    if (!confirmPasswordText) {
-        showFieldError(confirmPassword, 'Заполните поле Повтор пароля');
-        hasError = true;
-    } else if (passwordText !== confirmPasswordText) {
-        showFieldError(confirmPassword, 'Пароли не совпадают');
+    if (password.value !== confirm.value) {
+        showFieldError(confirm, 'Пароли не совпадают');
         hasError = true;
     }
 
@@ -48,16 +33,3 @@ document.getElementById('replace-password').addEventListener('click', function(e
         document.querySelector('form').submit();
     }
 });
-
-function validatePassword(password) {
-    return password && password.length >= 8 && password.length <= 25;
-}
-
-function validateEmail(email) {
-    if (!email) return false;
-    if (email.includes(' ')) return false;
-    const englishChars = /^[a-zA-Z0-9.@_+-]+$/;
-    if (!englishChars.test(email)) return false;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}

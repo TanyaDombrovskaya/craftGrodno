@@ -1,72 +1,62 @@
 <?php
 session_start();
-require_once("db.php");
+require_once(__DIR__ . "/db.php");
+require_once(__DIR__ . "/passwordHash.php");
 
-unset($_SESSION['forgot_error']);
-unset($_SESSION['error_field']);
+global $passwordHash, $connection;
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: /craftGrodno/3.0/forgotPage.php");
+    exit();
+}
+
+$login = trim($_POST["login"] ?? '');
+$email = trim($_POST["email"] ?? '');
+$new_password = $_POST["new_password"] ?? '';
+
+$_SESSION['previous_login'] = $login;
+$_SESSION['previous_email'] = $email;
+
+if (strlen($new_password) < 8) {
+    $_SESSION['forgot_error'] = 'Пароль должен быть не менее 8 символов';
+    $_SESSION['error_field'] = 'password';
+    header("Location: /craftGrodno/3.0/forgotPage.php");
+    exit();
+}
+
+$sql = "SELECT * FROM users WHERE login = ?";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("s", $login);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+if (!$user) {
+    $_SESSION['forgot_error'] = 'Пользователь не найден';
+    $_SESSION['error_field'] = 'login';
+    header("Location: /craftGrodno/3.0/forgotPage.php");
+    exit();
+}
+
+if ($email != $user['email']) {
+    $_SESSION['forgot_error'] = 'Email не совпадает';
+    $_SESSION['error_field'] = 'email';
+    header("Location: /craftGrodno/3.0/forgotPage.php");
+    exit();
+}
+
+$hashed = $passwordHash->hash($new_password);
+
+$update = $connection->prepare("UPDATE users SET password = ? WHERE login = ?");
+$update->bind_param("ss", $hashed, $login);
+$update->execute();
+$update->close();
+
 unset($_SESSION['previous_login']);
 unset($_SESSION['previous_email']);
+$_SESSION['success_message'] = "Пароль успешно изменен!";
+header("Location: /craftGrodno/3.0/loginPage.php");
+exit();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $login = $_POST["login"] ?? '';
-    $email = $_POST["email"] ?? '';
-    $new_password = $_POST["new_password"] ?? '';
-
-    $_SESSION['previous_login'] = $login;
-    $_SESSION['previous_email'] = $email;
-
-    $sql = "SELECT * FROM `users` WHERE login = ?";
-    $stmt = $connection->prepare($sql);
-
-    if ($stmt) {
-        $stmt->bind_param("s", $login);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-
-            if ($email == $user["email"]) {
-                $hashed_password = md5($new_password);
-                $update_sql = "UPDATE `users` SET password = ? WHERE login = ?";
-                $update_stmt = $connection->prepare($update_sql);
-                
-                if ($update_stmt) {
-                    $update_stmt->bind_param("ss", $hashed_password, $login);
-                    if ($update_stmt->execute()) {
-                        unset($_SESSION['previous_login']);
-                        unset($_SESSION['previous_email']);
-                        $_SESSION['success_message'] = "Пароль успешно изменен!";
-                        echo "<script>
-                            window.location.href = '../loginPage.php';
-                        </script>";
-                        exit();
-                    }
-                    $update_stmt->close();
-                }
-            } else {
-                $_SESSION['forgot_error'] = 'Неверная почта';
-                $_SESSION['error_field'] = 'email';
-                echo "<script>
-                    localStorage.setItem('forgotError', 'email');
-                    localStorage.setItem('errorMessage', 'Неверная почта');
-                    window.location.href = '../forgotPage.php';
-                </script>";
-                exit();
-            }
-        } else {
-            $_SESSION['forgot_error'] = 'Пользователь не найден';
-            $_SESSION['error_field'] = 'login';
-            echo "<script>
-                localStorage.setItem('forgotError', 'login');
-                localStorage.setItem('errorMessage', 'Пользователь не найден');
-                window.location.href = '../forgotPage.php';
-            </script>";
-            exit();
-        }
-        
-        $stmt->close();
-    }
-
-    $connection->close();
-}
+$connection->close();
+?>

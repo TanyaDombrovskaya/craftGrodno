@@ -88,7 +88,15 @@ $review_count = $rating_data['review_count'];
         <!-- Заголовок профиля -->
         <div class="master-profile-header">
             <div class="master-avatar-large">
-                <?php echo getMasterAvatar($masterData['masterName']); ?>
+                <?php 
+                if (!empty($masterData['avatar'])) {
+                    $avatarData = base64_encode($masterData['avatar']);
+                    $avatarMime = $masterData['avatar_mime_type'];
+                    echo '<img src="data:' . $avatarMime . ';base64,' . $avatarData . '" alt="' . htmlspecialchars($masterData['masterName']) . '" class="avatar-image">';
+                } else {
+                    echo getMasterAvatar($masterData['masterName']);
+                }
+                ?>
             </div>
             <div class="master-info">
                 <h1 class="master-name-large"><?php echo htmlspecialchars($masterData['masterName']); ?></h1>

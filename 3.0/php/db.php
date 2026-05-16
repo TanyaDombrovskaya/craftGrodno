@@ -2,7 +2,7 @@
 $server = "localhost";
 $username = "global";
 $password = "1234";
-$database = "grodnoCraft3.0";
+$database = "grodnoart";
 
 $connection = new mysqli($server, $username, $password, $database);
 

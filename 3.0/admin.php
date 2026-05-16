@@ -34,13 +34,11 @@ require_once('./php/init.php');
     <div class="admin-container">
         <div class="admin-sidebar">
             <div class="admin-avatar">
-                <div class="avatar-icon">👑</div>
                 <h2>Панель управления</h2>
                 <p class="admin-role">Администратор</p>
             </div>
             <div class="admin-nav">
                 <button class="admin-nav-btn active" data-tab="orders">Заказы</button>
-                <button class="admin-nav-btn" data-tab="products">Товары на модерацию</button>
                 <button class="admin-nav-btn" data-tab="reviews">Отзывы</button>
                 <button class="admin-nav-btn" data-tab="users">Пользователи</button>
                 <a href="./php/logout.php" class="admin-logout-btn">Выйти</a>
@@ -110,25 +108,6 @@ require_once('./php/init.php');
                             <tr><td colspan="10" class="loading">Загрузка заказов...</td></tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
-
-            <!-- Вкладка модерации товаров -->
-            <div class="admin-tab" id="tab-products">
-                <h2 class="tab-title">Модерация товаров</h2>
-                <div class="products-filters">
-                    <div class="filter-group">
-                        <label>Статус:</label>
-                        <select id="productStatusFilter">
-                            <option value="pending">На проверке</option>
-                            <option value="approved">Одобренные</option>
-                            <option value="rejected">Отклонённые</option>
-                        </select>
-                    </div>
-                    <button id="applyProductFilters" class="filter-btn">Применить</button>
-                </div>
-                <div id="productsModerationContainer" class="products-moderation-container">
-                    <div class="loading">Загрузка товаров...</div>
                 </div>
             </div>
 

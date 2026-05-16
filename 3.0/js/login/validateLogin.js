@@ -1,4 +1,4 @@
-document.getElementById('login-button').addEventListener('click', function() {    
+document.getElementById('login-button').addEventListener('click', function(e) {
     clearAllFieldErrors();
 
     const login = document.getElementById('login-input');
@@ -19,6 +19,6 @@ document.getElementById('login-button').addEventListener('click', function() {
     }
 
     if (hasError) {
-        return;
+        e.preventDefault();
     }
 });
