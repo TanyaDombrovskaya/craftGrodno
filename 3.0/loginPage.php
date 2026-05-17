@@ -8,6 +8,9 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
     } else if ($_SESSION['user_role'] == 'seller') {
         header("Location: /craftGrodno/3.0/mainSeller.php");
         exit();
+    } else if ($_SESSION['user_role'] == 'admin') {
+        header("Location: /craftGrodno/3.0/admin.php");
+        exit();
     }
 }
 

@@ -638,6 +638,36 @@
     align-items: flex-end;
 }
 
+.change-role-btn {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 5px;
+    transition: background-color 0.2s;
+}
+
+.change-role-btn:hover {
+    background-color: #357abd;
+}
+
+.role-confirm-btn {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.role-confirm-btn:hover {
+    background-color: #357abd;
+}
+
 /* Модальные окна */
 .reject-form textarea,
 .status-form textarea,

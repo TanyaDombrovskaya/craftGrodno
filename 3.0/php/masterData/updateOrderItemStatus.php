@@ -12,6 +12,20 @@ if (getUserRole() !== 'seller') {
 $userID = getUserId();
 $orderItemID = isset($_POST['order_item_id']) ? intval($_POST['order_item_id']) : 0;
 $newStatus = isset($_POST['status']) ? $_POST['status'] : '';
+$comment = isset($_POST['comment']) ? $_POST['comment'] : '';
+
+// Получаем логин мастера для записи в историю
+$currentUserLogin = $_SESSION['user_login'] ?? null;
+if (!$currentUserLogin) {
+    $userSql = "SELECT login FROM users WHERE userID = ?";
+    $userStmt = $connection->prepare($userSql);
+    $userStmt->bind_param("i", $userID);
+    $userStmt->execute();
+    $userResult = $userStmt->get_result();
+    $userData = $userResult->fetch_assoc();
+    $currentUserLogin = $userData['login'] ?? 'master';
+    $userStmt->close();
+}
 
 // Разрешенные статусы для мастера
 $allowedStatuses = ['collecting', 'delivering', 'delivered'];
@@ -53,22 +67,42 @@ $allowedTransitions = [
 ];
 
 if (!isset($allowedTransitions[$currentStatus]) || !in_array($newStatus, $allowedTransitions[$currentStatus])) {
-    echo json_encode(['success' => false, 'message' => 'Невозможно изменить статус. Текущий статус: ' . $this->getStatusText($currentStatus)]);
+    echo json_encode(['success' => false, 'message' => 'Невозможно изменить статус. Текущий статус: ' . getStatusText($currentStatus)]);
     exit();
 }
 
-// Обновляем статус
-$updateSql = "UPDATE order_items SET status = ? WHERE order_itemID = ?";
-$updateStmt = $connection->prepare($updateSql);
-$updateStmt->bind_param("si", $newStatus, $orderItemID);
+// Начинаем транзакцию
+$connection->begin_transaction();
 
-if ($updateStmt->execute()) {
+try {
+    // Обновляем статус
+    $updateSql = "UPDATE order_items SET status = ? WHERE order_itemID = ?";
+    $updateStmt = $connection->prepare($updateSql);
+    $updateStmt->bind_param("si", $newStatus, $orderItemID);
+    
+    if (!$updateStmt->execute()) {
+        throw new Exception('Ошибка при обновлении: ' . $updateStmt->error);
+    }
+    $updateStmt->close();
+    
+    // Записываем историю
+    $historySql = "INSERT INTO order_item_status_history (order_itemID, old_status, new_status, changed_by, comment) 
+                   VALUES (?, ?, ?, ?, ?)";
+    $historyStmt = $connection->prepare($historySql);
+    $historyStmt->bind_param("issss", $orderItemID, $currentStatus, $newStatus, $currentUserLogin, $comment);
+    
+    if (!$historyStmt->execute()) {
+        throw new Exception('Ошибка записи истории: ' . $historyStmt->error);
+    }
+    $historyStmt->close();
+    
+    $connection->commit();
     echo json_encode(['success' => true, 'message' => 'Статус обновлен']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Ошибка при обновлении']);
+    
+} catch (Exception $e) {
+    $connection->rollback();
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
-
-$updateStmt->close();
 
 function getStatusText($status) {
     $texts = [

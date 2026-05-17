@@ -225,105 +225,6 @@ function updateSingleOrderItemStatus() {
     });
 }
 
-// ========== ФУНКЦИИ ДЛЯ МОДЕРАЦИИ ТОВАРОВ ==========
-
-function loadProductsForModeration() {
-    const status = document.getElementById('productStatusFilter')?.value || 'pending';
-    
-    fetch(`./php/admin/getProductsForModeration.php?status=${status}`)
-        .then(response => response.json())
-        .then(data => {
-            displayProductsForModeration(data.products || []);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('productsModerationContainer').innerHTML = '<div class="no-products">Ошибка загрузки товаров</div>';
-        });
-}
-
-function displayProductsForModeration(products) {
-    const container = document.getElementById('productsModerationContainer');
-    
-    if (!products || products.length === 0) {
-        container.innerHTML = '<div class="no-products">Товары не найдены</div>';
-        return;
-    }
-    
-    let html = '';
-    products.forEach(product => {
-        const statusClass = product.approved === 'approved' ? 'status-approved-badge' : (product.approved === 'rejected' ? 'status-rejected-badge' : 'status-pending-badge');
-        const statusText = product.approved === 'approved' ? 'Одобрен' : (product.approved === 'rejected' ? 'Отклонён' : 'На проверке');
-        
-        html += `
-            <div class="moderation-card">
-                <div class="status-pending-badge ${statusClass}">${statusText}</div>
-                <img src="${product.image_src || '/styles/image/icon.png'}" alt="${escapeHtml(product.productName)}">
-                <h4>${escapeHtml(product.productName)}</h4>
-                <div class="price">${parseFloat(product.price).toFixed(2)} руб.</div>
-                <div class="master">Мастер: ${escapeHtml(product.masterName)}</div>
-                <p>${escapeHtml(product.aboutProduct.substring(0, 100))}...</p>
-                ${product.rejection_reason ? `<div class="rejection-reason">Причина: ${escapeHtml(product.rejection_reason)}</div>` : ''}
-                <div class="moderation-actions">
-                    <button class="approve-btn" onclick="approveProduct(${product.productID})">✅ Одобрить</button>
-                    <button class="reject-btn" onclick="openRejectModal(${product.productID})">❌ Отклонить</button>
-                </div>
-            </div>
-        `;
-    });
-    container.innerHTML = html;
-}
-
-function approveProduct(productId) {
-    fetch('./php/admin/approveProduct.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `product_id=${productId}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showMessage('Товар одобрен', 'success');
-            loadProductsForModeration();
-        } else {
-            showMessage(data.message || 'Ошибка', 'error');
-        }
-    });
-}
-
-function openRejectModal(productId) {
-    document.getElementById('rejectProductId').value = productId;
-    document.getElementById('rejectModal').style.display = 'flex';
-}
-
-function rejectProduct() {
-    const productId = document.getElementById('rejectProductId').value;
-    const reason = document.getElementById('rejectReason').value;
-    
-    if (!reason.trim()) {
-        showMessage('Укажите причину отклонения', 'error');
-        return;
-    }
-    
-    fetch('./php/admin/rejectProduct.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `product_id=${productId}&reason=${encodeURIComponent(reason)}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showMessage('Товар отклонён', 'success');
-            document.getElementById('rejectModal').style.display = 'none';
-            document.getElementById('rejectReason').value = '';
-            loadProductsForModeration();
-        } else {
-            showMessage(data.message || 'Ошибка', 'error');
-        }
-    });
-}
-
-document.getElementById('confirmReject')?.addEventListener('click', rejectProduct);
-
 // ========== ФУНКЦИИ ДЛЯ МОДЕРАЦИИ ОТЗЫВОВ ==========
 
 function loadReviews() {
@@ -434,6 +335,78 @@ function loadUsers() {
         });
 }
 
+// ========== ФУНКЦИИ ДЛЯ СМЕНЫ РОЛИ ПОЛЬЗОВАТЕЛЯ ==========
+
+function openChangeRoleModal(userId, userLogin, currentRole) {
+    document.getElementById('changeRoleUserId').value = userId;
+    document.getElementById('changeRoleUserLogin').textContent = userLogin;
+    
+    // Устанавливаем текущую роль в select
+    const roleSelect = document.getElementById('newRole');
+    if (roleSelect) {
+        roleSelect.value = currentRole;
+    }
+    
+    document.getElementById('changeRoleModal').style.display = 'flex';
+}
+
+function changeUserRole() {
+    const userId = document.getElementById('changeRoleUserId').value;
+    const newRole = document.getElementById('newRole').value;
+    
+    if (!userId) {
+        showMessage('Ошибка: ID пользователя не найден', 'error');
+        return;
+    }
+    
+    // Блокируем кнопку
+    const confirmBtn = document.getElementById('confirmChangeRole');
+    const originalText = confirmBtn ? confirmBtn.textContent : 'Сменить роль';
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Сохранение...';
+    }
+    
+    fetch('./php/admin/changeUserRole.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `user_id=${userId}&new_role=${newRole}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showMessage(data.message, 'success');
+            document.getElementById('changeRoleModal').style.display = 'none';
+            loadUsers(); // Перезагружаем список пользователей
+        } else {
+            showMessage(data.message || 'Ошибка при смене роли', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showMessage('Ошибка при смене роли', 'error');
+    })
+    .finally(() => {
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = originalText;
+        }
+    });
+}
+
+// Добавляем обработчик для кнопки подтверждения смены роли
+document.addEventListener('DOMContentLoaded', function() {
+    // ... существующий код ...
+    
+    // Обработчик для смены роли
+    const confirmChangeRoleBtn = document.getElementById('confirmChangeRole');
+    if (confirmChangeRoleBtn) {
+        confirmChangeRoleBtn.addEventListener('click', changeUserRole);
+    }
+});
+
 function displayUsers(users) {
     const container = document.getElementById('usersContainer');
     
@@ -475,6 +448,11 @@ function displayUsers(users) {
         
         const lastActivity = user.last_activity ? formatDateTime(user.last_activity) : 'Никогда';
         
+        // Используем глобальную переменную currentAdminId
+        const roleButton = (user.userID != currentAdminId) ? 
+            `<button class="change-role-btn" onclick="openChangeRoleModal(${user.userID}, '${escapeHtml(user.login)}', '${user.role}')">👥 Сменить роль</button>` : 
+            '';
+        
         html += `
             <tr>
                 <td>${user.userID}</td>
@@ -485,17 +463,18 @@ function displayUsers(users) {
                 <td>${statusHtml}</td>
                 <td>${lastActivity}</td>
                 <td>
+                    ${roleButton}
                     ${user.is_blocked == 0 ? 
                         `<button class="block-user-btn" onclick="openBlockModal(${user.userID}, '${escapeHtml(user.login)}')">🔨 Блокировать</button>` :
                         `<button class="unblock-user-btn" onclick="unblockUser(${user.userID})">🔓 Разблокировать</button>`
                     }
                     <button class="delete-user-btn" onclick="deleteUser(${user.userID}, '${escapeHtml(user.login)}')">🗑️ Удалить</button>
-                </td>
-            </tr>
+                 </td>
+             </tr>
         `;
     });
     
-    html += '</tbody></table></div>';
+    html += '</tbody> </table>';
     container.innerHTML = html;
 }
 

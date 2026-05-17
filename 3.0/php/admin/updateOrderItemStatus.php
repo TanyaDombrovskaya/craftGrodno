@@ -8,6 +8,24 @@ if (getUserRole() !== 'admin') {
     exit();
 }
 
+// Получаем логин текущего администратора
+$currentUserLogin = $_SESSION['user_login'] ?? null;
+if (!$currentUserLogin) {
+    $userId = $_SESSION['user_id'] ?? 0;
+    if ($userId) {
+        $userSql = "SELECT login FROM users WHERE userID = ?";
+        $userStmt = $connection->prepare($userSql);
+        $userStmt->bind_param("i", $userId);
+        $userStmt->execute();
+        $userResult = $userStmt->get_result();
+        $userData = $userResult->fetch_assoc();
+        $currentUserLogin = $userData['login'] ?? 'admin';
+        $userStmt->close();
+    } else {
+        $currentUserLogin = 'admin';
+    }
+}
+
 $orderItemId = isset($_POST['order_item_id']) ? intval($_POST['order_item_id']) : 0;
 $newStatus = isset($_POST['status']) ? $_POST['status'] : '';
 $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
@@ -35,15 +53,36 @@ if (!$currentItem) {
 
 $oldStatus = $currentItem['status'];
 
-// Обновляем статус
-$updateSql = "UPDATE order_items SET status = ? WHERE order_itemID = ?";
-$updateStmt = $connection->prepare($updateSql);
-$updateStmt->bind_param("si", $newStatus, $orderItemId);
+// Начинаем транзакцию
+$connection->begin_transaction();
 
-if ($updateStmt->execute()) {
+try {
+    // Обновляем статус
+    $updateSql = "UPDATE order_items SET status = ? WHERE order_itemID = ?";
+    $updateStmt = $connection->prepare($updateSql);
+    $updateStmt->bind_param("si", $newStatus, $orderItemId);
+    
+    if (!$updateStmt->execute()) {
+        throw new Exception('Ошибка обновления: ' . $updateStmt->error);
+    }
+    $updateStmt->close();
+    
+    // Записываем историю
+    $historySql = "INSERT INTO order_item_status_history (order_itemID, old_status, new_status, changed_by, comment) 
+                   VALUES (?, ?, ?, ?, ?)";
+    $historyStmt = $connection->prepare($historySql);
+    $historyStmt->bind_param("issss", $orderItemId, $oldStatus, $newStatus, $currentUserLogin, $comment);
+    
+    if (!$historyStmt->execute()) {
+        throw new Exception('Ошибка записи истории: ' . $historyStmt->error);
+    }
+    $historyStmt->close();
+    
+    $connection->commit();
     echo json_encode(['success' => true, 'message' => 'Статус обновлён']);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Ошибка обновления: ' . $updateStmt->error]);
+    
+} catch (Exception $e) {
+    $connection->rollback();
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
-$updateStmt->close();
 ?>

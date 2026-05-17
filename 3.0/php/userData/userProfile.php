@@ -12,6 +12,7 @@ if (getUserRole() !== 'user') {
 $userID = getUserId();
 $name = isset($_POST['name']) ? trim($_POST['name']) : '';
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+$address = isset($_POST['address']) ? trim($_POST['address']) : '';
 
 if (empty($name) || empty($email)) {
     echo json_encode(['success' => false, 'message' => 'Заполните все поля']);
@@ -23,9 +24,9 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit();
 }
 
-$sql = "UPDATE users SET name = ?, email = ? WHERE userID = ?";
+$sql = "UPDATE users SET name = ?, email = ?, address = ? WHERE userID = ?";
 $stmt = $connection->prepare($sql);
-$stmt->bind_param("ssi", $name, $email, $userID);
+$stmt->bind_param("sssi", $name, $email, $address, $userID);
 
 if ($stmt->execute()) {
     $_SESSION['user_name'] = $name;

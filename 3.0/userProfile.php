@@ -11,8 +11,39 @@ require_once('./php/init.php');
 
 $userID = getUserId();
 
-// Получаем данные пользователя (включая аватар)
-$sql = "SELECT login, name, email, balance, avatar, avatar_mime_type FROM users WHERE userID = ?";
+// ======= ОБРАБОТКА POST-ЗАПРОСА (AJAX обновление профиля) =======
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $address = isset($_POST['address']) ? trim($_POST['address']) : '';
+    
+    if (empty($name) || empty($email)) {
+        echo json_encode(['success' => false, 'message' => 'Заполните все поля']);
+        exit();
+    }
+    
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode(['success' => false, 'message' => 'Неверный формат email']);
+        exit();
+    }
+    
+    $sql = "UPDATE users SET name = ?, email = ?, address = ? WHERE userID = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("sssi", $name, $email, $address, $userID);
+    
+    if ($stmt->execute()) {
+        $_SESSION['user_name'] = $name;
+        echo json_encode(['success' => true, 'message' => 'Данные обновлены']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Ошибка при обновлении: ' . $stmt->error]);
+    }
+    
+    $stmt->close();
+    exit();
+}
+
+// ======= GET-ЗАПРОС - ПОКАЗ СТРАНИЦЫ =======
+$sql = "SELECT login, name, email, balance, address, avatar, avatar_mime_type FROM users WHERE userID = ?";
 $stmt = $connection->prepare($sql);
 $stmt->bind_param("i", $userID);
 $stmt->execute();
@@ -62,9 +93,7 @@ $stmt->close();
                     }
                     ?>
                     <div class="avatar-overlay">
-                        <label class="avatar-upload-btn-overlay">
-                        📷
-                        </label>
+                        <label class="avatar-upload-btn-overlay">📷</label>
                     </div>
                 </div>
                 <h2><?php echo htmlspecialchars($user['name']); ?></h2>
@@ -103,6 +132,11 @@ $stmt->close();
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Адрес доставки</label>
+                        <textarea id="address" name="address" rows="3" placeholder="Укажите ваш полный адрес для доставки (город, улица, дом, квартира)"><?php echo htmlspecialchars($user['address'] ?? ''); ?></textarea>
+                        <small class="form-hint">Обязательное поле для оформления заказа</small>
                     </div>
                     <button type="submit" class="save-btn">Сохранить изменения</button>
                 </form>

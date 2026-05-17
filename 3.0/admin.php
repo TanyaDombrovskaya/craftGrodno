@@ -260,7 +260,36 @@ require_once('./php/init.php');
         </div>
     </div>
 
+    <!-- Модальное окно смены роли пользователя -->
+    <div id="changeRoleModal" class="modal">
+        <div class="modal-content small-modal">
+            <div class="modal-header">
+                <h3>Смена роли пользователя</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="change-role-form">
+                    <p>Пользователь: <strong id="changeRoleUserLogin"></strong></p>
+                    <label for="newRole">Новая роль:</label>
+                    <select id="newRole">
+                        <option value="user">Покупатель</option>
+                        <option value="seller">Мастер</option>
+                        <option value="admin">Администратор</option>
+                    </select>
+                    <input type="hidden" id="changeRoleUserId">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn">Отмена</button>
+                <button id="confirmChangeRole" class="role-confirm-btn">Сменить роль</button>
+            </div>
+        </div>
+    </div>
+
     <script src="./js/commonValidate.js"></script>
+    <script>
+        const currentAdminId = <?php echo getUserId(); ?>;
+    </script>
     <script src="./js/admin.js"></script>
     <script src="./js/toogleMenu.js"></script>
 </body>

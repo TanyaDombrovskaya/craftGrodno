@@ -11,8 +11,22 @@ if (getUserRole() !== 'user') {
 
 $userID = getUserId();
 
+// ======= ПРОВЕРКА АДРЕСА ДОСТАВКИ =======
+$addressSql = "SELECT address FROM users WHERE userID = ?";
+$addressStmt = $connection->prepare($addressSql);
+$addressStmt->bind_param("i", $userID);
+$addressStmt->execute();
+$addressResult = $addressStmt->get_result();
+$userAddress = $addressResult->fetch_assoc();
+$addressStmt->close();
+
+if (empty($userAddress['address'])) {
+    echo json_encode(['success' => false, 'message' => 'Укажите адрес доставки в профиле перед оформлением заказа']);
+    exit();
+}
+
 // Получаем товары из корзины
-$cartSql = "SELECT c.cartID, c.quantity, p.productID, p.price, p.masterID, p.countOfProduct as available
+$cartSql = "SELECT c.cartID, c.quantity, p.productID, p.productName, p.price, p.masterID, p.countOfProduct as available
             FROM cart c 
             JOIN products p ON c.productID = p.productID 
             WHERE c.userID = ?";
@@ -46,6 +60,7 @@ $balanceStmt->bind_param("i", $userID);
 $balanceStmt->execute();
 $balanceResult = $balanceStmt->get_result();
 $userBalance = $balanceResult->fetch_assoc();
+$balanceStmt->close();
 
 if ($userBalance['balance'] < $totalAmount) {
     echo json_encode(['success' => false, 'message' => 'Недостаточно средств. Пополните баланс.']);

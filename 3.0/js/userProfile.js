@@ -1,9 +1,41 @@
+// Функция для отображения сообщений
+function showMessage(message, type) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${type === 'success' ? 'message-success' : 'message-error'}`;
+    msgDiv.textContent = message;
+    msgDiv.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 9999;
+        font-size: 14px;
+        animation: fadeIn 0.3s ease;
+    `;
+    
+    if (type === 'success') {
+        msgDiv.style.backgroundColor = '#d4edda';
+        msgDiv.style.color = '#155724';
+        msgDiv.style.border = '1px solid #c3e6cb';
+    } else {
+        msgDiv.style.backgroundColor = '#f8d7da';
+        msgDiv.style.color = '#721c24';
+        msgDiv.style.border = '1px solid #f5c6cb';
+    }
+    
+    document.body.appendChild(msgDiv);
+    
+    setTimeout(() => {
+        msgDiv.remove();
+    }, 3000);
+}
+
 // Проверяем URL параметр tab
 const urlParams = new URLSearchParams(window.location.search);
 const activeTab = urlParams.get('tab');
 
 if (activeTab === 'orders') {
-    // Активируем вкладку заказов
     const ordersBtn = document.querySelector('.profile-nav-btn[data-tab="orders"]');
     if (ordersBtn) {
         ordersBtn.click();
@@ -48,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (showBtn) {
         showBtn.addEventListener('click', () => {
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
         });
     }
     
@@ -88,24 +120,31 @@ document.addEventListener('DOMContentLoaded', function() {
 function updateProfile() {
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
+    const address = document.getElementById('address')?.value.trim() || '';
     
     if (!name || !email) {
         showMessage('Заполните все поля', 'error');
         return;
     }
     
-    fetch('./php/userData/updateProfile.php', {
+    const saveBtn = document.querySelector('#profileForm .save-btn');
+    const originalText = saveBtn ? saveBtn.textContent : 'Сохранить изменения';
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Сохранение...';
+    }
+    
+    fetch('userProfile.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`
+        body: `name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&address=${encodeURIComponent(address)}`
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             showMessage('Данные успешно обновлены', 'success');
-            // Обновляем имя в навбаре
             const userNameSpan = document.querySelector('.user-name-link');
             if (userNameSpan) {
                 userNameSpan.textContent = name;
@@ -117,15 +156,30 @@ function updateProfile() {
     .catch(error => {
         console.error('Error:', error);
         showMessage('Ошибка при обновлении данных', 'error');
+    })
+    .finally(() => {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.textContent = originalText;
+        }
     });
 }
 
 function topupBalance() {
-    const amount = document.getElementById('topupAmount').value;
+    const amountInput = document.getElementById('topupAmount');
+    const amount = amountInput ? amountInput.value : '';
     
     if (!amount || amount <= 0) {
         showMessage('Введите корректную сумму', 'error');
         return;
+    }
+    
+    // Блокируем кнопку, чтобы избежать повторных запросов
+    const confirmBtn = document.getElementById('confirmTopup');
+    const originalText = confirmBtn ? confirmBtn.textContent : 'Пополнить';
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Обработка...';
     }
     
     fetch('./php/userData/topupBalance.php', {
@@ -133,20 +187,24 @@ function topupBalance() {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `amount=${amount}`
+        body: `amount=${encodeURIComponent(amount)}`
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             showMessage(`Баланс пополнен на ${data.amount} руб.`, 'success');
-            // Обновляем отображение баланса
             const balanceSpan = document.getElementById('balanceAmount');
             if (balanceSpan) {
                 balanceSpan.textContent = data.new_balance + ' руб.';
             }
-            // Закрываем модальное окно
-            document.getElementById('topupModal').style.display = 'none';
-            document.getElementById('topupAmount').value = '';
+            const modal = document.getElementById('topupModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            const amountInputElem = document.getElementById('topupAmount');
+            if (amountInputElem) {
+                amountInputElem.value = '';
+            }
         } else {
             showMessage(data.message || 'Ошибка при пополнении', 'error');
         }
@@ -154,11 +212,19 @@ function topupBalance() {
     .catch(error => {
         console.error('Error:', error);
         showMessage('Ошибка при пополнении баланса', 'error');
+    })
+    .finally(() => {
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = originalText;
+        }
     });
 }
 
 function loadOrders() {
     const container = document.getElementById('ordersContainer');
+    
+    if (!container) return;
     
     // Получаем значения фильтров
     const status = document.getElementById('orderStatusFilter')?.value || 'all';
@@ -240,7 +306,6 @@ function loadOrders() {
         });
 }
 
-// Функция сброса фильтров
 function resetOrdersFilter() {
     const statusSelect = document.getElementById('orderStatusFilter');
     const dateFromInput = document.getElementById('dateFrom');
@@ -278,6 +343,7 @@ function getStatusClass(status) {
 }
 
 function formatDate(dateString) {
+    if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('ru-RU', {
         day: '2-digit',
@@ -289,6 +355,7 @@ function formatDate(dateString) {
 }
 
 function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
