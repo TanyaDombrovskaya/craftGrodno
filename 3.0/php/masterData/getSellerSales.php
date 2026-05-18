@@ -29,7 +29,7 @@ if (!$master) {
 $masterID = $master['masterID'];
 $masterStmt->close();
 
-// Получаем параметры фильтрации (убран period)
+// Получаем параметры фильтрации
 $status = isset($_GET['status']) ? $_GET['status'] : 'all';
 $dateFrom = isset($_GET['date_from']) && !empty($_GET['date_from']) ? $_GET['date_from'] : null;
 $dateTo = isset($_GET['date_to']) && !empty($_GET['date_to']) ? $_GET['date_to'] : null;
@@ -72,7 +72,8 @@ $sql = "SELECT
             p.productID,
             p.productName,
             u.name as buyer_name,
-            u.login as buyer_login
+            u.login as buyer_login,
+            u.address as buyer_address
         FROM order_items oi
         JOIN orders o ON oi.orderID = o.orderID
         JOIN products p ON oi.productID = p.productID

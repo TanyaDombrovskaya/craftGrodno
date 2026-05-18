@@ -456,23 +456,26 @@ function displaySales(sales) {
     }
     
     let html = '<div class="sales-table-wrapper"><table class="sales-table"><thead><tr>';
-    html += '<th>Дата</th><th>Товар</th><th>Кол-во</th><th>Сумма</th><th>Покупатель</th><th>Статус</th><th>Действие</th>';
+    html += '<th>Дата</th><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th><th>Покупатель</th><th>Адрес доставки</th><th>Статус</th><th>Действие</th>';
     html += '</tr></thead><tbody>';
     
     sales.forEach(sale => {
         const statusClass = getStatusClass(sale.status);
         const statusText = getStatusText(sale.status);
+        const totalAmount = parseFloat(sale.price) * parseInt(sale.quantity);
+        const buyerAddress = sale.buyer_address || 'Адрес не указан';
         
         html += `<tr data-order-item-id="${sale.order_itemID}">`;
         html += `<td>${formatDateTime(sale.order_date)}</td>`;
         html += `<td><a href="productCard.php?id=${sale.productID}" target="_blank" class="sale-product-link">${escapeHtml(sale.productName)}</a></td>`;
         html += `<td>${sale.quantity}</td>`;
         html += `<td>${parseFloat(sale.price).toFixed(2)} руб.</td>`;
+        html += `<td>${totalAmount.toFixed(2)} руб.</td>`;
         html += `<td>${escapeHtml(sale.buyer_name || 'Неизвестно')}<br><small>@${escapeHtml(sale.buyer_login || '')}</small></td>`;
+        html += `<td class="address-cell">${escapeHtml(buyerAddress)}</td>`;
         html += `<td><span class="status-badge ${statusClass}">${statusText}</span></td>`;
         html += `<td>`;
         
-        // Кнопки для мастера в зависимости от статуса
         if (sale.status === 'approved') {
             html += `<button class="change-status-btn" onclick="updateOrderItemStatus(${sale.order_itemID}, 'collecting')">Начать сборку</button>`;
         } else if (sale.status === 'collecting') {
