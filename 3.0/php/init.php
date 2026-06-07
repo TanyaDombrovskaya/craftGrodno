@@ -1,6 +1,29 @@
 <?php
 require_once(__DIR__ . "/db.php");
 
+// Обновление последней активности пользователя (только один раз)
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+    
+    // Проверяем, существует ли поле last_activity
+    $checkColumn = $connection->query("SHOW COLUMNS FROM users LIKE 'last_activity'");
+    if ($checkColumn->num_rows > 0) {
+        $columnInfo = $checkColumn->fetch_assoc();
+        
+        // Убираем ON UPDATE CURRENT_TIMESTAMP если он есть
+        if (strpos($columnInfo['Extra'], 'on update CURRENT_TIMESTAMP') !== false) {
+            $connection->query("ALTER TABLE users MODIFY last_activity TIMESTAMP NULL DEFAULT NULL");
+        }
+    }
+    
+    // Обновляем last_activity
+    $updateActivitySql = "UPDATE users SET last_activity = NOW() WHERE userID = ?";
+    $updateStmt = $connection->prepare($updateActivitySql);
+    $updateStmt->bind_param("i", $userId);
+    $updateStmt->execute();
+    $updateStmt->close();
+}
+
 // Общие функции
 function getProductCountText($count) {
     if ($count % 10 == 1 && $count % 100 != 11) {

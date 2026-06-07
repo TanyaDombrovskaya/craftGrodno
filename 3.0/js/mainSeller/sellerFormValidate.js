@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
         'product_name', 'product_about', 'price', 'count'
     ];
 
+    // Проверяем и блокируем категорию при загрузке
+    checkAndLockCategoryOnLoad();
+
     // Добавляем обработчики для полей формы мастера
     masterFormFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
@@ -58,10 +61,77 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Функция для проверки и блокировки категории при загрузке
+    function checkAndLockCategoryOnLoad() {
+        const categoryField = document.getElementById('category');
+        if (!categoryField) return;
+
+        // Проверяем localStorage
+        const categoryLocked = localStorage.getItem('category_permanently_locked');
+        const savedCategoryValue = localStorage.getItem('saved_category_value');
+        
+        if (categoryLocked === 'true' && savedCategoryValue) {
+            // Восстанавливаем значение категории
+            categoryField.value = savedCategoryValue;
+            // Блокируем поле навсегда
+            permanentlyLockCategory(categoryField);
+            return;
+        }
+
+        // Проверяем, есть ли уже выбранное значение и форма была отправлена
+        if (categoryField.value && categoryField.value !== '') {
+            // Проверяем, не была ли эта страница загружена после сохранения
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success') || urlParams.has('success_message')) {
+                // Сохраняем в localStorage что категория заблокирована
+                localStorage.setItem('category_permanently_locked', 'true');
+                localStorage.setItem('saved_category_value', categoryField.value);
+                permanentlyLockCategory(categoryField);
+            } else {
+                // Проверяем, есть ли данные о мастере (заполнена ли форма)
+                const masterName = document.getElementById('master_name');
+                const direction = document.getElementById('direction');
+                const phone = document.getElementById('phone');
+                
+                if (masterName && masterName.value && direction && direction.value && phone && phone.value) {
+                    // Форма уже заполнена, значит это редактирование существующего мастера
+                    localStorage.setItem('category_permanently_locked', 'true');
+                    localStorage.setItem('saved_category_value', categoryField.value);
+                    permanentlyLockCategory(categoryField);
+                }
+            }
+        }
+    }
+
+    // Функция для перманентной блокировки категории
+    function permanentlyLockCategory(categoryField) {
+        categoryField.disabled = true;
+        categoryField.style.opacity = '0.6';
+        categoryField.style.cursor = 'not-allowed';
+        categoryField.style.backgroundColor = '#f3f4f6';
+        
+        // Сохраняем признак блокировки в data-атрибут
+        categoryField.setAttribute('data-locked-forever', 'true');
+        
+        // Добавляем поясняющий текст, если его нет
+        if (!categoryField.parentElement.querySelector('.category-lock-hint')) {
+            const hint = document.createElement('small');
+            hint.className = 'category-lock-hint';
+            hint.style.cssText = 'display: block; margin-top: 5px; color: #6c757d; font-size: 12px;';
+            hint.innerHTML = '🔒 Категория выбрана и не может быть изменена';
+            categoryField.parentElement.appendChild(hint);
+        }
+    }
+
     // Функция для обновления состояния поля категории
     function updateCategoryFieldState() {
         const categoryField = document.getElementById('category');
         if (!categoryField) return;
+
+        // Если категория уже заблокирована навсегда, не меняем состояние
+        if (categoryField.getAttribute('data-locked-forever') === 'true') {
+            return;
+        }
 
         const masterName = document.getElementById('master_name');
         const direction = document.getElementById('direction');
@@ -84,7 +154,9 @@ document.addEventListener('DOMContentLoaded', function() {
             categoryField.style.opacity = '0.6';
             categoryField.style.cursor = 'not-allowed';
         } else {
-            if (!categoryField.value) {
+            // Проверяем, не заблокирована ли категория навсегда
+            const isLockedForever = localStorage.getItem('category_permanently_locked') === 'true';
+            if (!isLockedForever && !categoryField.value) {
                 categoryField.disabled = false;
                 categoryField.style.opacity = '1';
                 categoryField.style.cursor = 'default';
@@ -241,7 +313,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const category = document.getElementById('category');
-            if (!category.value) {
+            // Проверяем, не заблокирована ли категория
+            const isLocked = category.getAttribute('data-locked-forever') === 'true';
+            if (!isLocked && !category.value) {
                 showFieldError(category, 'Выберите категорию');
                 hasError = true;
             }
@@ -278,6 +352,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const firstError = document.querySelector('.error-input');
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else {
+                // После успешной валидации, сохраняем категорию в localStorage
+                const categoryField = document.getElementById('category');
+                if (categoryField && categoryField.value && !categoryField.disabled) {
+                    localStorage.setItem('category_permanently_locked', 'true');
+                    localStorage.setItem('saved_category_value', categoryField.value);
                 }
             }
         });
@@ -372,6 +453,23 @@ function checkUrlMessages() {
         showMessage('Операция выполнена успешно!', 'success');
         const newUrl = window.location.pathname + window.location.hash;
         window.history.replaceState({}, document.title, newUrl);
+        
+        // Дополнительная блокировка категории после успешной операции
+        setTimeout(function() {
+            const categoryField = document.getElementById('category');
+            if (categoryField && categoryField.value && localStorage.getItem('category_permanently_locked') !== 'true') {
+                localStorage.setItem('category_permanently_locked', 'true');
+                localStorage.setItem('saved_category_value', categoryField.value);
+                if (categoryField.getAttribute('data-locked-forever') !== 'true') {
+                    categoryField.disabled = true;
+                    categoryField.style.opacity = '0.6';
+                    categoryField.style.cursor = 'not-allowed';
+                    categoryField.style.backgroundColor = '#f3f4f6';
+                    categoryField.setAttribute('data-locked-forever', 'true');
+                }
+            }
+        }, 100);
+        
     } else if (urlParams.has('error')) {
         showMessage('Произошла ошибка. Попробуйте еще раз.', 'error');
         const newUrl = window.location.pathname + window.location.hash;
@@ -383,6 +481,31 @@ function checkUrlMessages() {
         showMessage(message, 'success');
         const newUrl = window.location.pathname;
         window.history.replaceState({}, document.title, newUrl);
+        
+        // Блокируем категорию после успешного сохранения
+        setTimeout(function() {
+            const categoryField = document.getElementById('category');
+            if (categoryField && categoryField.value && localStorage.getItem('category_permanently_locked') !== 'true') {
+                localStorage.setItem('category_permanently_locked', 'true');
+                localStorage.setItem('saved_category_value', categoryField.value);
+                if (categoryField.getAttribute('data-locked-forever') !== 'true') {
+                    categoryField.disabled = true;
+                    categoryField.style.opacity = '0.6';
+                    categoryField.style.cursor = 'not-allowed';
+                    categoryField.style.backgroundColor = '#f3f4f6';
+                    categoryField.setAttribute('data-locked-forever', 'true');
+                    
+                    // Добавляем подсказку
+                    if (!categoryField.parentElement.querySelector('.category-lock-hint')) {
+                        const hint = document.createElement('small');
+                        hint.className = 'category-lock-hint';
+                        hint.style.cssText = 'display: block; margin-top: 5px; color: #6c757d; font-size: 12px;';
+                        hint.innerHTML = '🔒 Категория выбрана и не может быть изменена';
+                        categoryField.parentElement.appendChild(hint);
+                    }
+                }
+            }
+        }, 100);
     }
     
     if (urlParams.has('error_message')) {

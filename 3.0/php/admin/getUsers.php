@@ -57,12 +57,16 @@ $result = $stmt->get_result();
 
 $users = [];
 while ($row = $result->fetch_assoc()) {
-    // Определяем статус онлайн (активность за последние 5 минут И не заблокирован)
     $isOnline = false;
-    if ($row['last_activity'] && $row['is_blocked'] == 0) {
+    
+    if ($row['is_blocked'] == 0 && !empty($row['last_activity'])) {
         $lastActivity = strtotime($row['last_activity']);
-        $fiveMinutesAgo = strtotime('-5 minutes');
-        $isOnline = ($lastActivity > $fiveMinutesAgo);
+        $currentTime = time();
+        $diffSeconds = $currentTime - $lastActivity;
+        
+        if ($diffSeconds < 300) {
+            $isOnline = true;
+        }
     }
     
     $users[] = [

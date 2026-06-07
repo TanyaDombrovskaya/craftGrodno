@@ -61,14 +61,14 @@
 .profile-balance {
     text-align: center;
     padding: var(--spacing-4);
-    background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
+    background: linear-gradient(135deg, var(--gray-900), var(--gray-800));
     border-radius: var(--radius-xl);
     margin: var(--spacing-4) 0;
     border: 1px solid var(--gray-200);
 }
 
 .balance-label {
-    color: var(--gray-600);
+    color: var(--white);
     font-size: var(--font-size-sm);
     margin-bottom: var(--spacing-2);
 }
@@ -81,7 +81,7 @@
 }
 
 .topup-btn {
-    background: var(--primary-gradient);
+    background: var(--secondary);
     color: var(--white);
     border: none;
     padding: var(--spacing-2) var(--spacing-4);
@@ -92,8 +92,8 @@
 }
 
 .topup-btn:hover {
+    background: var(--secondary-dark);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-glow);
 }
 
 /* Навигация */
@@ -121,8 +121,9 @@
 }
 
 .profile-nav-btn.active {
-    background: var(--primary-gradient);
-    color: var(--white);
+    background: var(--white);
+    color: var(--black-light);
+    border: 1px solid var(--black-light) !important;
 }
 
 .profile-logout-btn {

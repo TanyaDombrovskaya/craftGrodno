@@ -10,6 +10,8 @@
 
 .master-card {
     background: var(--white);
+    opacity: 0.9;
+    border: 1px var(--primary-dark) solid !important;
     border-radius: var(--radius-xl);
     padding: var(--spacing-6);
     text-align: center;
@@ -76,7 +78,7 @@
 }
 
 .master-description {
-    color: var(--gray-500);
+    color: var(--gray-700);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-normal);
     margin-bottom: var(--spacing-4);

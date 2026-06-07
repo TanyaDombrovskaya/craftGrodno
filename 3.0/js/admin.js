@@ -398,8 +398,6 @@ function changeUserRole() {
 
 // Добавляем обработчик для кнопки подтверждения смены роли
 document.addEventListener('DOMContentLoaded', function() {
-    // ... существующий код ...
-    
     // Обработчик для смены роли
     const confirmChangeRoleBtn = document.getElementById('confirmChangeRole');
     if (confirmChangeRoleBtn) {
@@ -425,7 +423,6 @@ function displayUsers(users) {
                     <th>Email</th>
                     <th>Роль</th>
                     <th>Статус</th>
-                    <th>Последняя активность</th>
                     <th>Действие</th>
                 </tr>
             </thead>
@@ -446,8 +443,6 @@ function displayUsers(users) {
             statusHtml = '<span class="status-badge status-offline">⚫ Не в сети</span>';
         }
         
-        const lastActivity = user.last_activity ? formatDateTime(user.last_activity) : 'Никогда';
-        
         // Используем глобальную переменную currentAdminId
         const roleButton = (user.userID != currentAdminId) ? 
             `<button class="change-role-btn" onclick="openChangeRoleModal(${user.userID}, '${escapeHtml(user.login)}', '${user.role}')">👥 Сменить роль</button>` : 
@@ -461,7 +456,6 @@ function displayUsers(users) {
                 <td>${escapeHtml(user.email)}</td>
                 <td><span class="role-badge ${roleClass}">${roleText}</span></td>
                 <td>${statusHtml}</td>
-                <td>${lastActivity}</td>
                 <td>
                     ${roleButton}
                     ${user.is_blocked == 0 ? 
@@ -469,12 +463,12 @@ function displayUsers(users) {
                         `<button class="unblock-user-btn" onclick="unblockUser(${user.userID})">🔓 Разблокировать</button>`
                     }
                     <button class="delete-user-btn" onclick="deleteUser(${user.userID}, '${escapeHtml(user.login)}')">🗑️ Удалить</button>
-                 </td>
-             </tr>
+                </td>
+            </tr>
         `;
     });
     
-    html += '</tbody> </table>';
+    html += '</tbody></table>';
     container.innerHTML = html;
 }
 

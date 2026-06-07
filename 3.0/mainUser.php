@@ -138,16 +138,7 @@ if (getUserRole() !== 'user') {
                     <li><a href="./allProducts.php?category=Шитье">Шитье</a></li>
                     <li><a href="./allProducts.php?category=Бижутерия">Бижутерия</a></li>
                 </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Помощь</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Доставка и оплата</a></li>
-                    <li><a href="#">Возврат</a></li>
-                    <li><a href="#">Вопросы и ответы</a></li>
-                    <li><a href="#">Контакты</a></li>
-                </ul>
-            </div>
+            </div> 
             <div class="footer-section">
                 <h3>Контакты</h3>
                 <ul class="footer-links">

@@ -127,6 +127,21 @@
     transform: translateY(-2px);
 }
 
+.withdraw-confirm-btn {
+    background: var(--primary-gradient);
+    color: var(--white);
+    border-radius: var(--radius-lg);
+    border: none;
+    padding: var(--spacing-3) var(--spacing-4);
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 1s ease;
+}
+
+.withdraw-confirm-btn:hover {
+    background-color: var(--error-dark);
+}
+
 /* ========== НАВИГАЦИЯ ПРОДАВЦА ========== */
 .seller-nav {
     display: flex;
@@ -152,8 +167,9 @@
 }
 
 .seller-nav-btn.active {
-    background: var(--primary-gradient);
-    color: var(--white);
+    background: var(--white);
+    color: var(--black-light);
+    border: 1px solid var(--black-light) !important;
 }
 
 .seller-logout-btn {

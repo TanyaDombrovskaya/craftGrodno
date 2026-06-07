@@ -5,17 +5,19 @@ $sql = "SELECT
             m.masterID,
             m.masterName,
             m.experience,
-            m.countOfProducts,
             m.aboutMaster,
             m.direction,
             u.avatar,        
             u.avatar_mime_type, 
-            u.userID
+            u.userID,
+            COUNT(p.productID) as actual_products_count
         FROM masters m
         LEFT JOIN users u ON m.userID = u.userID
+        LEFT JOIN products p ON m.masterID = p.masterID
         WHERE m.masterName IS NOT NULL 
-        AND m.countOfProducts > 0
-        ORDER BY m.countOfProducts DESC
+        GROUP BY m.masterID
+        HAVING actual_products_count > 0
+        ORDER BY actual_products_count DESC
         LIMIT 3";
 
 $result = $connection->query($sql);
@@ -34,7 +36,7 @@ if ($result && $result->num_rows > 0) {
         }
         
         $experience = formatExperience($master['experience']);
-        $productCountText = $master['countOfProducts'] . ' ' . getProductCountText($master['countOfProducts']);
+        $actualCount = $master['actual_products_count'];
         
         // Получаем средний рейтинг мастера через его продукты
         $rating_sql = "SELECT AVG(r.rating) as avg_rating, COUNT(*) as review_count 
@@ -61,8 +63,8 @@ if ($result && $result->num_rows > 0) {
 
             <div class="master-stats">
                 <div class="master-stat">
-                    <span class="stat-value">' . $master['countOfProducts'] . '</span>
-                    <span class="stat-name">' . getProductCountText($master['countOfProducts']) . '</span>
+                    <span class="stat-value">' . $actualCount . '</span>
+                    <span class="stat-name">' . getProductCountText($actualCount) . '</span>
                 </div>
                 <!-- Рейтинг мастера -->
                 <div class="master-rating">

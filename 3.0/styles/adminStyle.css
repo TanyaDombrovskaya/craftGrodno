@@ -63,31 +63,39 @@
     margin-top: var(--spacing-4);
 }
 
+/* Кнопки навигации: Заказы, Отзывы, Пользователи - только обводка, без заливки */
 .admin-nav-btn {
-    background: none;
-    border: none;
+    background: transparent !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #334155 !important;
     padding: var(--spacing-3) var(--spacing-4);
     text-align: left;
     font-size: var(--font-size-base);
     cursor: pointer;
     border-radius: var(--radius-lg);
     transition: var(--transition-fast);
-    color: var(--gray-700);
     display: flex;
     align-items: center;
     gap: var(--spacing-2);
+    width: 100%;
+    box-shadow: none !important;
 }
 
 .admin-nav-btn:hover {
-    background: var(--gray-100);
-    color: var(--gray-900);
+    background: transparent !important;
+    border: 1px solid #94a3b8 !important;
+    color: #1e293b !important;
+    transform: none;
+    box-shadow: none;
 }
 
 .admin-nav-btn.active {
-    background: var(--primary-gradient);
-    color: var(--white);
+    background: var(--white) !important;
+    border: 1px solid var(--black-light) !important;
+    color: var(--black-light) !important;
 }
 
+/* Кнопка выхода - не меняется */
 .admin-logout-btn {
     background: var(--error);
     color: var(--white);
@@ -321,22 +329,6 @@
 .batch-status-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-glow);
-}
-
-.change-status-btn {
-    background: var(--secondary);
-    color: var(--white);
-    border: none;
-    padding: var(--spacing-1) var(--spacing-3);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    font-size: var(--font-size-xs);
-    transition: var(--transition-fast);
-}
-
-.change-status-btn:hover {
-    background: var(--secondary-dark);
-    transform: translateY(-2px);
 }
 
 .status-collecting {
