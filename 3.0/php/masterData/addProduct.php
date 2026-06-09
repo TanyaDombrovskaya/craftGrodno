@@ -31,13 +31,31 @@ $image = null;
 $hasImage = false;
 
 if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {
-    // Проверяем тип файла
-    $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-    $file_type = $_FILES['product_image']['type'];
+    // Проверяем расширение файла
+    $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'avif'];
+    $file_extension = strtolower(pathinfo($_FILES['product_image']['name'], PATHINFO_EXTENSION));
     
-    if (!in_array($file_type, $allowed_types)) {
+    if (!in_array($file_extension, $allowed_extensions)) {
         http_response_code(400);
-        echo "Ошибка: разрешены только изображения JPEG, JPG, PNG и GIF";
+        echo "Ошибка: разрешены только изображения форматов: " . implode(', ', $allowed_extensions);
+        exit();
+    }
+    
+    // Проверяем реальный тип изображения через getimagesize (более надёжно)
+    $image_info = @getimagesize($_FILES['product_image']['tmp_name']);
+    if ($image_info === false) {
+        http_response_code(400);
+        echo "Ошибка: загруженный файл не является корректным изображением";
+        exit();
+    }
+    
+    // Проверяем MIME-тип из getimagesize
+    $allowed_mimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/avif'];
+    $file_mime = $image_info['mime'];
+    
+    if (!in_array($file_mime, $allowed_mimes)) {
+        http_response_code(400);
+        echo "Ошибка: неподдерживаемый тип изображения: " . $file_mime;
         exit();
     }
     
@@ -98,3 +116,4 @@ if (isset($stmt)) {
     mysqli_stmt_close($stmt);
 }
 mysqli_stmt_close($masterStmt);
+?>

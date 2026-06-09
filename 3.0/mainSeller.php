@@ -26,6 +26,7 @@ $stmt->close();
 
 $masterID = $master['masterID'] ?? null;
 $categoryName = $master['categoryName'] ?? '';
+$categoryID = $master['categoryID'] ?? ''; // ПОЛУЧАЕМ categoryID ИЗ БД
 $direction = $master['direction'] ?? '';
 $aboutMaster = $master['aboutMaster'] ?? '';
 $experience = $master['experience'] ?? '';
@@ -177,13 +178,13 @@ mysqli_stmt_close($count_stmt);
                         </div>
                         <div class="form-group">
                             <label for="category">Категория *</label>
-                            <select id="category" name="category" required>
+                            <select id="category" name="category">
                                 <option value="">Выберите категорию</option>
-                                <option value="1" <?= $categoryName == 'Дерево' ? 'selected' : '' ?>>Дерево</option>
-                                <option value="2" <?= $categoryName == 'Вязание' ? 'selected' : '' ?>>Вязание</option>
-                                <option value="3" <?= $categoryName == 'Керамика' ? 'selected' : '' ?>>Керамика</option>
-                                <option value="4" <?= $categoryName == 'Шитье' ? 'selected' : '' ?>>Шитье</option>
-                                <option value="5" <?= $categoryName == 'Бижутерия' ? 'selected' : '' ?>>Бижутерия</option>
+                                <option value="1" <?php echo ($categoryID == 1) ? 'selected' : ''; ?>>Дерево</option>
+                                <option value="2" <?php echo ($categoryID == 2) ? 'selected' : ''; ?>>Вязание</option>
+                                <option value="3" <?php echo ($categoryID == 3) ? 'selected' : ''; ?>>Керамика</option>
+                                <option value="4" <?php echo ($categoryID == 4) ? 'selected' : ''; ?>>Шитье</option>
+                                <option value="5" <?php echo ($categoryID == 5) ? 'selected' : ''; ?>>Бижутерия</option>
                             </select>
                         </div>
                     </div>

@@ -1,8 +1,12 @@
-/* styles/userProfileStyle.css - Современный личный кабинет */
+/* styles/userProfileStyle.css - Современный личный кабинет (полная адаптация) */
 
 @import url("./variables.css");
 @import url("./navigation.css");
 @import url("./modals.css");
+
+* {
+    box-sizing: border-box;
+}
 
 .profile-page {
     max-width: var(--breakpoint-xl);
@@ -78,6 +82,7 @@
     font-weight: var(--font-weight-bold);
     color: var(--primary);
     margin-bottom: var(--spacing-3);
+    word-wrap: break-word;
 }
 
 .topup-btn {
@@ -155,6 +160,7 @@
     border: 1px solid var(--gray-200);
     min-height: auto;
     height: auto;
+    overflow-x: hidden;
 }
 
 .profile-tab {
@@ -195,16 +201,19 @@
     color: var(--gray-700);
 }
 
-.profile-form input {
+.profile-form input,
+.profile-form textarea {
     padding: var(--spacing-3);
     border: 1px solid var(--gray-300);
     border-radius: var(--radius-lg);
     font-size: var(--font-size-base);
     background: var(--white);
     transition: var(--transition-fast);
+    width: 100%;
 }
 
-.profile-form input:focus {
+.profile-form input:focus,
+.profile-form textarea:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
@@ -213,6 +222,18 @@
 .profile-form input[readonly] {
     background: var(--gray-100);
     color: var(--gray-500);
+}
+
+.profile-form textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+.form-hint {
+    display: block;
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
 }
 
 .save-btn {
@@ -417,6 +438,75 @@
     color: var(--gray-800);
 }
 
+/* Фильтры заказов */
+.orders-filters {
+    background: var(--gray-50);
+    padding: var(--spacing-4);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--spacing-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
+    align-items: flex-end;
+    border: 1px solid var(--gray-200);
+}
+
+.orders-filters .filter-group {
+    flex: 1;
+    min-width: 140px;
+}
+
+.orders-filters label {
+    font-size: var(--font-size-sm);
+    display: block;
+    margin-bottom: var(--spacing-1);
+    color: var(--gray-600);
+}
+
+.orders-filters select,
+.orders-filters input {
+    width: 100%;
+    padding: var(--spacing-2);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    font-size: var(--font-size-sm);
+}
+
+.filter-btn {
+    background: var(--primary-gradient);
+    color: var(--white);
+    border: none;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-fast);
+    height: 38px;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.reset-filter-btn {
+    background: var(--gray-300);
+    color: var(--gray-700);
+    border: none;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-fast);
+    height: 38px;
+}
+
+.reset-filter-btn:hover {
+    background: var(--gray-400);
+    transform: translateY(-2px);
+}
+
 /* Модальное окно пополнения */
 .topup-form {
     display: flex;
@@ -507,7 +597,6 @@
     color: var(--white);
 }
 
-/* Hover overlay - плавное появление */
 .avatar-overlay {
     position: absolute;
     top: 0;
@@ -538,119 +627,160 @@
     justify-content: center;
 }
 
-/* Скрытая форма */
 .avatar-upload-form {
     display: none;
 }
 
-/* Адаптивность для мобильных */
-@media (max-width: 768px) {
-    .cart-counter {
-        position: absolute;
-        top: -8px;
-        right: -12px;
-        min-width: 16px;
-        height: 16px;
-        font-size: 0.65rem;
-        padding: 0 4px;
+/* ============================================ */
+/* ========== ПОЛНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ ============ */
+/* ============================================ */
+
+/* Стили для оверлея мобильного меню */
+.nav-overlay {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Планшеты до 1024px */
+@media (max-width: 1024px) {
+    .profile-page {
+        grid-template-columns: 280px 1fr;
+        gap: var(--spacing-4);
     }
 }
 
-/* Стили для поля адреса */
-.form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 14px;
-}
-
-.form-group textarea:focus {
-    border-color: #4a90e2;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
-}
-
-.form-hint {
-    display: block;
-    font-size: 12px;
-    color: #6c757d;
-    margin-top: 5px;
-}
-
-/* Фильтры заказов */
-.orders-filters {
-    background: var(--gray-50);
-    padding: var(--spacing-4);
-    border-radius: var(--radius-xl);
-    margin-bottom: var(--spacing-5);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-3);
-    align-items: flex-end;
-    border: 1px solid var(--gray-200);
-}
-
-.orders-filters .filter-group {
-    flex: 1;
-    min-width: 140px;
-}
-
-.orders-filters label {
-    font-size: var(--font-size-sm);
-    display: block;
-    margin-bottom: var(--spacing-1);
-    color: var(--gray-600);
-}
-
-.orders-filters select,
-.orders-filters input {
-    width: 100%;
-    padding: var(--spacing-2);
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius-md);
-    background: var(--white);
-    font-size: var(--font-size-sm);
-}
-
-.filter-btn {
-    background: var(--primary-gradient);
-    color: var(--white);
-    border: none;
-    padding: var(--spacing-2) var(--spacing-4);
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-    font-weight: var(--font-weight-medium);
-    transition: var(--transition-fast);
-    height: 38px;
-}
-
-.filter-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-glow);
-}
-
-.reset-filter-btn {
-    background: var(--gray-300);
-    color: var(--gray-700);
-    border: none;
-    padding: var(--spacing-2) var(--spacing-4);
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-    font-weight: var(--font-weight-medium);
-    transition: var(--transition-fast);
-    height: 38px;
-}
-
-.reset-filter-btn:hover {
-    background: var(--gray-400);
-    transform: translateY(-2px);
-}
-
-/* Адаптивность */
-@media (max-width: var(--breakpoint-md)) {
+/* Планшеты до 768px */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+    
+    .profile-page {
+        grid-template-columns: 1fr;
+        padding: 0;
+        margin-top: 60px;
+    }
+    
+    /* Боковая панель - выезжающая */
+    .profile-sidebar {
+        position: fixed !important;
+        top: 60px !important;
+        left: -100% !important;
+        width: 85% !important;
+        max-width: 300px !important;
+        height: calc(100vh - 60px) !important;
+        background: white !important;
+        z-index: 999 !important;
+        transition: left 0.3s ease !important;
+        overflow-y: auto !important;
+        border-radius: 0 !important;
+        padding: var(--spacing-4) !important;
+    }
+    
+    .profile-sidebar.open {
+        left: 0 !important;
+    }
+    
+    /* Оверлей для боковой панели */
+    .sidebar-overlay {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Навигация внутри панели */
+    .profile-nav {
+        flex-direction: column !important;
+    }
+    
+    .profile-nav-btn {
+        text-align: center !important;
+        padding: var(--spacing-3) !important;
+    }
+    
+    /* Основной контент */
+    .profile-content {
+        margin: 0;
+        border-radius: 0;
+        padding: var(--spacing-3);
+        min-height: calc(100vh - 60px);
+    }
+    
+    .tab-title {
+        font-size: var(--font-size-xl);
+        margin-bottom: var(--spacing-3);
+    }
+    
+    /* Формы */
+    .profile-form .form-group input,
+    .profile-form .form-group textarea {
+        padding: var(--spacing-2);
+        font-size: var(--font-size-sm);
+    }
+    
+    .save-btn {
+        width: 100%;
+        text-align: center;
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--font-size-sm);
+    }
+    
+    /* Заказы */
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .order-item-right {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .order-item-price {
+        text-align: left;
+    }
+    
+    .order-item-status {
+        text-align: left;
+    }
+    
+    /* Фильтры */
     .orders-filters {
         flex-direction: column;
     }
@@ -662,69 +792,144 @@
     .filter-btn,
     .reset-filter-btn {
         width: 100%;
+        height: auto;
+        padding: var(--spacing-2);
+    }
+    
+    /* Мобильное меню */
+    .nav-links {
+        position: fixed !important;
+        top: 60px !important;
+        left: -100% !important;
+        width: 280px !important;
+        height: calc(100vh - 60px) !important;
+        background: white !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+        transition: left 0.3s ease !important;
+        z-index: 999 !important;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important;
+        display: flex !important;
+        overflow-y: auto !important;
+    }
+    
+    .nav-links.active {
+        left: 0 !important;
+    }
+    
+    .nav-links .nav-link {
+        width: 100% !important;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        color: #D97706 !important;
+        background: white !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        text-decoration: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+    
+    .nav-links .nav-link:hover {
+        background: #FFF7ED !important;
+        color: #B45309 !important;
+        padding-left: 24px !important;
+    }
+    
+    .nav-links .nav-link .cart-counter {
+        position: static !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #D97706 !important;
+        color: white !important;
+        border-radius: 20px !important;
+        padding: 2px 8px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        min-width: 24px !important;
+        height: 22px !important;
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+        top: auto !important;
+        right: auto !important;
+    }
+    
+    .menu-toggle {
+        display: flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Аватар на мобильных */
+    .avatar-container {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .profile-avatar h2 {
+        font-size: var(--font-size-lg);
+    }
+    
+    .balance-amount {
+        font-size: var(--font-size-2xl);
     }
 }
 
-/* Адаптивность для мобильных */
-@media (max-width: 576px) {
-    .order-item {
-        flex-direction: column;
-        align-items: flex-start;
+/* Маленькие телефоны до 480px */
+@media (max-width: 480px) {
+    .profile-sidebar {
+        width: 85%;
+        max-width: 280px;
     }
     
     .order-item-right {
-        width: 100%;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
     }
     
     .order-item-price {
-        text-align: left;
+        min-width: auto;
     }
     
     .order-item-status {
-        text-align: left;
-        align-self: flex-start;
-    }
-}
-
-@media (max-width: var(--breakpoint-lg)) {
-    .profile-page {
-        grid-template-columns: 280px 1fr;
-        gap: var(--spacing-4);
-    }
-}
-
-@media (max-width: var(--breakpoint-md)) {
-    .profile-page {
-        grid-template-columns: 1fr;
-        padding: var(--spacing-4) var(--spacing-3);
+        min-width: auto;
     }
     
+    .notification {
+        bottom: var(--spacing-2);
+        right: var(--spacing-2);
+        left: var(--spacing-2);
+        text-align: center;
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* Альбомная ориентация */
+@media (max-width: 768px) and (orientation: landscape) {
     .profile-sidebar {
-        position: static;
+        width: 260px;
     }
     
-    .profile-nav {
-        flex-direction: row;
-        flex-wrap: wrap;
+    .nav-links {
+        width: 260px;
+    }
+}
+
+/* Модальное окно на мобильных */
+@media (max-width: 768px) {
+    .modal-content {
+        width: calc(100% - 20px);
+        margin: 10px;
+        max-height: calc(100vh - 20px);
     }
     
-    .profile-nav-btn {
-        flex: 1;
-        text-align: center;
-    }
-    
-    .profile-content {
-        padding: var(--spacing-4);
-    }
-    
-    .save-btn {
-        width: 100%;
-        text-align: center;
-    }
-    
-    .order-header {
-        flex-direction: column;
-        align-items: flex-start;
+    .modal-content.small-modal {
+        width: calc(100% - 20px);
     }
 }

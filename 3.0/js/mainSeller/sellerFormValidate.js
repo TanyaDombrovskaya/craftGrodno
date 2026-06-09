@@ -24,6 +24,22 @@ document.addEventListener('DOMContentLoaded', function() {
         'product_name', 'product_about', 'price', 'count'
     ];
 
+    function loadCategoryFromDB() {
+        const categoryField = document.getElementById('category');
+        if (!categoryField) return;
+        
+        // Значение уже установлено из PHP (через selected option)
+        // Просто проверяем и блокируем если есть значение
+        if (categoryField.value && categoryField.value !== '') {
+            permanentlyLockCategory(categoryField);
+            localStorage.setItem('category_permanently_locked', 'true');
+            localStorage.setItem('saved_category_value', categoryField.value);
+        }
+    }
+    
+    // Вызываем загрузку категории
+    loadCategoryFromDB();
+
     // Проверяем и блокируем категорию при загрузке
     checkAndLockCategoryOnLoad();
 
