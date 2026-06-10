@@ -1,9 +1,13 @@
-/* styles/allMastersPageStyle.css - Страница всех мастеров */
+/* styles/allMastersPageStyle.css - Страница всех мастеров (полная адаптация) */
 
 @import url("./variables.css");
 @import url("./navigation.css");
 @import url("./master-card.css");
 @import url("./ratings.css");
+
+* {
+    box-sizing: border-box;
+}
 
 .masters-page {
     padding: var(--spacing-6) 0;
@@ -54,8 +58,6 @@
     color: var(--gray-800);
 }
 
-/* styles/cartStyle.css - добавить в конец файла */
-
 /* Футер */
 .footer {
     background: var(--gray-900);
@@ -98,25 +100,56 @@
     color: var(--primary-light);
 }
 
-@media (max-width: var(--breakpoint-md)) {
-    .footer-content {
-        grid-template-columns: 1fr;
-        text-align: center;
+/* ============================================ */
+/* ========== ПОЛНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ ============ */
+/* ============================================ */
+
+/* Стили для оверлея мобильного меню */
+.nav-overlay {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Планшеты до 1024px */
+@media (max-width: 1024px) {
+    .masters-grid-all {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-5);
         padding: 0 var(--spacing-4);
     }
 }
 
-/* Адаптивность */
-@media (max-width: var(--breakpoint-lg)) {
-    .masters-grid-all {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-5);
+/* Планшеты до 768px */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
     }
-}
-
-@media (max-width: var(--breakpoint-md)) {
+    
     .masters-page {
-        padding: var(--spacing-4) 0;
+        padding: var(--spacing-3) 0;
+        margin-top: 60px;
+    }
+    
+    .page-header {
+        margin-bottom: var(--spacing-4);
+        padding: 0 var(--spacing-3);
     }
     
     .page-header h1 {
@@ -125,24 +158,192 @@
     
     .page-header p {
         font-size: var(--font-size-base);
-        padding: 0 var(--spacing-4);
+        padding: 0 var(--spacing-2);
     }
     
     .masters-grid-all {
         grid-template-columns: 1fr;
         gap: var(--spacing-4);
-        max-width: 400px;
+        padding: 0 var(--spacing-3);
+        max-width: 100%;
         margin-left: auto;
         margin-right: auto;
     }
+    
+    /* Футер */
+    .footer {
+        margin-top: var(--spacing-4);
+        padding: var(--spacing-4) 0;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: var(--spacing-4);
+        padding: 0 var(--spacing-3);
+    }
+    
+    /* Мобильное меню */
+    .nav-links {
+        position: fixed !important;
+        top: 60px !important;
+        left: -100% !important;
+        width: 280px !important;
+        height: calc(100vh - 60px) !important;
+        background: white !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+        transition: left 0.3s ease !important;
+        z-index: 999 !important;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important;
+        display: flex !important;
+        overflow-y: auto !important;
+    }
+    
+    .nav-links.active {
+        left: 0 !important;
+    }
+    
+    .nav-links .nav-link {
+        width: 100% !important;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        color: #D97706 !important;
+        background: white !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        text-decoration: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+    
+    .nav-links .nav-link:hover {
+        background: #FFF7ED !important;
+        color: #B45309 !important;
+        padding-left: 24px !important;
+    }
+    
+    .nav-links .nav-link .cart-counter {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #D97706 !important;
+        color: white !important;
+        border-radius: 20px !important;
+        padding: 2px 8px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        min-width: 24px !important;
+        height: 22px !important;
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .menu-toggle {
+        display: flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 }
 
-@media (max-width: var(--breakpoint-sm)) {
+/* Маленькие телефоны до 480px */
+@media (max-width: 480px) {
+    .masters-page {
+        margin-top: 60px;
+    }
+    
     .page-header h1 {
         font-size: var(--font-size-2xl);
     }
     
     .page-header p {
         font-size: var(--font-size-sm);
+    }
+    
+    .masters-grid-all {
+        gap: var(--spacing-3);
+        padding: 0 var(--spacing-2);
+    }
+    
+    .notification {
+        bottom: var(--spacing-2);
+        right: var(--spacing-2);
+        left: var(--spacing-2);
+        text-align: center;
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* Альбомная ориентация */
+@media (max-width: 768px) and (orientation: landscape) {
+    .masters-grid-all {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-3);
+    }
+    
+    .nav-links {
+        width: 260px;
+    }
+}
+
+/* Планшеты от 481px до 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+    .masters-grid-all {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 100%;
+    }
+}
+
+/* Модальные окна на мобильных */
+@media (max-width: 768px) {
+    .modal-content {
+        width: calc(100% - 20px);
+        margin: 10px;
+        max-height: calc(100vh - 20px);
+    }
+    
+    .modal-content.small-modal {
+        width: calc(100% - 20px);
+    }
+}
+
+/* Уведомление */
+.notification {
+    position: fixed;
+    bottom: var(--spacing-5);
+    right: var(--spacing-5);
+    padding: var(--spacing-3) var(--spacing-5);
+    border-radius: var(--radius-lg);
+    color: var(--white);
+    font-weight: var(--font-weight-medium);
+    z-index: 10001;
+    animation: slideUp 0.3s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+.notification.success {
+    background: var(--success);
+}
+
+.notification.error {
+    background: var(--error);
+}
+
+.notification.info {
+    background: var(--info);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

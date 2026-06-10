@@ -1,9 +1,13 @@
-/* styles/masterPageStyle.css - Страница мастера */
+/* styles/masterPageStyle.css - Страница мастера (полная адаптация) */
 
 @import url("./variables.css");
 @import url("./navigation.css");
 @import url("./product-card.css");
 @import url("./ratings.css");
+
+* {
+    box-sizing: border-box;
+}
 
 .master-profile-page {
     max-width: var(--breakpoint-xl);
@@ -41,12 +45,15 @@
     color: var(--white);
     font-weight: 600;
     font-size: 1.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .master-avatar-large .avatar-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
 }
 
 .master-name-large {
@@ -100,6 +107,47 @@
 .contact-phone:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-glow);
+}
+
+/* Рейтинг мастера */
+.master-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-3);
+    flex-wrap: wrap;
+}
+
+.master-rating-info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-1);
+}
+
+.master-rating-value {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--gray-900);
+}
+
+.master-rating-count {
+    font-size: var(--font-size-xs);
+    color: var(--gray-500);
+}
+
+.master-rating-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.master-rating-stars .rating-star {
+    font-size: var(--font-size-base);
+    color: var(--gray-400);
+}
+
+.master-rating-stars .rating-star.filled {
+    color: var(--warning);
 }
 
 .master-stats-profile {
@@ -191,45 +239,357 @@
     color: var(--primary-light);
 }
 
-/* Адаптивность */
-@media (max-width: var(--breakpoint-lg)) {
+/* ============================================ */
+/* ========== ПОЛНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ ============ */
+/* ============================================ */
+
+/* Стили для оверлея мобильного меню */
+.nav-overlay {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Планшеты до 1024px */
+@media (max-width: 1024px) {
     .master-profile-page {
         grid-template-columns: 260px 1fr;
         gap: var(--spacing-4);
+        padding: var(--spacing-4);
     }
     
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-4);
+    }
+    
+    .master-avatar-large {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+/* Планшеты до 768px */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+    
+    .master-profile-page {
+        grid-template-columns: 1fr;
+        padding: var(--spacing-3);
+        margin-top: 60px;
+        gap: var(--spacing-4);
+    }
+    
+    .master-profile-header {
+        position: static;
+        padding: var(--spacing-4);
+        margin-bottom: 0;
+    }
+    
+    .master-avatar-large {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 16px;
+    }
+    
+    .master-name-large {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--spacing-1);
+    }
+    
+    .master-specialty-large {
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--spacing-2);
+    }
+    
+    .master-category {
+        font-size: var(--font-size-xs);
+        display: flexbox;
+        align-items: center;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .master-description-full {
+        font-size: var(--font-size-sm);
+        text-align: center;
+    }
+    
+    /* Рейтинг по центру */
+    .master-rating {
+        justify-content: center;
+    }
+    
+    .contact-phone {
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-2) var(--spacing-3);
+    }
+    
+    .stat-value-profile {
+        font-size: var(--font-size-lg);
+    }
+    
+    .stat-name-profile {
+        font-size: var(--font-size-xs);
+    }
+    
+    /* Товары мастера */
+    .products-section {
+        margin-top: 0;
+    }
+    
+    .section-title {
+        font-size: var(--font-size-xl);
+        text-align: center;
+        margin-bottom: var(--spacing-4);
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-3);
+    }
+    
+    /* Футер */
+    .footer {
+        margin-top: var(--spacing-4);
+        padding: var(--spacing-4) 0;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: var(--spacing-4);
+        padding: 0 var(--spacing-3);
+    }
+    
+    /* Мобильное меню */
+    .nav-links {
+        position: fixed !important;
+        top: 60px !important;
+        left: -100% !important;
+        width: 280px !important;
+        height: calc(100vh - 60px) !important;
+        background: white !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+        transition: left 0.3s ease !important;
+        z-index: 999 !important;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important;
+        display: flex !important;
+        overflow-y: auto !important;
+    }
+    
+    .nav-links.active {
+        left: 0 !important;
+    }
+    
+    .nav-links .nav-link {
+        width: 100% !important;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        color: #D97706 !important;
+        background: white !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        text-decoration: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+    
+    .nav-links .nav-link:hover {
+        background: #FFF7ED !important;
+        color: #B45309 !important;
+        padding-left: 24px !important;
+    }
+    
+    .nav-links .nav-link .cart-counter {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #D97706 !important;
+        color: white !important;
+        border-radius: 20px !important;
+        padding: 2px 8px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        min-width: 24px !important;
+        height: 22px !important;
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .menu-toggle {
+        display: flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* Маленькие телефоны до 480px */
+@media (max-width: 480px) {
+    .master-profile-page {
+        padding: var(--spacing-2);
+        margin-top: 60px;
+    }
+    
+    .master-profile-header {
+        padding: var(--spacing-3);
+    }
+    
+    .master-avatar-large {
+        width: 80px;
+        height: 80px;
+        font-size: var(--font-size-2xl);
+    }
+    
+    .master-name-large {
+        font-size: var(--font-size-base);
+    }
+    
+    .master-specialty-large {
+        font-size: var(--font-size-xs);
+    }
+    
+    .master-description-full {
+        font-size: var(--font-size-xs);
+    }
+    
+    .master-rating-value {
+        font-size: var(--font-size-base);
+    }
+    
+    .master-rating-stars .rating-star {
+        font-size: var(--font-size-sm);
+    }
+    
+    .contact-phone {
+        font-size: var(--font-size-xs);
+        padding: var(--spacing-1) var(--spacing-2);
+    }
+    
+    .stat-value-profile {
+        font-size: var(--font-size-base);
+    }
+    
+    .section-title {
+        font-size: var(--font-size-lg);
+    }
+    
+    .notification {
+        bottom: var(--spacing-2);
+        right: var(--spacing-2);
+        left: var(--spacing-2);
+        text-align: center;
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* Альбомная ориентация */
+@media (max-width: 768px) and (orientation: landscape) {
+    .master-profile-page {
+        margin-top: 60px;
+    }
+    
+    .master-profile-header {
+        padding: var(--spacing-3);
+    }
+    
+    .master-avatar-large {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .master-stats-profile {
+        flex-direction: row;
+        gap: var(--spacing-2);
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-3);
+    }
+    
+    .nav-links {
+        width: 260px;
+    }
+}
+
+/* Планшеты от 481px до 768px */
+@media (min-width: 481px) and (max-width: 768px) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: var(--breakpoint-md)) {
-    .master-profile-page {
-        grid-template-columns: 1fr;
-        padding: var(--spacing-4) var(--spacing-3);
+/* Модальные окна на мобильных */
+@media (max-width: 768px) {
+    .modal-content {
+        width: calc(100% - 20px);
+        margin: 10px;
+        max-height: calc(100vh - 20px);
     }
     
-    .master-profile-header {
-        position: static;
-    }
-    
-    .products-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .section-title {
-        text-align: center;
+    .modal-content.small-modal {
+        width: calc(100% - 20px);
     }
 }
 
-@media (max-width: var(--breakpoint-sm)) {
-    .master-avatar-large {
-        width: 100px;
-        height: 100px;
-        font-size: var(--font-size-3xl);
+/* Уведомление */
+.notification {
+    position: fixed;
+    bottom: var(--spacing-5);
+    right: var(--spacing-5);
+    padding: var(--spacing-3) var(--spacing-5);
+    border-radius: var(--radius-lg);
+    color: var(--white);
+    font-weight: var(--font-weight-medium);
+    z-index: 10001;
+    animation: slideUp 0.3s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+.notification.success {
+    background: var(--success);
+}
+
+.notification.error {
+    background: var(--error);
+}
+
+.notification.info {
+    background: var(--info);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-    
-    .master-name-large {
-        font-size: var(--font-size-lg);
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

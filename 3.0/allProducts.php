@@ -147,15 +147,6 @@ $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Помощь</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Доставка и оплата</a></li>
-                    <li><a href="#">Возврат</a></li>
-                    <li><a href="#">Вопросы и ответы</a></li>
-                    <li><a href="#">Контакты</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
                 <h3>Контакты</h3>
                 <ul class="footer-links">
                     <li>г. Гродно, ул. Советская, 25</li>

@@ -362,6 +362,49 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // ДОБАВЛЯЕМ ССЫЛКУ НА ГЛАВНУЮ В БОКОВУЮ ПАНЕЛЬ (только на мобильных)
+        function addHomeLinkToSidebar() {
+            if (window.innerWidth <= 768) {
+                const profileNav = profileSidebar.querySelector('.profile-nav');
+                if (profileNav && !profileNav.querySelector('.profile-home-link')) {
+                    const homeLink = document.createElement('a');
+                    homeLink.href = 'mainUser.php';
+                    homeLink.className = 'profile-nav-btn profile-home-link';
+                    homeLink.textContent = 'Главная';
+                    homeLink.style.display = 'block';
+                    homeLink.style.width = '100%';
+                    homeLink.style.textAlign = 'center';
+                    homeLink.style.padding = 'var(--spacing-3)';
+                    homeLink.style.backgroundColor = 'transparent';
+                    homeLink.style.border = 'none';
+                    homeLink.style.borderRadius = 'var(--radius-lg)';
+                    homeLink.style.cursor = 'pointer';
+                    homeLink.style.fontSize = 'var(--font-size-base)';
+                    homeLink.style.color = '#D97706';
+                    homeLink.style.textDecoration = 'none';
+                    homeLink.style.marginBottom = 'var(--spacing-2)';
+                    
+                    // Добавляем hover эффект
+                    homeLink.addEventListener('mouseenter', function() {
+                        this.style.backgroundColor = '#FFF7ED';
+                        this.style.color = '#B45309';
+                    });
+                    homeLink.addEventListener('mouseleave', function() {
+                        this.style.backgroundColor = 'transparent';
+                        this.style.color = '#D97706';
+                    });
+                    
+                    // Вставляем ссылку в начало списка
+                    profileNav.insertBefore(homeLink, profileNav.firstChild);
+                    console.log('Ссылка на главную добавлена в боковую панель');
+                }
+            }
+        }
+        
+        // Вызываем добавление ссылки при загрузке и при изменении размера окна
+        addHomeLinkToSidebar();
+        window.addEventListener('resize', addHomeLinkToSidebar);
+        
         // Создаем оверлей для боковой панели профиля
         let profileOverlay = document.querySelector('.profile-sidebar-overlay');
         if (!profileOverlay) {
@@ -427,9 +470,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // Закрытие по клику на ссылки в боковой панели профиля
+        // Закрытие по клику на ссылки в боковой панели профиля (включая новую ссылку)
         if (profileSidebar) {
-            profileSidebar.querySelectorAll('.profile-nav-btn, .profile-logout-btn').forEach(btn => {
+            profileSidebar.querySelectorAll('.profile-nav-btn, .profile-logout-btn, .profile-home-link').forEach(btn => {
                 btn.addEventListener('click', function() {
                     // Не закрываем при клике на кнопку выхода - пусть выполнится его действие
                     if (!this.classList.contains('profile-logout-btn')) {
@@ -498,10 +541,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     .profile-nav {
                         flex-direction: column !important;
                     }
-                    .profile-nav-btn {
+                    .profile-nav-btn, .profile-home-link {
                         text-align: center !important;
                         padding: var(--spacing-3) !important;
                         width: 100% !important;
+                        display: block !important;
+                        box-sizing: border-box !important;
                     }
                     .profile-logout-btn {
                         text-align: center !important;
@@ -522,5 +567,198 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         console.log('Меню профиля пользователя инициализировано');
+    }
+})();
+
+// ============================================
+// ========== ЛОГИКА ДЛЯ СТРАНИЦЫ АДМИНИСТРАТОРА (admin.php) ==========
+// ============================================
+
+(function() {
+    // Ждем полной загрузки DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAdminMenu);
+    } else {
+        initAdminMenu();
+    }
+    
+    function initAdminMenu() {
+        console.log('Инициализация меню администратора');
+        
+        const adminSidebar = document.querySelector('.admin-sidebar');
+        const adminMenuToggle = document.querySelector('.menu-toggle');
+        
+        console.log('adminSidebar найден:', adminSidebar);
+        console.log('adminMenuToggle найден:', adminMenuToggle);
+        
+        // Если нет .admin-sidebar - выходим
+        if (!adminSidebar) {
+            console.log('Страница не подходит для меню администратора');
+            return;
+        }
+        
+        // Создаем оверлей для боковой панели администратора
+        let adminOverlay = document.querySelector('.admin-sidebar-overlay');
+        if (!adminOverlay) {
+            adminOverlay = document.createElement('div');
+            adminOverlay.className = 'admin-sidebar-overlay';
+            document.body.appendChild(adminOverlay);
+            console.log('Оверлей для администратора создан');
+        }
+        
+        function isAdminMobile() {
+            return window.innerWidth <= 768;
+        }
+        
+        function openAdminSidebar() {
+            console.log('openAdminSidebar вызван');
+            if (!adminSidebar) return;
+            adminSidebar.classList.add('open');
+            if (adminOverlay) adminOverlay.classList.add('active');
+            document.body.classList.add('menu-open');
+            if (adminMenuToggle) adminMenuToggle.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeAdminSidebar() {
+            console.log('closeAdminSidebar вызван');
+            if (!adminSidebar) return;
+            adminSidebar.classList.remove('open');
+            if (adminOverlay) adminOverlay.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            if (adminMenuToggle) adminMenuToggle.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function toggleAdminSidebar() {
+            console.log('toggleAdminSidebar вызван');
+            if (!adminSidebar) return;
+            if (adminSidebar.classList.contains('open')) {
+                closeAdminSidebar();
+            } else {
+                openAdminSidebar();
+            }
+        }
+        
+        // Клик по бургеру для страницы администратора
+        if (adminMenuToggle) {
+            // Удаляем старые обработчики, чтобы не было конфликтов
+            const newToggle = adminMenuToggle.cloneNode(true);
+            adminMenuToggle.parentNode.replaceChild(newToggle, adminMenuToggle);
+            
+            newToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Клик по бургеру (администратор)');
+                toggleAdminSidebar();
+            });
+        }
+        
+        // Закрытие по клику на оверлей
+        if (adminOverlay) {
+            adminOverlay.addEventListener('click', function() {
+                console.log('Клик по оверлею (администратор)');
+                closeAdminSidebar();
+            });
+        }
+        
+        // Закрытие по клику на ссылки в боковой панели администратора
+        if (adminSidebar) {
+            adminSidebar.querySelectorAll('.admin-nav-btn, .admin-logout-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Не закрываем при клике на кнопку выхода
+                    if (!this.classList.contains('admin-logout-btn')) {
+                        console.log('Клик по кнопке навигации администратора');
+                        closeAdminSidebar();
+                    }
+                });
+            });
+        }
+        
+        // Закрытие по ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && adminSidebar && adminSidebar.classList.contains('open')) {
+                console.log('Нажат ESC (администратор)');
+                closeAdminSidebar();
+            }
+        });
+        
+        // При изменении размера окна
+        window.addEventListener('resize', function() {
+            if (!isAdminMobile() && adminSidebar && adminSidebar.classList.contains('open')) {
+                console.log('Изменение размера окна, закрываем меню администратора');
+                closeAdminSidebar();
+            }
+        });
+        
+        // Добавляем стили для оверлея администратора, если их нет
+        if (!document.querySelector('#admin-sidebar-styles')) {
+            const adminStyle = document.createElement('style');
+            adminStyle.id = 'admin-sidebar-styles';
+            adminStyle.textContent = `
+                .admin-sidebar-overlay {
+                    position: fixed;
+                    top: 60px;
+                    left: 0;
+                    width: 100%;
+                    height: calc(100vh - 60px);
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 998;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.3s ease;
+                }
+                .admin-sidebar-overlay.active {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                @media (max-width: 768px) {
+                    .admin-sidebar {
+                        position: fixed !important;
+                        top: 60px !important;
+                        left: -100% !important;
+                        width: 85% !important;
+                        max-width: 300px !important;
+                        height: calc(100vh - 60px) !important;
+                        background: white !important;
+                        z-index: 999 !important;
+                        transition: left 0.3s ease !important;
+                        overflow-y: auto !important;
+                        border-radius: 0 !important;
+                        padding: var(--spacing-4) !important;
+                    }
+                    .admin-sidebar.open {
+                        left: 0 !important;
+                    }
+                    .admin-nav {
+                        flex-direction: column !important;
+                    }
+                    .admin-nav-btn {
+                        text-align: center !important;
+                        justify-content: center !important;
+                        padding: var(--spacing-3) !important;
+                        width: 100% !important;
+                        display: block !important;
+                        box-sizing: border-box !important;
+                    }
+                    .admin-logout-btn {
+                        text-align: center !important;
+                        margin-top: var(--spacing-3) !important;
+                    }
+                    .admin-container {
+                        margin-top: 60px !important;
+                    }
+                    .menu-toggle {
+                        display: flex !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                }
+            `;
+            document.head.appendChild(adminStyle);
+            console.log('Стили для администратора добавлены');
+        }
+        
+        console.log('Меню администратора инициализировано');
     }
 })();

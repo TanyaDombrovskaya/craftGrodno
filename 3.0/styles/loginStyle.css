@@ -1,4 +1,4 @@
-/* styles/loginStyle.css - Современная страница входа без изображения */
+/* styles/loginStyle.css - Современная страница входа (полная адаптация) */
 
 @import url("./variables.css");
 
@@ -8,15 +8,28 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
 body {
     font-family: var(--font-family);
-    min-height: 100vh;
+    background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-800) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-800) 100%);
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    touch-action: pan-y pinch-zoom;
 }
 
 body::before {
@@ -26,8 +39,9 @@ body::before {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
     animation: rotate 20s linear infinite;
+    pointer-events: none;
 }
 
 @keyframes rotate {
@@ -41,6 +55,16 @@ body::before {
     padding: var(--spacing-4);
     position: relative;
     z-index: 1;
+    margin: auto;
+    overflow-y: auto;
+    max-height: 100vh;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Скрываем скролл на мобильных, но оставляем возможность скроллить если контент не помещается */
+.container::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
 }
 
 .form-section {
@@ -102,6 +126,13 @@ input::placeholder {
     background: rgba(239, 68, 68, 0.1);
 }
 
+.field-error {
+    color: var(--error);
+    font-size: var(--font-size-xs);
+    margin-top: var(--spacing-1);
+    display: block;
+}
+
 #login-button {
     width: 100%;
     padding: var(--spacing-3);
@@ -119,6 +150,10 @@ input::placeholder {
 #login-button:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-glow);
+}
+
+#login-button:active {
+    transform: translateY(0);
 }
 
 .links-group {
@@ -150,14 +185,131 @@ input::placeholder {
     font-weight: 500;
 }
 
-@media (max-width: var(--breakpoint-sm)) {
+/* ============================================ */
+/* ========== ПОЛНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ ============ */
+/* ============================================ */
+
+/* Планшеты до 768px */
+@media (max-width: 768px) {
+    .container {
+        max-width: 400px;
+        padding: var(--spacing-3);
+    }
+    
     .form-section {
         padding: var(--spacing-6);
+        border-radius: var(--radius-xl);
+    }
+    
+    .logo {
+        font-size: var(--font-size-2xl);
+        margin-bottom: var(--spacing-5);
+    }
+    
+    .form-group {
+        margin-bottom: var(--spacing-4);
+    }
+    
+    label {
+        font-size: var(--font-size-xs);
+        margin-bottom: var(--spacing-1);
+    }
+    
+    input {
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-sm);
+    }
+    
+    #login-button {
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-sm);
+        margin-top: var(--spacing-3);
+    }
+    
+    .links-group {
+        margin-top: var(--spacing-5);
+    }
+    
+    .link {
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* Маленькие телефоны до 480px */
+@media (max-width: 480px) {
+    .container {
+        max-width: 100%;
+        padding: var(--spacing-2);
+    }
+    
+    .form-section {
+        padding: var(--spacing-4);
+        border-radius: var(--radius-lg);
+    }
+    
+    .logo {
+        font-size: var(--font-size-xl);
+        margin-bottom: var(--spacing-4);
+    }
+    
+    .form-group {
+        margin-bottom: var(--spacing-3);
+    }
+    
+    input {
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-sm);
+    }
+    
+    #login-button {
+        padding: var(--spacing-2);
+        font-size: var(--font-size-sm);
     }
     
     .links-group {
         flex-direction: column;
         gap: var(--spacing-3);
         text-align: center;
+        margin-top: var(--spacing-4);
+    }
+    
+    .link {
+        padding: var(--spacing-1) 0;
+    }
+}
+
+/* Альбомная ориентация */
+@media (max-width: 768px) and (orientation: landscape) {
+    .container {
+        max-width: 500px;
+    }
+    
+    .form-section {
+        padding: var(--spacing-4);
+    }
+    
+    .logo {
+        font-size: var(--font-size-xl);
+        margin-bottom: var(--spacing-3);
+    }
+    
+    .form-group {
+        margin-bottom: var(--spacing-2);
+    }
+    
+    input {
+        padding: var(--spacing-1) var(--spacing-2);
+    }
+}
+
+/* Улучшение для touch-устройств */
+@media (hover: none) and (pointer: coarse) {
+    #login-button {
+        padding: var(--spacing-3) var(--spacing-4);
+    }
+    
+    .link {
+        padding: var(--spacing-1) 0;
+        display: inline-block;
     }
 }
