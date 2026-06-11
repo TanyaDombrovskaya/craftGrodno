@@ -16,6 +16,14 @@ unset($_SESSION['reg_errors']);
     <title>ГродноАрт - Регистрация</title>
     <link rel="stylesheet" href="./styles/registerStyle.css">
     <link rel="icon" href="./styles/image/icon.png">
+    <meta name="color-scheme" content="dark only">
+    <meta name="theme-color" content="#0f172a">
+    <style>
+        html, body, :root {
+            background: #0f172a !important;
+            background-color: #0f172a !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container">        
